@@ -1,0 +1,58 @@
+.skeleton {
+    background-color: #e1e1e1;
+    /* margin-top: 1rem; */
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    animation: skeletonanimation 0.5s linear infinite alternate both;
+}
+.skeleton.text {
+    width: 100%;
+    height: 0.75rem; /* 3px */
+	max-width: 100% !important;
+}
+.skeleton.title {
+    width: 50%;
+    height: 1.25rem; /* 5px */
+    margin-bottom: 0.5rem;
+}
+.skeleton.avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+.skeleton.optionsmore {
+    width: 0;
+    height: 0.75rem; /* 3px */
+}
+.skeleton.mediumtext {
+    width: 100%;
+    height: 2rem; /* 8px */
+    margin-top: 0;
+}
+.skeleton.button {
+    width: 100%;
+    height: 2rem; /* 8px */
+    margin-top: 0;
+}
+.skeleton.block {
+    width: 100%;
+    height: 3rem; /* 12px */
+    margin-top: 0;
+}
+/* Skeleton Animation */
+@-webkit-keyframes skeletonanimation {
+    0% {
+        background-color: #e1e1e1;
+    }
+    100% {
+        background-color: rgba(232, 232, 232, 0.5);
+    }
+}
+@keyframes skeletonanimation {
+    0% {
+        background-color: #e1e1e1;
+    }
+    100% {
+        background-color: rgba(232, 232, 232, 0.5);
+    }
+}
