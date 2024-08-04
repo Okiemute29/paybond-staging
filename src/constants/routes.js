@@ -11,6 +11,10 @@ const _route = {
 
     _dashboard: '/dashboard',
     _airtime: '/airtime',
+    _data: '/data',
+    _electricity: '/electricity',
+    _cable: '/cable',
+    _betting: '/betting',
     _not_found: '*',
 
 }

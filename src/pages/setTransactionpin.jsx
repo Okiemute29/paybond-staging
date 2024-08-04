@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import _route from '../constants/routes';
 import Spinnar from '../component/spinnar'
 import OtpInput from 'react-otp-input';
+import signUpImg from "../assets/images/signup-img.svg"
 
 export default function SetTransactionPin() {
     const [pin, setPin] = useState("");
@@ -115,7 +116,7 @@ export default function SetTransactionPin() {
                 {/* .nk-split-content */}
                 <div className="nk-split-content p-0 nk-split-stretch nk-auth-image">
                   <div className="auth-image-container w-100">
-                    <img className="img-fitting" src="/assets/images/auth/signup-img.svg" />
+				  <img className="img-fitting" src={signUpImg} alt='img' />
                   </div>
                 </div>
                 {/* .nk-split-content */}

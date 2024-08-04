@@ -123,7 +123,7 @@ export default function _sidebar() {
                           </span>
                         </NavLink>
                         {/* .nk-menu-item */}
-						<NavLink to={"testing"}  className={(isActive) => "nk-menu-item " + (isActive.isActive ? "active " : "")} >
+						<NavLink to={_route._data}  className={(isActive) => "nk-menu-item " + (isActive.isActive ? "active " : "")} >
                           <span className="nk-menu-link">
                             <span className="nk-menu-icon side-svg">
                               <svg
@@ -170,7 +170,7 @@ export default function _sidebar() {
                           </span>
                         </NavLink>
                         {/* .nk-menu-item */}
-						<NavLink to={"testing"}  className={(isActive) => "nk-menu-item " + (isActive.isActive ? "active " : "")} >
+						<NavLink to={_route._electricity}  className={(isActive) => "nk-menu-item " + (isActive.isActive ? "active " : "")} >
                           <span className="nk-menu-link">
                             <span className="nk-menu-icon side-svg">
                               <svg
@@ -217,7 +217,7 @@ export default function _sidebar() {
                           </span>
                         </NavLink>
                         {/* .nk-menu-item */}
-						<NavLink to={"testing"}  className={(isActive) => "nk-menu-item " + (isActive.isActive ? "active " : "")} >
+						<NavLink to={_route._cable}  className={(isActive) => "nk-menu-item " + (isActive.isActive ? "active " : "")} >
                           <span className="nk-menu-link">
                             <span className="nk-menu-icon side-svg">
                               <svg
@@ -264,7 +264,7 @@ export default function _sidebar() {
                           </span>
                         </NavLink>
                         {/* .nk-menu-item */}
-						<NavLink to={"testing"}  className={(isActive) => "nk-menu-item " + (isActive.isActive ? "active " : "")} >
+						<NavLink to={_route._betting}  className={(isActive) => "nk-menu-item " + (isActive.isActive ? "active " : "")} >
                           <span className="nk-menu-link">
                             <span className="nk-menu-icon side-svg">
                               <svg

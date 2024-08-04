@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import _route from '../constants/routes';
 import Spinnar from '../component/spinnar'
+import signUpImg from "../assets/images/signup-img.svg"
 
 export default function SignUp() {
 	const [showPassword, setShowPassword] = useState(false)
@@ -168,7 +169,7 @@ export default function SignUp() {
                         </div>
                       </form>
                       <div className="form-note-s2 pt-4 text-black">
-						Already have and account? <Link to={_route._admin_login} >Log In</Link>
+						Already have and account? <Link to={_route._login} className='text-paybond' >Log In</Link>
                       </div>
                     </div>
 					</div>
@@ -177,7 +178,7 @@ export default function SignUp() {
                 {/* .nk-split-content */}
                 <div className="nk-split-content p-0 nk-split-stretch nk-auth-image">
                   <div className="auth-image-container w-100">
-                    <img className="img-fitting" src="/assets/images/auth/signup-img.svg" />
+                    <img className="img-fitting" src={signUpImg} alt='sign-up' />
                   </div>
                 </div>
                 {/* .nk-split-content */}

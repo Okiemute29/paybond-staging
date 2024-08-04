@@ -7,6 +7,10 @@ import {
   import { 
 	  Dashboard,
 	  Airtime, 
+	  Data,
+	  Electricity,
+	  Betting,
+	  Cable,
 	  
   
   } from "./pages/user/index";
@@ -45,6 +49,10 @@ const router = createBrowserRouter(
 		<Route path={_route._landing_page} element={<PageLayouts.RootLayout />}>
 		<Route path={_route._dashboard}  element={<Dashboard />} />
 		<Route path={_route._airtime}  element={<Airtime />} />
+		<Route path={_route._data}  element={<Data />} />
+		<Route path={_route._electricity}  element={<Electricity />} />
+		<Route path={_route._betting}  element={<Betting />} />
+		<Route path={_route._cable}  element={<Cable />} />
 
 		</Route>
 	</Route>

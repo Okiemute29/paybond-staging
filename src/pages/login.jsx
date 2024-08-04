@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import _route from '../constants/routes';
 import Spinnar from '../component/spinnar'
+import InputField from '../component/common/input';
+import loginImg from "../assets/images/login-img.svg"
 
 export default function Login() {
-	const [showPassword, setShowPassword] = useState(false)
 	var loading = false
 	const [formData, setFormData] = useState({
 		username: '',
@@ -15,6 +16,11 @@ export default function Login() {
 		e.preventDefault()
 		console.log("submited")
 	}
+
+	const handleInputChange = (e) => {
+		const { name, value } = e.target;
+		setFormData((prev) => ({ ...prev, [name]: value }));
+	};
 
   return (
     <>
@@ -51,55 +57,35 @@ export default function Login() {
                       <form onSubmit={handleSubmit} className="auth-form">
                         <div className="form-group">
                           <div className="form-control-wrap">
-							<label className='auth-label'>E-mail</label>
-                            <input
-                              type="email"
-                              name="email"
-                              className="form-control form-control-lg auth-field"                              
-                              placeholder="e.g paulokoro@gmail.com"
-							  value={formData.username}
-							  onChange={(e)=> setFormData(prv => ({...prv, username: e.target.value}))}
-                              required
-                            />
+							<InputField 
+								label="E-mail"
+								name="username"
+								type="email"
+								placeholder="e.g paulokoro@gmail.com"
+								value={formData.username}
+								change={handleInputChange}
+							/>
                           </div>
                         </div>
                         {/* .form-group */}
                         <div className="form-group">
                           <div className="form-control-wrap">
-                            <div
-                              className="form-icon form-icon-right passcode-switch lg"
-							  onClick={()=> setShowPassword(prv => !prv)}
-                            >
-                              <em className={`con-show icon ni ${showPassword ? 'ni ni-eye-off-fill' : 'ni-eye-fill'} `} />
-                            </div>
-							<label className='auth-label'>Create Password</label>
-                            <input
-                              type={`${showPassword ? 'text' : 'password'}`}
-                              name="password"
-                              className="form-control form-control-lg auth-field"
-                              id="password"
-                              placeholder="Create a 4 digit password"
-							  value={formData.password}
-							  onChange={(e)=> setFormData(prv => ({...prv, password: e.target.value}))}
-                              required
-                            />
+							<InputField 
+								label="Create Password"
+								name="password"
+								type="password"
+								placeholder="Create a 4 digit password"
+								value={formData.password}
+								change={handleInputChange}
+							/>
+							
+							
                           </div>
                           <div className="form-label-group">
                             <div className="custom-control custom-checkbox">
-                              {/* <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="customCheck1"
-                              />
-                              <label
-                                className="custom-control-label auth-label"
-                                htmlFor="customCheck1"
-                              >
-                                Remember Me
-                              </label> */}
                             </div>
                             <Link
-								to={_route._admin_login}
+								to="#"
 								className="link link-sm text-black"
                             >
                               Forgot Password?
@@ -113,29 +99,11 @@ export default function Login() {
                           </button>
                         </div>
                       </form>
-                      {/* <div className="form-note-s2 pt-4">
-                        Don't have an account? <a href="/signup">Sign Up</a>
-                      </div> */}
+                      <div className="form-note-s2 pt-4 text-black">
+						Don't have an account? <Link to={_route._signup} className='text-paybond'  >Sign Up</Link>
+                      </div>
                     </div>
 					</div>
-					{/* <div className="nk-block m-5 ">
-						<div className="nk-block-between">
-							<ul className="nav nav-sm">
-							<li className="nav-item">
-								<Link className="nav-link text-primary" to="https://perrypays.co/terms-and-conditions/">Terms &amp; Condition</Link>
-							</li>
-							<li className="nav-item">
-								<Link className="nav-link text-primary" to="https://perrypays.co/privacy-policy">Privacy Policy</Link>
-							</li>
-							<li className="nav-item">
-								<a className="nav-link text-primary" href="javascript:void(0)">Help</a>
-							</li>
-							</ul>
-						</div>
-						<div className="mt-3">
-							<p>© {new Date().getFullYear()} Perrypays. Designed by <a href="https://carburant.io/" target="_blank" className='text-primary'>Carburant Technology</a></p>
-						</div>
-					</div> */}
 
                     {/* .nk-block */}
                   </div>
@@ -143,7 +111,7 @@ export default function Login() {
                 {/* .nk-split-content */}
                 <div className="nk-split-content p-0 nk-split-stretch nk-auth-image">
                   <div className="auth-image-container w-100">
-                    <img className="img-fitting" src="/assets/images/auth/login-img.svg" />
+                    <img className="img-fitting" src={loginImg} alt='login-img' />
                   </div>
                 </div>
                 {/* .nk-split-content */}

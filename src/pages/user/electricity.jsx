@@ -1,24 +1,27 @@
 
-import sidepic from "../../assets/images/airtime-img.png"
-import mtn from "../../assets/images/mtn.png"
-import airtel from "../../assets/images/airtel.png"
-import glo from "../../assets/images/glo.png"
-import mobile from "../../assets/images/9mobil.png"
+import sidepic from "../../assets/images/electricity-img.png"
+import aedc from "../../assets/images/AEDC-BRAND.png"
+import bedc from "../../assets/images/BEDC.png"
+import eedc from "../../assets/images/eedc.png"
+import ecedc from "../../assets/images/ecedc.png"
+import PHED from "../../assets/images/PHED.png"
+import ibedc from "../../assets/images/ibedc.png"
 import dropdown from "../../assets/images/dropdown.svg"
-import nigeria from "../../assets/images/nigeria.png"
 import Spinnar from '../../component/spinnar'
 import { useState } from 'react'
 import DropDown from '../../helpers/dropdown'
 import InputField from "../../component/common/input"
 
 
-export default function Airtime() {
+export default function Electricity() {
 	var loading = false
 	const [selectProvider, setSelectProvider] = useState(false)
 	const [picx, setPicx] = useState(null)
 	const [name, setName] = useState(null)
 	const [formData, setFormData] = useState({
 		amount: "",
+		meterNumber: "",
+		meterType: "prepaid"
 	})
 
 	const handleClick = (e) => {
@@ -33,27 +36,32 @@ export default function Airtime() {
 		setFormData(prv => ({...prv, [name]: rawValue}))
 	}	
 
-	const formatNumber = (num) => {
-		return `N${new Intl.NumberFormat().format(num)}`;
-	};
 
 
 	const items = [
 		{
-			img: mtn,
-			value: "MTN"
+			img: aedc,
+			value: "Abuja Electricity"
 		},
 		{
-			img: airtel,
-			value: "AIRTEL"
+			img: bedc,
+			value: "BEDC Electricity "
 		},
 		{
-			img: glo,
-			value: "GLO"
+			img: eedc,
+			value: "Enugu Electricity"
 		},
 		{
-			img: mobile,
-			value: "9 MOBILE"
+			img: ecedc,
+			value: "Eko Electricity "
+		},
+		{
+			img: PHED,
+			value: "Port Harcourt Electricity "
+		},
+		{
+			img: ibedc,
+			value: "Benin Electricity"
 		},
 	]
 
@@ -67,7 +75,7 @@ export default function Airtime() {
 				<div className="nk-block-head nk-block-head-sm mt-4">
 				<div className="nk-block-between">
 					<div className="nk-block-head-content">
-						<h4 className="page-title cus-page-title text-paybond">Buy Airtime</h4>
+						<h4 className="page-title cus-page-title text-paybond">Buy Electricity</h4>
 						
 					</div>
 					{/* .nk-block-head-content */}
@@ -82,7 +90,7 @@ export default function Airtime() {
 							<div className="card shodowles-card bg-transparent">
 								<div className="nk-ecwg nk-ecwg2">
 								<div className="card-inner p-0">
-								<p className='auth-label'>Select Provider</p>
+									<p className='auth-label'>Select Provider</p>
 									<div onClick={()=> setSelectProvider(prv => !prv)} className='bg-white cursor-pointer d-flex justify-content-between align-items-center rounded-4 py-2 px-3'>
 										<div className="select-item">
 											<div className='selected-product-img'>
@@ -100,7 +108,6 @@ export default function Airtime() {
 								{/* .nk-ecwg */}
 							</div>
 
-
 							<DropDown 
 								show={selectProvider}
 								items={items}
@@ -109,42 +116,38 @@ export default function Airtime() {
 								name={name}
 
 							/>
-
-							<div className="card shodowles-card bg-transparent">
+							<div className="card mt-0 shodowles-card bg-transparent">
 								<div className="nk-ecwg nk-ecwg2">
 								<div className="card-inner p-0">
-									<div className='bg-white d-flex justify-content-between align-items-center rounded-4 py-2 px-3'>
-										<div className="select-item">
-											<div className='d-flex justify-content-start product-number align-items-center'>
-												<div className='selected-product-img me-2'>
-													<img src={nigeria} alt='select-img' />
-												</div>
-												+234
-											</div>
-											<input className='border-0' type='tel' placeholder='' value="8039835234" />
+									<div className='rounded-4 py-2'>								
+										<div className="form-group">												
+											<InputField 
+												label="Meter Number"
+												name="meterNumber"
+												type="number"
+												placeholder="Enter meter number"
+												value={formData.meterNumber}
+												change={handleInputChange}
+											/>
 										</div>
-										{/* <div className='dropdown-con'>
-											<img src={dropdown} alt='dropdown' />
-										</div> */}
 									</div>
 								</div>
 								{/* .card-inner */}
 								</div>
 								{/* .nk-ecwg */}
 							</div>
-							<div className="card shodowles-card bg-transparent">
+							<div className="card mt-0 shodowles-card bg-transparent">
 								<div className="nk-ecwg nk-ecwg2">
+								<p className='auth-label'>Select Meter Type</p>
 								<div className="card-inner p-0">
-									<div className='bg-white product-amount-con rounded-4 py-2 px-3'>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("50")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("100")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("200")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("500")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("100")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("1500")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("2000")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("50000")} name="amount" type='text' readOnly/>
-									
+									<div className='rounded-4 py-2 d-flex justify-content-start align-items-center paybound-gap-2'>
+										
+										<div onClick={() => setFormData(prv => ({...prv, meterType: "prepaid"}))} className={`meter-type-con ${formData.meterType === "prepaid" && "active-meter-type"}`}>
+											Prepaid
+										</div>
+										<div onClick={() => setFormData(prv => ({...prv, meterType: "postpaid"}))} className={`meter-type-con ${formData.meterType === "postpaid" && "active-meter-type"}`}>
+											Postpaid
+										</div>
 									</div>
 								</div>
 								{/* .card-inner */}
