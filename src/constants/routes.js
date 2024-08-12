@@ -15,6 +15,7 @@ const _route = {
     _electricity: '/electricity',
     _cable: '/cable',
     _betting: '/betting',
+    _groceries: '/groceries',
     _not_found: '*',
 
 }

@@ -341,3 +341,47 @@ select[multiple] option:checked {
 	row-gap: 20px;
 	column-gap: 20px;
 }
+.paybound-gap-1{
+	row-gap: 10px;
+	column-gap: 10px;
+}
+.search-icon{
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	right: 10px;
+}
+.search-icon > img {
+	width: 1.1rem;
+}
+.fav-con{
+	width: 40px;
+	height: 40px;
+	background: #fff;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+.flex-con{	
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.fav-con-abs{
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	width: 30px;
+	height: 30px;
+	background: #fff;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+.fav-con-abs > img{
+	width: 17px;
+}

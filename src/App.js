@@ -11,6 +11,7 @@ import {
 	  Electricity,
 	  Betting,
 	  Cable,
+	  Groceries,
 	  
   
   } from "./pages/user/index";
@@ -53,6 +54,7 @@ const router = createBrowserRouter(
 		<Route path={_route._electricity}  element={<Electricity />} />
 		<Route path={_route._betting}  element={<Betting />} />
 		<Route path={_route._cable}  element={<Cable />} />
+		<Route path={_route._groceries} element={<Groceries /> } />
 
 		</Route>
 	</Route>

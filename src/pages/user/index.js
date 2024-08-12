@@ -4,6 +4,7 @@ import Data from "./data";
 import Electricity from "./electricity";
 import Betting from "./betting";
 import Cable from "./cable";
+import Groceries from "./groceries";
 
 
 export { 
@@ -13,6 +14,7 @@ export {
 	Electricity,
 	Betting,
 	Cable,
+	Groceries,
 	
 	
 };

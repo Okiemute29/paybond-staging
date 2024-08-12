@@ -1,0 +1,97 @@
+.auth-title{
+	font-size: 3rem;
+    background: linear-gradient(286.12deg, #003F9C 1.79%, #00EAB0 131.86%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	width: fit-content;
+    background-clip: text; /* This is for non-WebKit browsers that support this property */
+    text-fill-color: transparent; /* This is for non-WebKit browsers that support this property */
+}
+.text-paybond{
+    background: linear-gradient(286.12deg, #003F9C 1.79%, #00EAB0 131.86%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	width: fit-content;
+    background-clip: text; /* This is for non-WebKit browsers that support this property */
+    text-fill-color: transparent; /* This is for non-WebKit browsers that support this property */
+}
+.bg-paybond{
+	background-image: linear-gradient(286.12deg, #003F9C 1.79%, #00EAB0 131.86%) !important;
+	
+}
+.border-paybond {
+    /* border-color: linear-gradient(286.12deg, #003F9C 1.79%, #00EAB0 131.86%);
+    border-image-slice: 1; */
+
+	border: 1px solid #00EAB0;
+}
+.border-paybond:hover {
+	border: 1px solid #00EAB0;
+}
+
+.text-grey{
+	color: #828282 !important;
+}
+.auth-brand{
+	margin-bottom: 70px;
+}
+.auth{
+	color: #1A1423;
+	font-size: 2rem;
+}
+.auth-descript{
+	color: #1A1423;
+	font-weight: 500;
+}
+.auth-label{
+	font-size: 14px;
+	margin-bottom: 5px;
+	color: #1A1423;
+}
+.auth-field::placeholder {
+    color: #828282;
+}
+.bg-bondwhite{
+	background: #FDFDFD;
+}
+.text-faintwhite{
+	color: #F5F5F5 !important;
+}
+.store-btn{
+	background: white;
+	color: #1A1423;
+	border: 2px solid #000;
+	padding: 10px;
+	border-radius: 10px;
+	/* width: rem; */
+}
+.store-btn > img{
+	width: 70%
+}
+.text-green{
+	color: #00EAB0 !important;
+}
+.social-widget{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.1);
+	/* padding: 5px; */
+}
+.social-widget > img{
+	width: 15px;
+}
+.social-container{
+	display: flex;
+	justify-content:  flex-start;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 15px;
+}
+.is-light .active > .nk-menu-link, .active > .nk-menu-link{
+	color: #006AFF !important;
+	font-weight: 700;
+}

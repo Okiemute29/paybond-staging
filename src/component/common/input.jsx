@@ -1,22 +1,25 @@
 import { useState } from "react"
-export default function InputField({label, type, name, placeholder, value, change }) {
+import search from "../../assets/images/search-normal.svg"
+
+
+export default function InputField({label, type, name, placeholder, value, inputClass, change }) {
 	const [showPassword, setShowPassword] = useState(false)
   return (
 	<>
 	  
 		{ type === "password" ?
 			<>
-			<div
-			className="form-icon form-icon-right passcode-switch lg"
-			onClick={()=> setShowPassword(prv => !prv)}
-			>
-			<em className={`con-show icon ni ${showPassword ? 'ni ni-eye-off-fill' : 'ni-eye-fill'} `} />
-			</div>
-				<label className='auth-label'>{label}</label>
+				<div
+					className="form-icon form-icon-right passcode-switch lg"
+					onClick={()=> setShowPassword(prv => !prv)}
+				>
+					<em className={`con-show icon ni ${showPassword ? 'ni ni-eye-off-fill' : 'ni-eye-fill'} `} />
+				</div>
+				{label && <label className='auth-label'>{label}</label>}
 				<input
 					type={`${showPassword ? 'text' : type}`}
 					name={name}
-					className="form-control form-control-lg auth-field"                              
+					className={`form-control form-control-lg auth-field ${inputClass && inputClass}`}                              
 					placeholder={placeholder}
 					value={value}
 					onChange={change}
@@ -25,16 +28,17 @@ export default function InputField({label, type, name, placeholder, value, chang
 			</>
 			:
 			<>
-				<label className='auth-label'>{label}</label>
+				{label && <label className='auth-label'>{label}</label>}
 				<input
 					type={type}
 					name={name}
-					className="form-control form-control-lg auth-field"                              
+					className={`form-control form-control-lg auth-field ${inputClass && inputClass}`}                              
 					placeholder={placeholder}
 					value={value}
 					onChange={change}
 					required
 				/>
+				{name?.toLowerCase() === "search" && <div className="search-icon" ><img src={search} alt="search" /></div> }
 			</>
 		}
 	</>

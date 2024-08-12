@@ -1,0 +1,193 @@
+
+import mtn from "../../assets/images/mtn.png"
+import airtel from "../../assets/images/airtel.png"
+import glo from "../../assets/images/glo.png"
+import { useState } from 'react'
+import InputField from "../../component/common/input"
+import favourite from "../../assets/images/favorite_colored.svg"
+import cart from "../../assets/images/shopping_basket_colored.svg"
+import ProductList from "../../component/groceries/productlist"
+import ProductDetails from "../../component/groceries/productdetails"
+
+
+export default function Groceries() {
+	const [selectProduct, setSelectProduct] = useState(null)
+	const [tab, setTab] = useState(0)
+	const [formData, setFormData] = useState({
+		amount: "",
+	})
+
+
+
+	const handleInputChange = (e) =>{
+		const {name, value} = e.target 
+		const rawValue = value.replace(/[^\d]/g, ''); // Remove non-numeric characters
+		console.log(rawValue);
+		setFormData(prv => ({...prv, [name]: rawValue}))
+	}	
+
+
+
+	const product = [
+		{
+			_id: "prod1",
+			title: "Premium T-Shirt",
+			price: 3500,
+			description: "A high-quality t-shirt made from organic cotton, available in multiple sizes and colors.",
+			image: {
+				url: mtn
+			},
+			size: "800g",
+			color: "Blue"
+		},
+		{
+			_id: "prod2",
+			title: "Classic Hoodie",
+			price: 7000,
+			description: "A comfortable hoodie perfect for chilly weather.",
+			image: {
+				url: airtel
+			},
+			size: "800g",
+			color: "Gray"
+		},
+		{
+			_id: "prod3",
+			title: "Sports Cap",
+			price: 1500,
+			description: "A stylish cap suitable for outdoor activities.",
+			image: {
+				url: glo
+			},
+			size: "Super pack",
+			color: "Black"
+		},
+		{
+			_id: "prod4",
+			title: "Running Shoes",
+			price: 12000,
+			description: "Lightweight running shoes with excellent grip and comfort.",
+			image: {
+				url: mtn
+			},
+			size: "800g",
+			color: "Red"
+		},
+		{
+			_id: "prod5",
+			title: "Leather Wallet",
+			price: 4500,
+			description: "A premium leather wallet with multiple compartments.",
+			image: {
+				url: airtel
+			},
+			size: "800g",
+			color: "Brown"
+		}
+	];
+
+	const carts = [
+		{
+			product: {
+				_id: "prod1",  // This ID should match the product ID
+				title: "Premium T-Shirt",
+				price: 3500,
+				description: "A high-quality t-shirt made from organic cotton, available in multiple sizes and colors.",
+				image: {
+					url: mtn  // Replace with actual image URL
+				}
+			},
+			quantity: 2
+		},
+		{
+			product: {
+				_id: "prod2",
+				title: "Classic Hoodie",
+				price: 7000,
+				description: "A comfortable hoodie perfect for chilly weather.",
+				image: {
+					url: airtel  // Replace with actual image URL
+				}
+			},
+			quantity: 1
+		}
+	];
+
+	const handleTab = (value) =>{
+		setSelectProduct(null)
+		setTab(value)
+	}
+
+	
+	return ( 
+	<>
+		<div className="nk-content ">
+			<div className="container-fluid">
+				<div className="nk-content-inner">
+				<div className="nk-content-body">
+					<div className="nk-block-head nk-block-head-sm mt-4">
+					<div className="nk-block-between">
+						<div className="nk-block-head-content flex-column flex-sm-row d-flex paybound-gap-1 justify-content-sm-between align-items-sm-center w-100">
+							<h4 className="page-title cus-page-title text-paybond">Groceries</h4>
+							<div className="d-flex paybound-gap-1 justify-content-between align-items-center w-available">
+								<div className="d-none d-sm-block"></div>
+								{!selectProduct && <div className=" w-75 relative">												
+									<InputField 
+										name="search"
+										type="text"
+										inputClass=""
+										placeholder="Search groceries"
+										value={formData.amount}
+										change={handleInputChange}
+									/>
+								</div>}
+								<div className="flex-con paybound-gap-1">
+									<div onClick={() => handleTab("Favourites")} className="fav-con">
+										<img src={favourite} alt="favourite" />
+									</div>
+									<div onClick={() => handleTab("Shopping cart")} className="fav-con">
+										<img src={cart} alt="cart" />
+									</div>
+								</div>
+							</div>
+						</div>
+						{/* .nk-block-head-content */}
+					</div>
+					{/* .nk-block-between */}
+					</div>
+					{/* .nk-block */}
+					<div className="nk-block mt-4">
+					<div className="row g-gs ">
+					{tab !== 0 && <h4 className="page-title cus-page-title text-paybond text-center w-100 mb-4">{tab}</h4>}
+
+					{	
+						selectProduct 
+						?
+							<ProductDetails 
+								product={selectProduct}
+								products={product}
+								carts={carts}
+								setSelectProduct={setSelectProduct}
+							/>
+
+						:
+						<ProductList 
+							products={product}
+							carts={carts}
+							setSelectProduct={setSelectProduct}
+						/>
+					}
+					</div>
+					{/* .row */}
+					</div>
+					{/* .nk-block */}
+				</div>
+				</div>
+			</div>
+		</div>
+
+
+	</>
+
+  );
+}
