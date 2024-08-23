@@ -173,12 +173,16 @@
 	border: 3px solid #fff;
 	position: absolute;
 }
+.otp-cont > div{
+    flex-wrap: wrap;
+    row-gap: 10px;
+}
 @media (max-width: 576px) {
 	.service-provider{
 		height: 5rem !important;
 	}
 	.auth-title{
-		font-size: 2rem;
+		font-size: 1.5rem;
 		text-align: center;
 	}
 	

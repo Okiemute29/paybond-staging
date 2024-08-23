@@ -7,6 +7,7 @@ import betting from '../../../assets/images/sports_soccer.svg'
 import grocery from '../../../assets/images/local_grocery_store.svg'
 import Card from '../sectionone/card';
 import ButtonSection from '../buttonsection'
+import _route from '../../../constants/routes'
 
 
 export default function SectionOne() {
@@ -30,26 +31,32 @@ export default function SectionOne() {
 											<Card 
 												icon={phone}
 												text="Airtime"
+												route={_route._airtime}
 											/>
 											<Card 
 												icon={wifi}
 												text="Data"
+												route={_route._data}
 											/>
 											<Card 
 												icon={electricity}
 												text="Electricity"
+												route={_route._electricity}
 											/>
 											<Card 
 												icon={tv}
 												text="Cable TV"
+												route={_route._cable}
 											/>
 											<Card 
 												icon={betting}
 												text="Betting"
+												route={_route._betting}
 											/>
 											<Card 
 												icon={grocery}
 												text="Groceries"
+												route={_route._groceries}
 											/>
 											
 										</div>

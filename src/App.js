@@ -12,6 +12,10 @@ import {
 	  Betting,
 	  Cable,
 	  Groceries,
+	  GroceriesProduct,
+	  Favourites,
+	  Category,
+	  CheckOut
 	  
   
   } from "./pages/user/index";
@@ -55,6 +59,10 @@ const router = createBrowserRouter(
 		<Route path={_route._betting}  element={<Betting />} />
 		<Route path={_route._cable}  element={<Cable />} />
 		<Route path={_route._groceries} element={<Groceries /> } />
+		<Route path={_route._groceries_details} element={<GroceriesProduct /> } />
+		<Route path={_route._favourite} element={<Favourites /> } />
+		<Route path={_route._category} element={<Category /> } />
+		<Route path={_route._checkout} element={<CheckOut /> } />
 
 		</Route>
 	</Route>

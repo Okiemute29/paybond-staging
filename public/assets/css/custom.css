@@ -992,6 +992,10 @@ a:hover{
 	align-items: center;
 	
 }
+.cart-plus-active{
+	border-color: #fff !important;
+	color: #fff !important;
+}
 .quiz-btn{
     color: white;
     text-align: center;

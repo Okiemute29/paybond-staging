@@ -16,6 +16,10 @@ const _route = {
     _cable: '/cable',
     _betting: '/betting',
     _groceries: '/groceries',
+    _favourite: '/groceries/favourite',
+    _category: '/groceries/shipping/cart',
+    _checkout: '/groceries/shipping/checkout',
+    _groceries_details: '/groceries/:id',
     _not_found: '*',
 
 }

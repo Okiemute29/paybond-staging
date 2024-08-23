@@ -34,12 +34,12 @@ export default function Login() {
             <div className="nk-content ">
               <div className="auth-split nk-split nk-split-page nk-split-md">
                 <div className="nk-split-content nk-block-area nk-block-area-column nk-auth-container">
-                  <div className="nk-block nk-block-middle nk-auth-body ">
-                    <div className=''>
-					<div className="brand-logo auth-brand">
+                  <div className="nk-block nk-block-middle nk-auth-body h-100vh">
+                    <div className='overflw-scroll overflow-scroll-hidden'>
+					<div className="brand-logo auth-brand mb-3">
                       <Link to={_route._admin_dashboard} className="logo-link">
                         
-                        <p className="auth">Login</p>
+                        <p className="auth fs-3 fs-md-1 ">Login</p>
                       </Link>
                     </div>
                     <div className="nk-auth-form overflow-scroll-hidden">

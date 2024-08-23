@@ -8,7 +8,7 @@
     text-fill-color: transparent; /* This is for non-WebKit browsers that support this property */
 }
 .text-paybond{
-    background: linear-gradient(286.12deg, #003F9C 1.79%, #00EAB0 131.86%);
+    background: linear-gradient(286.12deg, #003F9C 1.79%, #00EAB0 131.86%) ;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 	width: fit-content;

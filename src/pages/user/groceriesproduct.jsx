@@ -2,25 +2,14 @@
 import mtn from "../../assets/images/mtn.png"
 import airtel from "../../assets/images/airtel.png"
 import glo from "../../assets/images/glo.png"
-import { useState } from 'react'
-import InputField from "../../component/common/input"
-import ProductList from "../../component/groceries/productlist"
+import ProductDetails from "../../component/groceries/productdetails"
 import FavouriteBtnSection from "../../component/groceries/favouritebtnsection"
 
 
-export default function Groceries() {
-	const [formData, setFormData] = useState({
-		amount: "",
-	})
+export default function GroceriesProduct() {
 
 
 
-	const handleInputChange = (e) =>{
-		const {name, value} = e.target 
-		const rawValue = value.replace(/[^\d]/g, ''); // Remove non-numeric characters
-		console.log(rawValue);
-		setFormData(prv => ({...prv, [name]: rawValue}))
-	}	
 
 
 
@@ -109,7 +98,17 @@ export default function Groceries() {
 		}
 	];
 
-
+	const select = {
+		_id: "prod1",
+		title: "Premium T-Shirt",
+		price: 3500,
+		description: "A high-quality t-shirt made from organic cotton, available in multiple sizes and colors.",
+		image: {
+			url: mtn
+		},
+		size: "800g",
+		color: "Blue"
+	};
 	
 	return ( 
 	<>
@@ -123,16 +122,7 @@ export default function Groceries() {
 							<h4 className="page-title cus-page-title text-paybond">Groceries</h4>
 							<div className="d-flex paybound-gap-1 justify-content-between align-items-center w-available">
 								<div className="d-none d-sm-block"></div>
-								<div className=" w-75 relative">												
-									<InputField 
-										name="search"
-										type="text"
-										inputClass=""
-										placeholder="Search groceries"
-										value={formData.amount}
-										change={handleInputChange}
-									/>
-								</div>
+								
 								<FavouriteBtnSection />
 							</div>
 						</div>
@@ -143,11 +133,11 @@ export default function Groceries() {
 					{/* .nk-block */}
 					<div className="nk-block mt-4">
 					<div className="row g-gs ">
-						<ProductList 
+						<ProductDetails 
 							products={product}
 							carts={carts}
+							product={select}
 						/>
-					
 					</div>
 					{/* .row */}
 					</div>

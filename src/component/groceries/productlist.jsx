@@ -1,5 +1,8 @@
 import React from 'react';
 import favourite from "../../assets/images/favorite.svg"
+import { Link } from 'react-router-dom';
+import _route from '../../constants/routes';
+import CartBtn from "../../component/groceries/cartbtn"
 
 const ProductList = ({ products, carts, setSelectProduct }) => {
     return (
@@ -15,7 +18,7 @@ const ProductList = ({ products, carts, setSelectProduct }) => {
                         // const productQuantity = isInCart ? carts.find(item => item.product._id === product._id)?.quantity : '0';
 
                         return (
-                            <div onClick={()=> setSelectProduct(product)} key={index} id={index} className="product">
+                            <Link to={`${_route._groceries}/${product._id}`} className="product">
 								<div className="product-image-container relative">
 									<img src={product?.image?.url} alt="product" />
 									<div className="fav-con-abs">
@@ -35,31 +38,14 @@ const ProductList = ({ products, carts, setSelectProduct }) => {
 								</div>
 
 								<div className="w-100 button-h px-3">
-									<button 
-										data-cart={isInCart}  
-										data-id={product._id} 
-										className="product-add-btn py-1">
-										<div></div>
-										cart
+									
+									<CartBtn 
+										isInCart={isInCart}
+										ProductId={product._id}
+									/>
 
-										<span className='cart-plus'>+</span>
-									</button>
-
-									{/* <div className={`quantity quantity-counter justify-content-center g-col-1 align-items-center ${isInCart ? '' : 'hidden'}`}>
-										<button data-id={product._id} className="prev">
-											<img src="/images/minus.svg" alt="subtract" />
-										</button>
-
-										<p style={{ width: '100%', textAlign: 'center' }} className="mb-0 quantity-value store-quantity-value">
-											{productQuantity}
-										</p>
-
-										<button data-id={product._id} className="next">
-											<img src="/images/add.svg" alt="add" />
-										</button>
-									</div> */}
 								</div>
-                            </div>
+                            </Link>
                         );
                     })}
                 </div>

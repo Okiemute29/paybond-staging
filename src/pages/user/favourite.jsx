@@ -8,7 +8,7 @@ import ProductList from "../../component/groceries/productlist"
 import FavouriteBtnSection from "../../component/groceries/favouritebtnsection"
 
 
-export default function Groceries() {
+export default function Favourites() {
 	const [formData, setFormData] = useState({
 		amount: "",
 	})
@@ -110,6 +110,7 @@ export default function Groceries() {
 	];
 
 
+
 	
 	return ( 
 	<>
@@ -143,11 +144,12 @@ export default function Groceries() {
 					{/* .nk-block */}
 					<div className="nk-block mt-4">
 					<div className="row g-gs ">
+					<h4 className="page-title cus-page-title text-paybond text-center w-100 mb-4">Favourites</h4>
+					
 						<ProductList 
 							products={product}
 							carts={carts}
 						/>
-					
 					</div>
 					{/* .row */}
 					</div>

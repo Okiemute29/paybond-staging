@@ -385,3 +385,69 @@ select[multiple] option:checked {
 .fav-con-abs > img{
 	width: 17px;
 }
+
+.product-banner > img, .shopping-cart > img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+.shopping-cart{
+    width: 8rem;
+    height: 7rem;
+	border-radius: 10px;
+	overflow: hidden;
+
+}
+.product-image-container {
+    overflow: hidden; /* To ensure the image doesn't overflow the container */
+}
+
+.product-image-container > img {
+    transition: transform 0.3s ease; /* Smooth transition for the zoom */
+    width: 100%; /* Ensure the image fits the container */
+}
+
+.product-image-container:hover > img {
+    transform: scale(1.1); /* Slightly zoom the image */
+}
+.cart-table{
+	border-bottom: 1px solid #828282;
+}
+.delete-cont{
+	height: fit-content;
+	width: fit-content;
+	padding: 2px;
+	background: #EDEDED;
+	border-radius: 5px;
+	padding: 5px;
+	cursor: pointer;
+}
+.checkout-btn{
+	border: 0;
+	color: #fff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+	width: 100%;
+	border-radius: 5px;
+}
+.w-35{
+	width: 35% !important;
+}
+.border-b-white{
+	border-bottom: 1px solid #fff;
+}
+.complete-btn{
+	background: #fff;
+	border: 0;
+	padding: 10px;
+	border-radius: 10px;
+}
+.h-100vh{
+	height: 100vh;
+}
+.overflw-scroll{
+	overflow: scroll;
+}

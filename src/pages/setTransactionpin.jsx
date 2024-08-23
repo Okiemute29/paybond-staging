@@ -28,8 +28,8 @@ export default function SetTransactionPin() {
             <div className="nk-content ">
               <div className="auth-split nk-split nk-split-page nk-split-md">
                 <div className="nk-split-content nk-block-area nk-block-area-column nk-auth-container">
-                  <div className="nk-block nk-block-middle nk-auth-body ">
-                    <div className='w-90'>
+                  <div className="nk-block nk-block-middle nk-auth-body mb-3">
+                    <div className='overflw-scroll overflow-scroll-hidden'>
 					<div className="brand-logo auth-brand">
                       <Link to={_route._admin_dashboard} className="logo-link">
                         
@@ -51,9 +51,9 @@ export default function SetTransactionPin() {
                       <form onSubmit={handleSubmit} className="auth-form ">
 						
 						<div className='row gy-4 mb-4'>
-							<div className="col-sm-6">
+							<div className="">
 								<div className="form-group">
-								<div className="">
+								<div className="otp-cont">
 									<OtpInput
 										value={pin}
 										onChange={setPin}
@@ -61,8 +61,8 @@ export default function SetTransactionPin() {
 										separator={<span> </span>}
 										renderInput={(inputProps, index) => <input key={index} {...inputProps} />}
 										inputStyle={{
-										width: '5rem',
-										height: '5rem',
+										width: '4rem',
+										height: '4rem',
 										margin: '0 0.5rem',
 										fontSize: '2rem',
 										borderRadius: 4,
@@ -75,10 +75,10 @@ export default function SetTransactionPin() {
 							</div>
 						</div>
 						<div className='row gy-4 mb-4'>
-							<div className="col-sm-6">
+							<div className="">
 								<div className="form-group">
 								<label className="form-label auth-label" htmlFor="email">Confirm transaction PIN</label>
-								<div className="">
+								<div className="otp-cont">
 									<OtpInput
 										value={confirmPin}
 										onChange={setConfirmPin}
@@ -86,8 +86,8 @@ export default function SetTransactionPin() {
 										separator={<span> </span>}
 										renderInput={(inputProps, index) => <input key={index} {...inputProps} />}
 										inputStyle={{
-										width: '5rem',
-										height: '5rem',
+										width: '4rem',
+										height: '4rem',
 										margin: '0 0.5rem',
 										fontSize: '2rem',
 										borderRadius: 4,
