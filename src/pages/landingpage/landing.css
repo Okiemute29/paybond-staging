@@ -172,10 +172,24 @@
 	background-color: rgba(253, 253, 253, 0.5);
 	border: 3px solid #fff;
 	position: absolute;
+	top: -65%;
+    padding: 20px;
+    border-radius: 15px;
+	width: 400px;
 }
 .otp-cont > div{
     flex-wrap: wrap;
     row-gap: 10px;
+}
+@media (max-width: 768px) {
+	.contact-form-container{
+		position: static;
+		top: -65%;
+		padding: 20px;
+		border-radius: 15px;
+		width: 100%;
+	}
+	
 }
 @media (max-width: 576px) {
 	.service-provider{

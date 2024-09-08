@@ -1584,7 +1584,7 @@ a:hover{
       border-right: 1px solid #e5e9f2;
     } */
     .nk-chat{
-      flex-direction: column;
+      /* flex-direction: column; */
     }
 	.nk-auth-body{
 		padding: 3em 3em;
@@ -1599,7 +1599,7 @@ a:hover{
         flex-grow: 1;
     }
     .chat-list{  
-        display: flex;
+        /* display: flex; */
         justify-content: flex-start;
         align-items: center;
         overflow-x: scroll;

@@ -19,6 +19,7 @@ const _route = {
     _favourite: '/groceries/favourite',
     _category: '/groceries/shipping/cart',
     _checkout: '/groceries/shipping/checkout',
+    _setting: '/setting',
     _groceries_details: '/groceries/:id',
     _not_found: '*',
 

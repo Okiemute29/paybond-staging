@@ -15,7 +15,8 @@ import {
 	  GroceriesProduct,
 	  Favourites,
 	  Category,
-	  CheckOut
+	  CheckOut,
+	  Settings
 	  
   
   } from "./pages/user/index";
@@ -63,6 +64,7 @@ const router = createBrowserRouter(
 		<Route path={_route._favourite} element={<Favourites /> } />
 		<Route path={_route._category} element={<Category /> } />
 		<Route path={_route._checkout} element={<CheckOut /> } />
+		<Route path={_route._setting} element={<Settings /> } />
 
 		</Route>
 	</Route>

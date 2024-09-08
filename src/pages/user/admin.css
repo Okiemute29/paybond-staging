@@ -208,7 +208,7 @@ select[multiple] option:checked {
     align-items: center;
     border-radius: 50%;
     font-size: 1rem;
-    bottom: 15px;
+    bottom: 0;
     right: 17px;
     cursor: pointer;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -451,3 +451,103 @@ select[multiple] option:checked {
 .overflw-scroll{
 	overflow: scroll;
 }
+.setting-switch {
+	position: relative;
+	display: flex;
+	width: 50px;
+	height: 24px;
+  }
+  
+  .setting-switch input { 
+	width: 0;
+	height: 0;
+	opacity: 0;
+  }
+  
+  .setting-slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #d1d5db; /* Equivalent to bg-slidergrey */
+	border: 2px solid #d1d5db; /* Equivalent to border-slidergrey */
+	transition: all 0.4s;
+  }
+  
+  .setting-slider::before {
+	position: absolute;
+	content: "";
+	height: 20px; /* Equivalent to h-5 */
+	width: 20px; /* Equivalent to w-5 */
+	left: 0;
+	bottom: 0.5px;
+	background-color: white;
+	transition: all 0.4s;
+  }
+  
+  .setting-switch input:checked + .setting-slider {
+	background-color: #00EAB0; 
+	border-color: #00EAB0; 
+  }
+  
+  .setting-switch input:checked + .setting-slider::before {
+	transform: translateX(24px);
+	background-color: white;
+  }
+  
+  .setting-slider.setting-round {
+	border-radius: 34px;
+  }
+  
+  .setting-slider.setting-round::before {
+	border-radius: 50%;
+  }
+  .support-cont{
+	width: 30px;
+	height: 30px;
+	padding: 5px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+.bg-red{
+	background: #F30000;
+}
+.bg-green{
+	background: #00EAB0;
+}
+@media (max-width: 991px) {
+	.nk-chat-aside {
+	  position: absolute;
+	  width: 100%;
+	  height: 100%;
+	  z-index: 10;
+	  background-color: #fff;
+	  transition: transform 0.3s ease;
+	  transform: translateX(0); /* Sidebar is shown by default */
+	}  
+	.nk-chat-body {
+	  display: none; /* Hide the tab content by default */
+	}  
+	.nk-chat.hide-sidebar {
+	  transform: translateX(-100%); /* Hide sidebar */
+	}  
+	.nk-chat-body.show-content {
+	  display: block;
+	}  
+	.back-button {
+	  display: block;
+	  padding: 10px;
+	  font-size: 16px;
+	  cursor: pointer;
+	}
+  }
+  
+  @media (min-width: 992px) {
+	.back-button {
+	  display: none;
+	}
+  }

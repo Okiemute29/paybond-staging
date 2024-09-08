@@ -357,6 +357,53 @@ export default function _sidebar() {
                             <span className="nk-menu-text">Groceries</span>
                           </span>
                         </NavLink>
+                        {/* .nk-menu-item */}
+						<NavLink to={_route._setting}  className={(isActive) => "nk-menu-item " + (isActive.isActive ? "active " : "")} >
+                          <span className="nk-menu-link">
+                            <span className="nk-menu-icon side-svg">
+                              <svg
+                                className="fill-inherit"
+                                width=" 24"
+                                height={25}
+                                viewBox="0 0 24 25"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
+                                  d="M19.0714 19.722C16.0152 22.7784 11.4898 23.4388 7.78642 21.7261C7.23971 21.506 6.79148 21.3281 6.36537 21.3281C5.17849 21.3351 3.70117 22.486 2.93336 21.7191C2.16555 20.9512 3.31726 19.4727 3.31726 18.2787C3.31726 17.8525 3.14642 17.4123 2.92632 16.8645C1.21283 13.1617 1.87411 8.63479 4.93026 5.57931C8.8316 1.67653 15.17 1.67653 19.0714 5.5783C22.9797 9.48711 22.9727 15.8202 19.0714 19.722Z"
+                                  stroke="inherit"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                                <path
+                                  d="M15.9394 13.0651H15.9484"
+                                  stroke="currentColor"
+                                  strokeWidth={2}
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                                <path
+                                  d="M11.9304 13.0651H11.9394"
+                                  stroke="currentColor"
+                                  strokeWidth={2}
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                                <path
+                                  d="M7.9214 13.0651H7.9304"
+                                  stroke="currentColor"
+                                  strokeWidth={2}
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            </span>
+                            <span className="nk-menu-text">Settings</span>
+                          </span>
+                        </NavLink>
 						
 						
                       </ul>

@@ -9,6 +9,7 @@ import GroceriesProduct from "./groceriesproduct";
 import Favourites from "./favourite";
 import Category from "./cartegory";
 import CheckOut from "./checkout";
+import Settings from "./settings"
 
 
 export { 
@@ -22,7 +23,8 @@ export {
 	GroceriesProduct,
 	Favourites,
 	Category,
-	CheckOut
+	CheckOut,
+	Settings
 	
 	
 };

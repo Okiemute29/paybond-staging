@@ -20,7 +20,7 @@ export default function SectionTwo() {
 
   return (
     <>
-      <div className="nk-content bg-white">
+      <div className="nk-content">
         <div className="contact-section my-5 flex-column flex-md-row ">
           <div className="container-fluid my-auto h-100">
             <div className="nk-content-inner h-100">
@@ -54,52 +54,67 @@ export default function SectionTwo() {
 						</ul>
 
                       </div>
-                      <div className="col-12 p-3 mt-5 mt-md-0 col-md-6 relative">
+                      <div className="col-12 p-3 mt-5 mt-md-0 col-md-6">
 						<div className="contact-form-container">
 							
 							<div className="nk-auth-form my-auto overflow-scroll-hidden">
 								<div className="nk-block-head pb-0">
 									<div className="nk-block-head-content">
-										<h6 className="nk-block-title my-4 fs-3 auth-title">Stay Update with PayBond</h6>
+										<h6 className="nk-block-title my-4 fs-3 text-center text-black">Feedback Form</h6>
 									</div>
 								</div>
 								{/* .nk-block-head */}
 								<form onSubmit={handleSubmit} className="auth-form">
 									<div className="form-group">
-									<div className="form-control-wrap">
-										<label className='auth-label'>Email Address</label>
-										<input
-										type="text"
-										name="name"
-										className="form-control form-control-lg auth-field"                              
-										placeholder="Enter your full name"
-										value={formData.username}
-										onChange={(e)=> setFormData(prv => ({...prv, username: e.target.value}))}
-										required
-										/>
-									</div>
+										<div className="form-control-wrap">
+											<label className='auth-label'>Email Address</label>
+											<input
+											type="text"
+											name="name"
+											className="form-control form-control-lg auth-field"                              
+											placeholder="Enter your full name"
+											value={formData.username}
+											onChange={(e)=> setFormData(prv => ({...prv, username: e.target.value}))}
+											required
+											/>
+										</div>
 									</div>
 									{/* .form-group */}
 									<div className="form-group">
-									<div className="form-control-wrap">
-										
-										<label className='auth-label'>Email Address</label>
-										<input
-										type='email'
-										name="email"
-										className="form-control form-control-lg auth-field"
-										id="password"
-										placeholder="Enter your email address"
-										value={formData.password}
-										onChange={(e)=> setFormData(prv => ({...prv, password: e.target.value}))}
-										required
-										/>
+										<div className="form-control-wrap">
+											
+											<label className='auth-label'>Email Address</label>
+											<input
+											type='email'
+											name="email"
+											className="form-control form-control-lg auth-field"
+											id="password"
+											placeholder="Enter your email address"
+											value={formData.password}
+											onChange={(e)=> setFormData(prv => ({...prv, password: e.target.value}))}
+											required
+											/>
+										</div>
 									</div>
+									<div className="form-group">
+										<div className="form-control-wrap">
+											
+											<label className='auth-label'>Your Message</label>
+											<textarea
+											name="message"
+											className="form-control form-control-lg auth-field"
+											id="message"
+											placeholder="Enter your message"
+											value={formData.password}
+											onChange={(e)=> setFormData(prv => ({...prv, password: e.target.value}))}
+											required
+											/>
+										</div>
 									</div>
 									{/* .form-group */}
 									<div className="form-group">
 									<button className="auth-btn btn btn-lg btn-primary btn-block">
-										{loading ? <Spinnar /> : 'Subscribe'}
+										{loading ? <Spinnar /> : 'Send Message'}
 									</button>
 									</div>
 								</form>
