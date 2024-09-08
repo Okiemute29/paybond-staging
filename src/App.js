@@ -51,7 +51,7 @@ const router = createBrowserRouter(
 	<Route path={_route._contact_us}  element={<Contact />} />
 
 	</Route>
-	<Route element={<PrivateRoute />} >
+	{/* <Route element={<PrivateRoute />} > */}
 		<Route path={_route._landing_page} element={<PageLayouts.RootLayout />}>
 		<Route path={_route._dashboard}  element={<Dashboard />} />
 		<Route path={_route._airtime}  element={<Airtime />} />
@@ -67,7 +67,7 @@ const router = createBrowserRouter(
 		<Route path={_route._setting} element={<Settings /> } />
 
 		</Route>
-	</Route>
+	{/* </Route> */}
 	</>
 	)
   );

@@ -52,14 +52,14 @@ input{
 .side-svg > svg{
     width: 24px;
     fill: transparent;
-    stroke: black;
-    color: black;
+    /* stroke: black; */
+    /* color: black; */
 }
 .active .side-svg > svg, .nk-menu-link:hover > .side-svg > svg{
     width: 24px;
     fill: white;
-    stroke: white;
-    color: #0057FD;
+    /* stroke: white; */
+    /* color: #0057FD; */
 }
 
 .active .side-svg-diff > svg, .nk-menu-link:hover > .side-svg-diff > svg{
