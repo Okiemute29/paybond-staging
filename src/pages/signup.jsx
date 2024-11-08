@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import _route from '../constants/routes';
 import Spinnar from '../component/spinnar'
 import signUpImg from "../assets/images/signup-img.svg"
+import useVerifyEmail from '../hooks/auth/useverifyemail';
 
 export default function SignUp() {
 	const [showPassword, setShowPassword] = useState(false)
-	var loading = false
+	const  {verifyEmail, loading} = useVerifyEmail()
 	const [formData, setFormData] = useState({
 		name: '',
 		number: '',
@@ -17,7 +18,17 @@ export default function SignUp() {
 
 	const handleSubmit = async (e)=>{
 		e.preventDefault()
-		console.log("submited")
+		if(formData.password !== formData.confirmPassword){
+			window.NioApp.Toast("The passwords entered do not match.", "error");
+		}else{
+			const user = {
+				username: formData.username,
+				password: formData.password,
+				fullname: formData.name,
+				phone_no: formData.number
+			}
+			await verifyEmail(user)
+		}
 	}
 
   return (
@@ -33,7 +44,7 @@ export default function SignUp() {
               <div className="auth-split nk-split nk-split-page nk-split-md">
                 <div className="nk-split-content nk-block-area nk-block-area-column nk-auth-container">
                   <div className="nk-block nk-block-middle nk-auth-body h-100vh ">
-                    <div className='overflw-scroll overflow-scroll-hidden'>
+                    <div className='overflw-scroll overflow-scroll-hidden h-100vh'>
 					<div className="brand-logo auth-brand mb-3">
                       <Link to={_route._admin_dashboard} className="logo-link">
                         
@@ -155,7 +166,7 @@ export default function SignUp() {
 							</div>
 						</div>
 						<div className="form-note-s2 mb-4 text-black">
-							By signing up, you agree to the<Link to={_route._admin_login} > Terms of Service </Link> and <Link to={_route._admin_login} >Privacy Policy </Link>
+							By signing up, you agree to the<Link to={_route._admin_login} className='text-paybond' > Terms of Service </Link> and <Link to={_route._admin_login} className='text-paybond' >Privacy Policy </Link>
 						</div>
 
 

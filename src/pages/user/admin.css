@@ -7,6 +7,9 @@
 	padding: 10px 20px;
 	border-radius: 5px;
 }
+.h-100vh{
+	height: 100vh !important;
+}
 .user-details-container{
 	display: flex;
 	flex-direction: column;
@@ -28,6 +31,27 @@
 }
 .chat-list-title{
 	letter-spacing: normal;
+}
+.box-shadow-none{
+	box-shadow: none !important;
+}
+.border-right-1{
+	border-right: 1px solid #dbdfea;
+}
+.dashboard-card-analysis .col-md-4:last-child {
+    border-right: 0 !important;
+}
+.fund-wallet-btn{
+	border: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 10px 20px;
+	border-radius: 8px;
+	gap: 10px;
+	margin: auto;
+	background: #002A69;
+	color: #fff;
 }
 .tab_button{
 	color: #7B7B7B;

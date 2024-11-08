@@ -5,7 +5,7 @@ import { SelectItem } from '../../helpers/selectitem'
 import { Link, useNavigate } from "react-router-dom";
 import _route from "../../constants/routes";
 import emptyState from '../../assets/images/oops.png'
-import useGetAllOrder from '../../hooks/orders/usegetorder';
+// import useGetAllOrder from '../../hooks/orders/usegetorder';
 import Skeleton from "../skeletons/skeleton";
 import Profile from "../data/profile";
 import TwoCharacterComponent from "../../helpers/twocharactercomponent";
@@ -17,12 +17,14 @@ export default function UserTableList({dashboard}) {
 	const {handleSelectAllChecked, handleEachInvoice, selectedItem} = SelectItem()
 	const [deleteId, setDeleteId] = useState(null)
 	const navigate = useNavigate()
-	const {getAllOrder, data, loading} = useGetAllOrder()
+	const data = []
+	const loading = false
+	// const {getAllOrder, data, loading} = useGetAllOrder()
 	const deleteLoading = false
 
 
 	const handleGetAllAgent = async ()=>{
-		await getAllOrder()
+		// await getAllOrder()
 	}
 
 	useEffect(()=>{

@@ -4,17 +4,23 @@ import _route from '../constants/routes';
 import Spinnar from '../component/spinnar'
 import OtpInput from 'react-otp-input';
 import signUpImg from "../assets/images/signup-img.svg"
+import useTransactionPin from '../hooks/auth/usetransactionpin';
 
 export default function SetTransactionPin() {
     const [pin, setPin] = useState("");
     const [confirmPin, setConfirmPin] = useState("");
-	var loading = false
+	const {transactionPin, loading} = useTransactionPin();
+	
 	const handleSubmit = async (e)=>{
 		e.preventDefault()
-		console.log("submited")
+		const transactionData = {
+			pin: pin,
+			confirm_pin: confirmPin
+		}
+		transactionPin(transactionData)
 	}
 
-	console.log(pin)
+	
 
   return (
     <>
@@ -29,7 +35,7 @@ export default function SetTransactionPin() {
               <div className="auth-split nk-split nk-split-page nk-split-md">
                 <div className="nk-split-content nk-block-area nk-block-area-column nk-auth-container">
                   <div className="nk-block nk-block-middle nk-auth-body mb-3">
-                    <div className='overflw-scroll overflow-scroll-hidden'>
+                    <div className='overflw-scroll overflow-scroll-hidden h-100vh'>
 					<div className="brand-logo auth-brand">
                       <Link to={_route._admin_dashboard} className="logo-link">
                         
@@ -49,7 +55,6 @@ export default function SetTransactionPin() {
                       </div>
                       {/* .nk-block-head */}
                       <form onSubmit={handleSubmit} className="auth-form ">
-						
 						<div className='row gy-4 mb-4'>
 							<div className="">
 								<div className="form-group">

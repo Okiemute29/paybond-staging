@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import _route from '../constants/routes';
 import Spinnar from '../component/spinnar'
 import InputField from '../component/common/input';
-import loginImg from "../assets/images/login-img.svg"
+import loginImg from "../assets/images/login-img.svg";
+import useLoginUser from '../hooks/auth/uselogin';
 
 export default function Login() {
-	var loading = false
+	const {loginUser, loading} = useLoginUser()
 	const [formData, setFormData] = useState({
 		username: '',
 		password: ''
@@ -14,7 +15,7 @@ export default function Login() {
 
 	const handleSubmit = async (e)=>{
 		e.preventDefault()
-		console.log("submited")
+		await loginUser(formData)
 	}
 
 	const handleInputChange = (e) => {
@@ -35,7 +36,7 @@ export default function Login() {
               <div className="auth-split nk-split nk-split-page nk-split-md">
                 <div className="nk-split-content nk-block-area nk-block-area-column nk-auth-container">
                   <div className="nk-block nk-block-middle nk-auth-body h-100vh">
-                    <div className='overflw-scroll overflow-scroll-hidden'>
+                    <div className='overflw-scroll overflow-scroll-hidden h-100vh'>
 					<div className="brand-logo auth-brand mb-3">
                       <Link to={_route._admin_dashboard} className="logo-link">
                         

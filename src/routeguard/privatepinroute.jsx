@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux'
 import _route from "../constants/routes";
 // import { useAuthContext } from "../hooks/auth/useauthcontext";
 
-export default function PrivateRoute() {
+export default function PrivatePinRoute() {
      const user = useSelector((state) => state.auth.user)
-	 console.log(user)
-     return user !== null ? <Outlet /> : <Navigate to={_route._login} />;
+     return user.pin !== null ? <Outlet /> : <Navigate to={_route._transaction_pin} />;
 }
 

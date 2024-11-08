@@ -5,37 +5,46 @@ import { setUser } from "../../redux/authreducer"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import _route from "../../constants/routes";
+import useSignUpUser from "./usesignup";
 
-const useLogOutUser = () => {
+const useVerifyOTP = () => {
     const [loading, setloading] = useState(false);
     const dispatch = useDispatch()
 	const navigate = useNavigate()
+	const {signUpUser, loading: signupLoading} = useSignUpUser()
     const CancelToken = axios.CancelToken;
     const source = useRef();
+
    
-    const logOutUser = async () => { 
+    const verifyOTP = async (data) => {
         if (source.current === undefined) {
             source.current = CancelToken.source();
           }
         try {
-            setloading(true);
-            const res = await AuthService.logOut(source.current);
-            
+			setloading(true);
+			const signupData = JSON.parse(localStorage.getItem("paybondsignup"));
+			const otpData = {
+				email: signupData.username,
+				otp: data
+			}
+			console.log("otpData", otpData)
+            const res = await AuthService.verifyOTP(otpData, source.current );
+			console.log("signup res", res)
+
             if(!res) {
 				window.NioApp.Toast('An error occured', "warning");
             }else{
-                setloading(false);
-                if(res.status === 200){
-                    await dispatch(setUser(null))
-					window.NioApp.Toast(res.data.message, "success");
-                    localStorage.clear()
-                    return true
+                if(res.status === 200 || res.status === 201){
+					// window.NioApp.Toast(res.data.message, "success");
+					await signUpUser()
                 }
+                setloading(false);
             }
+            
         } catch (error) {
             setloading(false);
             if (axios.isCancel(error)) {
-                console.log(error);
+				console.log("Request canceled:", error.message);
             } else {
 				const message = error?.response?.data?.message || error.message;
 				console.error("Error:", error);
@@ -51,7 +60,7 @@ const useLogOutUser = () => {
         }
     }, [])
 
-    return {logOutUser, loading};
+    return {verifyOTP, loading};
 }
  
-export default useLogOutUser;
+export default useVerifyOTP;

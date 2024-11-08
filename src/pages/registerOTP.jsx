@@ -4,14 +4,15 @@ import _route from '../constants/routes';
 import Spinnar from '../component/spinnar'
 import OtpInput from 'react-otp-input';
 import signUpImg from "../assets/images/signup-img.svg"
+import useVerifyOTP from '../hooks/auth/useverifyotp';
 
 export default function RegisterOtp() {
-	var loading = false
+	const {verifyOTP, loading} = useVerifyOTP()
     const [OTP, setOTP] = useState("");
 
 	const handleSubmit = async (e)=>{
 		e.preventDefault()
-		console.log("submited")
+		await verifyOTP(OTP)
 	}
 
 	console.log(OTP)
@@ -29,7 +30,7 @@ export default function RegisterOtp() {
               <div className="auth-split nk-split nk-split-page nk-split-md">
                 <div className="nk-split-content nk-block-area nk-block-area-column nk-auth-container">
                   <div className="nk-block nk-block-middle nk-auth-body h-100vh">
-                    <div className='overflw-scroll overflow-scroll-hidden'>
+                    <div className='overflw-scroll overflow-scroll-hidden h-100vh'>
 					<div className="brand-logo auth-brand mb-3">
                       <Link to={_route._admin_dashboard} className="logo-link">
                         
@@ -57,7 +58,7 @@ export default function RegisterOtp() {
 									<OtpInput
 										value={OTP}
 										onChange={setOTP}
-										numInputs={5}
+										numInputs={6}
 										separator={<span> </span>}
 										renderInput={(inputProps, index) => <input key={index} {...inputProps} />}
 										inputStyle={{

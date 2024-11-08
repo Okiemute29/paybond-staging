@@ -3,7 +3,13 @@ import { Link } from "react-router-dom";
 import _route from "../../constants/routes";
 import './admin.css'
 import OrderTableList from "../../component/dashboard/userlist";
-import AgentTableList from "../../component/agent/agenttablelist";
+import phone from '../../assets/images/phone_in_talk.svg'
+import wifi from '../../assets/images/wifi.svg'
+import electricity from '../../assets/images/electricity.svg'
+import tv from '../../assets/images/tv.svg'
+import betting from '../../assets/images/sports_soccer.svg'
+import grocery from '../../assets/images/local_grocery_store.svg'
+import Card from '../../component/landingpage/sectionone/card';
 import { useSelector } from 'react-redux'
 
 
@@ -17,7 +23,7 @@ export default function Dashboard() {
 		<div className="container-fluid">
 			<div className="nk-content-inner">
 			<div className="nk-content-body">
-				<div className="nk-block-head nk-block-head-sm mt-4">
+				<div className="nk-block-head nk-block-head-sm mb-4 mt-4">
 				<div className="nk-block-between">
 					<div className="nk-block-head-content">
 					<h4 className="page-title cus-page-title">Overview</h4>
@@ -31,21 +37,23 @@ export default function Dashboard() {
 				</div>
 				{/* .nk-block-head */}
 				<div className="nk-block">
-				<div className="row g-gs">
-					<DashboardAnalysis
-						title="Total Approved Crypto Transactions"
-						value="10,361,457"
-						accept=" 6,512,224.384"
-						decline='33,611,719'
-					/>
-					<DashboardAnalysis
-						title="Total Approved Giftcard Transactions"
-						value="12,932,900"
-						accept="1,663,230"
-						decline='1,423,550'
-					/>
+				<div className="row bg-white dashboard-card-analysis pb-5 g-gs">
+					
 					<DashboardAnalysis
 						title="Total User Wallet Balance"
+						value="10,361,457"
+						wallet
+						// accept=" 6,512,224.384"
+						// decline='33,611,719'
+					/>
+					<DashboardAnalysis
+						title="Total Groceries Transactions"
+						value="12,932,900"
+						// accept="1,663,230"
+						// decline='1,423,550'
+					/>
+					<DashboardAnalysis
+						title="Total Paybills Transaction"
 						value="889,768"
 						// increase="5"
 						// width='3'
@@ -62,7 +70,49 @@ export default function Dashboard() {
 				{/* .nk-block */}
 				<div className="nk-block">
 				<div className="row g-gs">
-					<div className={`col-md-12`}>
+					<div className={`col-md-6`}>
+						<div style={{maxWidth: 'none'}} className='widget-container p-0'>
+							<Card 
+								icon={phone}
+								text="Airtime"
+								route={_route._airtime}
+								dashboard
+							/>
+							<Card 
+								icon={wifi}
+								text="Data"
+								route={_route._data}
+								dashboard
+							/>
+							<Card 
+								icon={electricity}
+								text="Electricity"
+								route={_route._electricity}
+								dashboard
+							/>
+							<Card 
+								icon={tv}
+								text="Cable TV"
+								route={_route._cable}
+								dashboard
+							/>
+							<Card 
+								icon={betting}
+								text="Betting"
+								route={_route._betting}
+								dashboard
+							/>
+							<Card 
+								icon={grocery}
+								text="Groceries"
+								route={_route._groceries}
+								dashboard
+							/>
+							
+						</div>
+					{/* .card */}
+					</div>
+					<div className={`col-md-6`}>
 					<div className="card h-100">
 						<div className="nk-ecwg nk-ecwg2">
 						<div className="card-inner pe-0 ps-0">
@@ -79,29 +129,6 @@ export default function Dashboard() {
 						{/* .nk-ecwg */}
 					</div>
 					{/* .card */}
-					</div>
-					{/* .col */}
-					<div className="col-md-4">
-						<div className="card h-100">
-							<div className="nk-ecwg nk-ecwg2">
-							<div className="card-inner flex-grow-1 d-flex flex-column pe-0 ps-0">
-								<div className="card-title-group mt-n1 mb-2 pe-3 pe-sm-4 ps-3 ps-sm-4">
-								<div className="card-title">
-									<h6 className="title card-title text-black">
-									Agents List
-									</h6>
-								</div>
-								<Link to={_route._admin_agent} className="mb-0 text-primary">View All </Link>
-								
-								</div>
-								<div className="mt-n2 flex-grow-1  px-3 px-sm-4">
-									<AgentTableList dashboard />
-								</div>
-							</div>
-							{/* .card-inner */}
-							</div>
-							{/* .nk-ecwg */}
-						</div>
 					</div>
 					{/* .col */}
 				</div>

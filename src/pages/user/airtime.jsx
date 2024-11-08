@@ -7,23 +7,80 @@ import mobile from "../../assets/images/9mobil.png"
 import dropdown from "../../assets/images/dropdown.svg"
 import nigeria from "../../assets/images/nigeria.png"
 import Spinnar from '../../component/spinnar'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DropDown from '../../helpers/dropdown'
 import InputField from "../../component/common/input"
+import useGetBillCategory from "../../hooks/airtime/usegetbillcategory"
+import useGetBillFromCategory from "../../hooks/airtime/usegetbillfromcategory"
+import LoadingModal from "../../helpers/paybillsmodal"
+import Modal from "../../helpers/modal"
+import usePostVerifyBill from "../../hooks/airtime/usepostverifybill"
+import useCreateCard from "../../hooks/airtime/usecreatecardtr"
+// import OtpInput from 'react-otp-input';
+import { useSelector } from 'react-redux'
+import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 
 
 export default function Airtime() {
-	var loading = false
+	const user = useSelector((state) => state.auth.user)
 	const [selectProvider, setSelectProvider] = useState(false)
-	const [picx, setPicx] = useState(null)
-	const [name, setName] = useState(null)
+	const {getBillCategory, data, loading} = useGetBillCategory();
+	const {createCardTransaction, data: cardData, loading: cardLoading} = useCreateCard()
+    const [pin, setPin] = useState("");
+	const [showPin, setShowPin] = useState(false)
+	const {getBillFromCategory, data: billFromCategoryData, loading: billFromCategoryLoading} = useGetBillFromCategory()
+	const {postVerifyBill, data: verifyBillData, loading: verifyBillLoading} = usePostVerifyBill()
+	const [selectedProvider, setSelectedProvider] = useState(null)
+	const [updatedBillers, setUpdatedBillers] = useState([]);
 	const [formData, setFormData] = useState({
 		amount: "",
+		item_code: "",
+		code: "",
+		customer: ""
 	})
+	const [paymentConfig, setPaymentConfig] = useState({
+		public_key: 'FLWPUBK_TEST-46541080f1bf17e301a6f52027061790-X',
+		tx_ref: `tx-${Date.now()}`,
+		amount: 0,
+		currency: 'NGN',
+		payment_options: 'card,mobilemoney,ussd',
+		customer: {
+		  email: user.username,
+		//   phone_number: '070********',
+		  name: user.fullname,
+		},
+		customizations: {
+		  title: 'Airtime Payment',
+		  description: 'Payment for Airtime',
+		  logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
+		},
+		meta: {
+		  source: window.location.origin, // Add your website name
+		},
+		redirect_url: '', // Add redirect URL
+		mode: 'payment',
+		payment_plan: null,
+		subaccounts: null,
+		theme: {
+		  mode: 'light', // or 'dark'
+		}
+	  });
+	const handleFlutterPayment = useFlutterwave(paymentConfig);
 
-	const handleClick = (e) => {
-		setPicx(e.img);
-		setName(e.value);
+	// Update config when amount changes
+	useEffect(() => {
+	if (formData?.amount) {
+		setPaymentConfig(prevConfig => ({
+		...prevConfig,
+		amount: formData.amount,
+		tx_ref: `tx-${Date.now()}`,
+		}));
+	}
+	}, [formData?.amount]);
+
+	const handleClick = (item) => {
+		setSelectedProvider(item);
+		setFormData(prv => ({...prv, code: item.biller_code}))
 	};
 
 	const handleInputChange = (e) =>{
@@ -53,9 +110,119 @@ export default function Airtime() {
 		},
 		{
 			img: mobile,
-			value: "9 MOBILE"
+			value: "9MOBILE"
 		},
 	]
+
+	const handleGetBillCategory = async () =>{
+		await getBillCategory()
+	}
+	const handleGetBillFromCategory = async () =>{
+		await getBillFromCategory(selectedProvider.biller_code)
+	} 
+	const handleVerifyBill = async (e) =>{
+		e.preventDefault()
+		console.log("submit verify", formData)
+		if(formData.amount && formData.code && formData.customer && formData.item_code){
+			var verifyData = {
+				item_code: formData.item_code,
+				code: formData.code,
+				customer: formData.customer
+			}
+			await postVerifyBill(verifyData)
+		}else{
+			window.NioApp.Toast("Fill all available field", "warning");
+
+		}
+	} 
+	const handleBillPayment = async (data)=>{
+		const cardData={
+			status: data.status,
+			description: "A new card payment",
+			flutterwave: data
+		}
+		const billData = {
+			amount: formData.amount,
+			customer_id: formData.customer,
+			biller_code: formData.code,
+			item_code: formData.item_code
+
+		}
+		await createCardTransaction(cardData, billData)
+	}
+
+	useEffect(()=>{
+		handleGetBillCategory()
+	},[])
+
+	useEffect(()=>{
+		if(selectedProvider){
+			handleGetBillFromCategory()
+		}
+	}, [selectedProvider])
+
+
+
+	useEffect(() => {
+		if(data) {
+			// Update logos in the billers array
+			const updated = data.map(biller => {
+				// Find matching logo by checking if biller name includes the logo value
+				const matchingLogo = items.find(logo => 
+					biller.name.toUpperCase().includes(logo.value)
+				);
+				
+				// If found, update the logo, otherwise keep as is
+				return matchingLogo 
+					? { ...biller, logo: matchingLogo.img }
+					: biller;
+			});
+	
+			setUpdatedBillers(updated);
+		}
+	}, [data]); // Added items to dependency array
+	
+	console.log("verifyBillData", verifyBillData);
+
+	// Function to handle payment initiation
+	const initiatePayment = () => {
+		try {
+		  handleFlutterPayment({
+			callback: async (response) => {
+			  console.log('Payment Response:', response);
+			  if (response.status === 'successful') {
+				// Verify the transaction on your backend
+				if (window.event) {
+					window.event.preventDefault();
+				  }
+				  handleBillPayment(response)
+				
+			  }
+			  closePaymentModal();
+			},
+			onClose: () => {
+			  console.log('Payment modal closed');
+			},
+		  });
+		} catch (error) {
+		  console.error('Error initiating payment:', error);
+		}
+	  };
+
+	  
+	useEffect(()=>{
+		if(verifyBillData.status?.toLowerCase() === "success"){			
+			initiatePayment()
+			
+		}
+	}, [verifyBillData])
+
+	const handleSubmit = async (e)=>{
+		e.preventDefault()
+		const transactionData = {
+			pin: pin,
+		}
+	}
 
 
 	return ( 
@@ -86,9 +253,9 @@ export default function Airtime() {
 									<div onClick={()=> setSelectProvider(prv => !prv)} className='bg-white cursor-pointer d-flex justify-content-between align-items-center rounded-4 py-2 px-3'>
 										<div className="select-item">
 											<div className='selected-product-img'>
-											{picx && <img src={picx} alt='select-img' />}
+											{selectedProvider?.logo && <img src={selectedProvider?.logo} alt='select-img' />}
 											</div>
-											{name && <p>{name}</p>}
+											{selectedProvider?.name && <p>{selectedProvider?.name}</p>}
 										</div>
 										<div className='dropdown-con'>
 											<img src={dropdown} alt='dropdown' />
@@ -103,12 +270,33 @@ export default function Airtime() {
 
 							<DropDown 
 								show={selectProvider}
-								items={items}
+								items={updatedBillers}
 								handleClick={handleClick}
 								checkMark
-								name={name}
+								selectedProvider={selectedProvider}
 
 							/>
+																
+							{billFromCategoryData?.length > 0 && <div className="form-group mt-3">	
+								<label className='auth-label'>Category</label>
+								<select
+									name="category"
+									className={`form-control form-control-lg auth-field `}                              
+									placeholder="Select Biller"
+									value={formData?.item_code}
+									onChange={(e)=> setFormData(prv => ({...prv, item_code: e.target.value }))}
+
+									required
+								>
+									<option hidden>Select Biller</option>
+									{
+										billFromCategoryData?.filter(item => item.name.includes(selectedProvider?.name?.split(" ")[0])).map((biller, index)=>{
+											return <option key={index} value={biller.item_code}>{biller.short_name}</option>
+										})
+									}
+									
+								</select>
+							</div>}
 
 							<div className="card shodowles-card bg-transparent">
 								<div className="nk-ecwg nk-ecwg2">
@@ -121,7 +309,13 @@ export default function Airtime() {
 												</div>
 												+234
 											</div>
-											<input className='border-0' type='tel' placeholder='' value="8039835234" />
+											<input 
+												className='border-0' 
+												type='tel' 
+												placeholder='0812222222' 
+												value={formData.customer}
+												onChange={(e)=> setFormData(prv => ({...prv, customer: e.target.value}))} 
+											/>
 										</div>
 										{/* <div className='dropdown-con'>
 											<img src={dropdown} alt='dropdown' />
@@ -136,14 +330,14 @@ export default function Airtime() {
 								<div className="nk-ecwg nk-ecwg2">
 								<div className="card-inner p-0">
 									<div className='bg-white product-amount-con rounded-4 py-2 px-3'>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("50")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("100")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("200")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("500")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("100")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("1500")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("2000")} name="amount" type='text' readOnly/>
-										<input onClick={(e) => handleInputChange(e)}  className='price-tablet' value={formatNumber("50000")} name="amount" type='text' readOnly/>
+										<input onClick={(e) => handleInputChange(e)}  className={`price-tablet ${formData.amount === '50' && "bg-paybond text-white"}`} value={formatNumber("50")} name="amount" type='text' readOnly/>
+										<input onClick={(e) => handleInputChange(e)}  className={`price-tablet ${formData.amount === '100' && "bg-paybond text-white"}`} value={formatNumber("100")} name="amount" type='text' readOnly/>
+										<input onClick={(e) => handleInputChange(e)}  className={`price-tablet ${formData.amount === '200' && "bg-paybond text-white"}`} value={formatNumber("200")} name="amount" type='text' readOnly/>
+										<input onClick={(e) => handleInputChange(e)}  className={`price-tablet ${formData.amount === '500' && "bg-paybond text-white"}`} value={formatNumber("500")} name="amount" type='text' readOnly/>
+										<input onClick={(e) => handleInputChange(e)}  className={`price-tablet ${formData.amount === '1000' && "bg-paybond text-white"}`} value={formatNumber("1000")} name="amount" type='text' readOnly/>
+										<input onClick={(e) => handleInputChange(e)}  className={`price-tablet ${formData.amount === '1500' && "bg-paybond text-white"}`} value={formatNumber("1500")} name="amount" type='text' readOnly/>
+										<input onClick={(e) => handleInputChange(e)}  className={`price-tablet ${formData.amount === '2000' && "bg-paybond text-white"}`} value={formatNumber("2000")} name="amount" type='text' readOnly/>
+										<input onClick={(e) => handleInputChange(e)}  className={`price-tablet ${formData.amount === '5000' && "bg-paybond text-white"}`} value={formatNumber("5000")} name="amount" type='text' readOnly/>
 									
 									</div>
 								</div>
@@ -155,7 +349,7 @@ export default function Airtime() {
 								<div className="nk-ecwg nk-ecwg2">
 								<div className="card-inner p-0">
 									<div className='rounded-4 py-2'>
-										<form>										
+										<form onSubmit={handleVerifyBill}>										
 											<div className="form-group">												
 												<InputField 
 													label="Amount"
@@ -169,7 +363,7 @@ export default function Airtime() {
 											{/* .form-group */}
 											<div className="form-group col-12">
 											<button className="auth-btn btn btn-lg btn-primary btn-block">
-												{loading ? <Spinnar /> : 'Pay'}
+												{verifyBillLoading ? <Spinnar /> : 'Pay'}
 											</button>
 											</div>
 										</form>
@@ -206,6 +400,62 @@ export default function Airtime() {
 			</div>
 		</div>
 		</div>
+
+		{
+			(loading || billFromCategoryLoading) &&<LoadingModal />
+		}
+		{/* <Modal
+			handleClose={handleClosePin}
+			showModal={showPin}
+		>
+				
+				<div className="nk-auth-form overflow-scroll-hidden">
+                      <div className="nk-block-head">
+                        <div className="nk-block-head-content">
+                          <h5 className="nk-block-title auth-title">Set Transaction Pin</h5>
+                          <div className="nk-block-des">
+                            <p className='auth-descript'>
+							Do not disclose this transaction pin to anyone.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <form onSubmit={handleSubmit} className="auth-form ">
+						<div className='row gy-4 mb-4'>
+							<div className="">
+								<div className="form-group">
+								<div className="otp-cont">
+									<OtpInput
+										value={pin}
+										onChange={setPin}
+										numInputs={4}
+										separator={<span> </span>}
+										renderInput={(inputProps, index) => <input key={index} {...inputProps} />}
+										inputStyle={{
+										width: '4rem',
+										height: '4rem',
+										margin: '0 0.5rem',
+										fontSize: '2rem',
+										borderRadius: 4,
+										background: '#EDEDED',
+										border: '1px solid #D9D9D9'
+										}}
+									/>
+								</div>
+								</div>
+							</div>
+						</div>
+
+
+
+                        <div className="form-group col-sm-6">
+                          <button className="auth-btn btn btn-lg btn-primary btn-block">
+                            {loading ? <Spinnar /> : 'Continue'}
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+			</Modal> */}
 
 
 	</>

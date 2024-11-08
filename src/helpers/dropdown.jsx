@@ -1,7 +1,7 @@
 import React from 'react'
 import check from "../assets/images/check-green.png"
 
-export default function DropDown({show, items, handleClick, checkMark, name}) {
+export default function DropDown({show, items, handleClick, checkMark, selectedProvider}) {
   return (
 	<>
 	  
@@ -14,16 +14,16 @@ export default function DropDown({show, items, handleClick, checkMark, name}) {
 						return (
 							<div key={index} onClick={() => handleClick(item)} className='cursor-pointer network-providers d-flex justify-content-between align-items-center rounded-4 py-2 px-3'>
 								<div className="select-item">
-									{item.img && <div className='selected-product-img'>
-										<img src={item.img} alt='select-img' className="provider-logo" />
+									{item.logo && <div className='selected-product-img'>
+										<img src={item.logo} alt='select-img' className="provider-logo" />
 									</div>
 									}
-									<p>{item?.value}</p>
+									<p>{item?.name}</p>
 								</div>
 								{
 								
 								checkMark && <div className='product-check'>
-												{name?.toLowerCase() === item?.value?.toLowerCase() && <img src={check} alt='dropdown' />}
+												{selectedProvider?.name?.toLowerCase() === item?.name?.toLowerCase() && <img src={check} alt='dropdown' />}
 											</div>
 								}
 							</div>

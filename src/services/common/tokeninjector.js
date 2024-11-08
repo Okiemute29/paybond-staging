@@ -22,10 +22,13 @@ function addTokentoRequest() {
   
   // Add tokens to request headers
   if (token && refreshToken) {
+	console.log("added token", token)
+	console.log("added refreshToken", refreshToken)
     return {
       headers: {
         "Authorization": token,
-        "refreshtoken": refreshToken
+        "refreshtoken": refreshToken,
+		"is-mobile": true
       }
     };
   }

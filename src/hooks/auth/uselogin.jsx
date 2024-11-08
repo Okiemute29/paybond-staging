@@ -3,10 +3,13 @@ import AuthService from "../../services/user/auth";
 import { useDispatch } from 'react-redux'
 import { setUser } from "../../redux/authreducer"
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import _route from "../../constants/routes";
 
 const useLoginUser = () => {
     const [loading, setloading] = useState(false);
     const dispatch = useDispatch()
+	const navigate = useNavigate()
     const CancelToken = axios.CancelToken;
     const source = useRef();
 
@@ -28,7 +31,7 @@ const useLoginUser = () => {
                     await dispatch(setUser(res.data.result))
 					window.NioApp.Toast(res.data.message, "success");
                     localStorage.setItem("user", JSON.stringify(res.data.result));
-                    return true
+                    navigate(_route._dashboard)
                 }
             }
             
@@ -37,13 +40,9 @@ const useLoginUser = () => {
             if (axios.isCancel(error)) {
                 console.log(error);
             } else {
-                if(error.response){
-                    console.log(error)
-					window.NioApp.Toast(error?.response?.data?.message, "warning");
-                }else{
-                    console.log(error)
-					window.NioApp.Toast(error?.message, "warning");
-                }
+				const message = error?.response?.data?.message || error.message;
+				console.error("Error:", error);
+				window.NioApp.Toast(message, "warning");
             }
         }
        

@@ -34,6 +34,7 @@ import RegisterOtp from './pages/registerOTP'
 import SetTransactionPin from './pages/setTransactionpin'
 import _route from './constants/routes';
 import PrivateRoute from './routeguard/privateroute'
+import PrivatePinRoute from './routeguard/privatepinroute'
 import './App.css';
 
 const router = createBrowserRouter(
@@ -46,28 +47,29 @@ const router = createBrowserRouter(
 
 	
 	<Route path={_route._landing_page} element={<PageLayouts.RootLandingPageLayout />}>
-	<Route path={_route._landing_page}  element={<Home />} />
-	<Route path={_route._about_us}  element={<About />} />
-	<Route path={_route._contact_us}  element={<Contact />} />
-
+		<Route path={_route._landing_page}  element={<Home />} />
+		<Route path={_route._about_us}  element={<About />} />
+		<Route path={_route._contact_us}  element={<Contact />} />
 	</Route>
-	{/* <Route element={<PrivateRoute />} > */}
-		<Route path={_route._landing_page} element={<PageLayouts.RootLayout />}>
-		<Route path={_route._dashboard}  element={<Dashboard />} />
-		<Route path={_route._airtime}  element={<Airtime />} />
-		<Route path={_route._data}  element={<Data />} />
-		<Route path={_route._electricity}  element={<Electricity />} />
-		<Route path={_route._betting}  element={<Betting />} />
-		<Route path={_route._cable}  element={<Cable />} />
-		<Route path={_route._groceries} element={<Groceries /> } />
-		<Route path={_route._groceries_details} element={<GroceriesProduct /> } />
-		<Route path={_route._favourite} element={<Favourites /> } />
-		<Route path={_route._category} element={<Category /> } />
-		<Route path={_route._checkout} element={<CheckOut /> } />
-		<Route path={_route._setting} element={<Settings /> } />
+	<Route element={<PrivateRoute />} >
+		<Route element={<PrivatePinRoute />} >
+			<Route path={_route._landing_page} element={<PageLayouts.RootLayout />}>
+			<Route path={_route._dashboard}  element={<Dashboard />} />
+			<Route path={_route._airtime}  element={<Airtime />} />
+			<Route path={_route._data}  element={<Data />} />
+			<Route path={_route._electricity}  element={<Electricity />} />
+			<Route path={_route._betting}  element={<Betting />} />
+			<Route path={_route._cable}  element={<Cable />} />
+			<Route path={_route._groceries} element={<Groceries /> } />
+			<Route path={_route._groceries_details} element={<GroceriesProduct /> } />
+			<Route path={_route._favourite} element={<Favourites /> } />
+			<Route path={_route._category} element={<Category /> } />
+			<Route path={_route._checkout} element={<CheckOut /> } />
+			<Route path={_route._setting} element={<Settings /> } />
 
+			</Route>
 		</Route>
-	{/* </Route> */}
+	</Route>
 	</>
 	)
   );

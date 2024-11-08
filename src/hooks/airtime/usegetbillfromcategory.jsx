@@ -1,45 +1,53 @@
 import { useEffect, useState, useRef } from "react";
-import AuthService from "../../services/user/auth";
-import { useDispatch } from 'react-redux'
-import { setUser } from "../../redux/authreducer"
+import Airtimeservices from "../../services/airtime/admin";
+import _route from '../../constants/routes'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import _route from "../../constants/routes";
 
-const useLogOutUser = () => {
+const useGetBillFromCategory = () => {
     const [loading, setloading] = useState(false);
-    const dispatch = useDispatch()
+    const [data, setData] = useState([])
 	const navigate = useNavigate()
     const CancelToken = axios.CancelToken;
     const source = useRef();
+
    
-    const logOutUser = async () => { 
+    const getBillFromCategory = async (data) => {
         if (source.current === undefined) {
             source.current = CancelToken.source();
           }
         try {
             setloading(true);
-            const res = await AuthService.logOut(source.current);
-            
+            const res = await Airtimeservices.getBillFromCategory(data, source.current.token );
+
             if(!res) {
+
 				window.NioApp.Toast('An error occured', "warning");
             }else{
                 setloading(false);
                 if(res.status === 200){
-                    await dispatch(setUser(null))
-					window.NioApp.Toast(res.data.message, "success");
-                    localStorage.clear()
+					setData(res.data.result)
+					// window.NioApp.Toast(res.data.message, "success");
                     return true
                 }
             }
+            
         } catch (error) {
             setloading(false);
             if (axios.isCancel(error)) {
                 console.log(error);
-            } else {
-				const message = error?.response?.data?.message || error.message;
-				console.error("Error:", error);
-				window.NioApp.Toast(message, "warning");
+            }else{
+                if(error.response){
+					if(error?.response?.status === 401){
+						if(error?.response?.data?.message?.toLowerCase() === "jwt expired"){
+							navigate(_route._login)
+						}
+					}
+					window.NioApp.Toast(error?.response?.data?.message, "warning");
+                }else{
+                    console.log(error)
+					window.NioApp.Toast(error?.response?.data?.message, "warning");
+                }
             }
         }
        
@@ -51,7 +59,7 @@ const useLogOutUser = () => {
         }
     }, [])
 
-    return {logOutUser, loading};
+    return {getBillFromCategory, data, loading};
 }
  
-export default useLogOutUser;
+export default useGetBillFromCategory;
