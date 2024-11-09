@@ -1,5 +1,11 @@
 
 import mtn from "../../assets/images/mtn.png"
+import milo from "../../assets/images/milo.png"
+import milk from "../../assets/images/milk.png"
+import noodles from "../../assets/images/noodles.png"
+import gabage from "../../assets/images/gabage.png"
+import spag from "../../assets/images/spag.png"
+import egg from "../../assets/images/egg.png"
 import deleteIcon from "../../assets/images/delete.svg";
 import { useState } from 'react'
 import InputField from "../../component/common/input"
@@ -24,6 +30,60 @@ export default function Category() {
 	}	
 
 
+	const carts = [
+		{
+			product: {
+				_id: "prod1",
+				title: "Milo Refill",
+				price: 3200,
+				description: "A high-quality t-shirt made from organic cotton, available in multiple sizes and colors.",
+				image: {
+					url: milo  // Replace with actual image URL
+				},
+				size: "800g",
+			},
+			quantity: 2
+		},
+		{
+			product: {
+				_id: "prod2",
+				title: "Peak Milk Full Creame",
+				price: 8200,
+				description: "A comfortable hoodie perfect for chilly weather.",
+				image: {
+					url: milk  // Replace with actual image URL
+				},
+				size: "800g",
+			},
+			quantity: 1
+		},
+		{
+			product: {
+				_id: "prod5",
+				title: "Spaghetti",
+				price: 950,
+				description: "A premium leather wallet with multiple compartments.",
+				image: {
+					url: spag
+				},
+				size: "800g",
+			},
+			quantity: 1
+		},
+		{
+			product: {
+				_id: "prod5",
+				title: "Crate of Egg",
+				price: 9540050,
+				description: "A premium leather wallet with multiple compartments.",
+				image: {
+					url: egg
+				},
+				size: "800g",
+			},
+			quantity: 1
+		}
+	];
 
 
 
@@ -79,24 +139,24 @@ export default function Category() {
 						
 						<div className="p-0 m-0">
 							{
-								[1,2,3,4,5,6].map((product, index)=>{
+								carts.map((product, index)=>{
 									return (
 										<div key={index} className="d-flex justify-content-between cart-table py-4 align-items-start  w-100">
 											<div className="col-5">												
 												<div className="d-flex flex-column flex-md-row p-0 product-details-container">
 													<div className="shopping-cart">
-														<img className="mt-auto" src={mtn} alt="product" />
+														<img className="mt-auto" src={product.product.image.url} alt="product" />
 													</div>
 													<div className="col-12 col-md-8 mt-2 mt-md-0 ms-md-3 px-1 rounded-3 p-details d-flex flex-column">
-														<p className="text-black fs-6  mt-0 mb-0">Premium T-Shirt</p>
-														<p className="product-size mb-0">800g</p>
+														<p className="text-black fs-6  mt-0 mb-0">{product.product.title}</p>
+														<p className="product-size mb-0">{product.product.size}</p>
 														<div className="delete-cont fs-6 mt-auto mb-0">
 															<img src={deleteIcon} alt="delete" />
 														</div>
 													</div>
 												</div>
 											</div>
-											<div className="col-2 text-black fw-bolder fs-5">NGN 3,200</div>
+											<div className="col-2 text-black fw-bolder fs-5">NGN {product.product.price}</div>
 											<div className="col-3">
 												<div className=" button-h w-75">
 													<CartBtn />

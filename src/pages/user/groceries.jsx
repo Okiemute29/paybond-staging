@@ -1,7 +1,10 @@
 
-import mtn from "../../assets/images/mtn.png"
-import airtel from "../../assets/images/airtel.png"
-import glo from "../../assets/images/glo.png"
+import milo from "../../assets/images/milo.png"
+import milk from "../../assets/images/milk.png"
+import noodles from "../../assets/images/noodles.png"
+import gabage from "../../assets/images/gabage.png"
+import spag from "../../assets/images/spag.png"
+import egg from "../../assets/images/egg.png"
 import { useState } from 'react'
 import InputField from "../../component/common/input"
 import ProductList from "../../component/groceries/productlist"
@@ -24,58 +27,70 @@ export default function Groceries() {
 
 
 
+	
 	const product = [
 		{
 			_id: "prod1",
-			title: "Premium T-Shirt",
-			price: 3500,
+			title: "Milo Refill",
+			price: 3200,
 			description: "A high-quality t-shirt made from organic cotton, available in multiple sizes and colors.",
 			image: {
-				url: mtn
+				url: milo
 			},
 			size: "800g",
 			color: "Blue"
 		},
 		{
 			_id: "prod2",
-			title: "Classic Hoodie",
-			price: 7000,
+			title: "Peak Milk Full Creame",
+			price: 8200,
 			description: "A comfortable hoodie perfect for chilly weather.",
 			image: {
-				url: airtel
+				url: milk
 			},
 			size: "800g",
 			color: "Gray"
 		},
 		{
 			_id: "prod3",
-			title: "Sports Cap",
-			price: 1500,
+			title: "Indomie Noodles",
+			price: 500,
 			description: "A stylish cap suitable for outdoor activities.",
 			image: {
-				url: glo
+				url: noodles
 			},
 			size: "Super pack",
 			color: "Black"
 		},
 		{
 			_id: "prod4",
-			title: "Running Shoes",
-			price: 12000,
+			title: "Gabage",
+			price: 3200,
 			description: "Lightweight running shoes with excellent grip and comfort.",
 			image: {
-				url: mtn
+				url: gabage
 			},
 			size: "800g",
 			color: "Red"
 		},
 		{
 			_id: "prod5",
-			title: "Leather Wallet",
-			price: 4500,
+			title: "Spaghetti",
+			price: 950,
 			description: "A premium leather wallet with multiple compartments.",
 			image: {
-				url: airtel
+				url: spag
+			},
+			size: "800g",
+			color: "Brown"
+		},
+		{
+			_id: "prod5",
+			title: "Crate of Egg",
+			price: 9540050,
+			description: "A premium leather wallet with multiple compartments.",
+			image: {
+				url: egg
 			},
 			size: "800g",
 			color: "Brown"
@@ -85,12 +100,12 @@ export default function Groceries() {
 	const carts = [
 		{
 			product: {
-				_id: "prod1",  // This ID should match the product ID
-				title: "Premium T-Shirt",
-				price: 3500,
+				_id: "prod1",
+				title: "Milo Refill",
+				price: 3200,
 				description: "A high-quality t-shirt made from organic cotton, available in multiple sizes and colors.",
 				image: {
-					url: mtn  // Replace with actual image URL
+					url: milo  // Replace with actual image URL
 				}
 			},
 			quantity: 2
@@ -98,11 +113,11 @@ export default function Groceries() {
 		{
 			product: {
 				_id: "prod2",
-				title: "Classic Hoodie",
-				price: 7000,
+				title: "Peak Milk Full Creame",
+				price: 8200,
 				description: "A comfortable hoodie perfect for chilly weather.",
 				image: {
-					url: airtel  // Replace with actual image URL
+					url: milk  // Replace with actual image URL
 				}
 			},
 			quantity: 1
