@@ -2,6 +2,9 @@ import React from 'react'
 import download from '../../assets/images/download.png'
 
 export default function DashboardAnalysis({value, title, accept, decline, wallet}) {
+	const formatNumber = (num) => {
+		return `N${new Intl.NumberFormat().format(parseFloat(num))}`;
+	};
   return (
     <>
       
@@ -26,7 +29,7 @@ export default function DashboardAnalysis({value, title, accept, decline, wallet
             </div>
             <div className="card-amount justify-content-center" id="totalapprovedcrypto">
               
-              <span className="amount text-white">₦ {value}</span>
+              <span className="amount text-white">{formatNumber(value)}</span>
             </div>
             <div className="invest-data mt-3">
               <div className="invest-data-amount g-2">

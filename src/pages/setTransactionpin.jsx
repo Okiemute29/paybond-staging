@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import _route from '../constants/routes';
 import Spinnar from '../component/spinnar'
 import OtpInput from 'react-otp-input';
+import logo from "../assets/images/logo.svg"
 import signUpImg from "../assets/images/signup-img.svg"
 import useTransactionPin from '../hooks/auth/usetransactionpin';
 
@@ -37,9 +38,13 @@ export default function SetTransactionPin() {
                   <div className="nk-block nk-block-middle nk-auth-body mb-3">
                     <div className='overflw-scroll overflow-scroll-hidden h-100vh'>
 					<div className="brand-logo auth-brand">
-                      <Link to={_route._admin_dashboard} className="logo-link">
-                        
-                        <p className="auth">Sign Up</p>
+					<Link to={_route._dashboard} className="logo-link">
+                        <img
+                          className="auth-logo-img logo-xl logo-img"
+                          src={logo}
+                          alt="logo"
+						  style={{width: '15rem', maxWidth: 'inherit'}}
+						/>
                       </Link>
                     </div>
                     <div className="nk-auth-form overflow-scroll-hidden">

@@ -3,9 +3,16 @@ import { Link } from 'react-router-dom';
 import _route from '../constants/routes';
 import Spinnar from '../component/spinnar'
 import signUpImg from "../assets/images/signup-img.svg"
+import logo from "../assets/images/logo.svg"
 import useVerifyEmail from '../hooks/auth/useverifyemail';
+import passwordStrength from "./passwordstrengthvalidation"
 
 export default function SignUp() {
+	const [upper, setupper] = useState(false)
+	const [lower, setlower] = useState(false)
+	const [number, setnumber] = useState(false)
+	const [character, setcharacter] = useState(false)
+	const [minlength, setminlength] = useState(false)
 	const [showPassword, setShowPassword] = useState(false)
 	const  {verifyEmail, loading} = useVerifyEmail()
 	const [formData, setFormData] = useState({
@@ -21,24 +28,39 @@ export default function SignUp() {
 
 	const handleSubmit = async (e)=>{
 		e.preventDefault()
-		if(formData.password !== formData.confirmPassword){
-			window.NioApp.Toast("The passwords entered do not match.", "error");
+		if((lower && upper && minlength && number && character) === true){
+			if(formData.password !== formData.confirmPassword){
+				window.NioApp.Toast("The passwords entered do not match.", "warning");
+			}else{
+				// Check if the phone number is valid
+				if (!nigeriaPhoneRegex.test(formData.number)) {
+					window.NioApp.Toast("Please enter a valid 11-digit Nigerian phone number", "warning");
+					return; // Stop execution if phone number is invalid
+				}
+				const user = {
+					username: formData.username,
+					password: formData.password,
+					fullname: formData.name,
+					phone_no: formData.number
+				}
+				await verifyEmail(user)
+			}
+
 		}else{
-			// Check if the phone number is valid
-			if (!nigeriaPhoneRegex.test(formData.number)) {
-				window.NioApp.Toast("Please enter a valid 11-digit Nigerian phone number", "warning");
-				return; // Stop execution if phone number is invalid
-			}
-			const user = {
-				username: formData.username,
-				password: formData.password,
-				fullname: formData.name,
-				phone_no: formData.number
-			}
-			await verifyEmail(user)
+			window.NioApp.Toast("password is too weak", "warning");
+
 		}
 	}
 
+	  
+	function checkPassword (e){
+		passwordStrength.upper.test(e.target.value) ? setupper(true) : setupper(false)
+		passwordStrength.lower.test(e.target.value) ? setlower(true) : setlower(false)
+		passwordStrength.number.test(e.target.value) ? setnumber(true) : setnumber(false)
+		passwordStrength.character.test(e.target.value) ? setcharacter(true) : setcharacter(false)
+		passwordStrength.minlength.test(e.target.value) ? setminlength(true) : setminlength(false)
+		setFormData(prv => ({...prv, password: e.target.value}))
+	}
 	
 	const handleChange = (e) => {
 		const { value } = e.target;
@@ -70,9 +92,13 @@ export default function SignUp() {
                   <div className="nk-block nk-block-middle nk-auth-body h-100vh ">
                     <div className='overflw-scroll overflow-scroll-hidden h-100vh'>
 					<div className="brand-logo auth-brand mb-3">
-                      <Link to={_route._admin_dashboard} className="logo-link">
-                        
-                        <p className="auth fs-3 fs-md-1">Sign Up</p>
+                      <Link to={_route._dashboard} className="logo-link">
+                        <img
+                          className="auth-logo-img logo-xl logo-img"
+                          src={logo}
+                          alt="logo"
+						  style={{width: '15rem', maxWidth: 'inherit'}}
+						/>
                       </Link>
                     </div>
                     <div className="nk-auth-form overflow-scroll-hidden">
@@ -159,7 +185,7 @@ export default function SignUp() {
 										id="password" 
 										placeholder="Create password" 
 										value={formData.password}
-										onChange={(e)=> setFormData(prv => ({...prv, password: e.target.value}))}
+										onChange={(e)=> checkPassword(e)}
 										required
 									/>
 								</div>

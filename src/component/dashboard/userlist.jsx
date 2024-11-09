@@ -54,7 +54,7 @@ console.log(Profile.filter(item => item.id === 2)[0]?.name)
         <div className="nk-tb-item nk-tb-head table-header">
           <div className="nk-tb-col tb-inner-tx">
             <span className="sub-text">
-              <strong>Client Name</strong>
+              <strong>Name</strong>
             </span>
           </div>
           <div className="nk-tb-col tb-col-mb tb-inner-tx">

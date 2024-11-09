@@ -7,6 +7,7 @@ import signUpImg from "../assets/images/signup-img.svg"
 import useVerifyOTP from '../hooks/auth/useverifyotp';
 import Countdown from "../helpers/countdown";
 import useVerifyEmail from '../hooks/auth/resendotp';
+import logo from "../assets/images/logo.svg"
 
 export default function RegisterOtp() {
 	const {verifyOTP, loading} = useVerifyOTP()
@@ -51,9 +52,13 @@ export default function RegisterOtp() {
                   <div className="nk-block nk-block-middle nk-auth-body h-100vh">
                     <div className='overflw-scroll overflow-scroll-hidden h-100vh'>
 					<div className="brand-logo auth-brand mb-3">
-                      <Link to={_route._admin_dashboard} className="logo-link">
-                        
-                        <p className="auth fs-3 fs-md-1">Sign Up</p>
+					<Link to={_route._dashboard} className="logo-link">
+                        <img
+                          className="auth-logo-img logo-xl logo-img"
+                          src={logo}
+                          alt="logo"
+						  style={{width: '15rem', maxWidth: 'inherit'}}
+						/>
                       </Link>
                     </div>
                     <div className="nk-auth-form overflow-scroll-hidden">

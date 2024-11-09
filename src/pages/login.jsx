@@ -5,6 +5,7 @@ import Spinnar from '../component/spinnar'
 import InputField from '../component/common/input';
 import loginImg from "../assets/images/login-img.svg";
 import useLoginUser from '../hooks/auth/uselogin';
+import logo from "../assets/images/logo.svg"
 
 export default function Login() {
 	const {loginUser, loading} = useLoginUser()
@@ -38,9 +39,13 @@ export default function Login() {
                   <div className="nk-block nk-block-middle nk-auth-body h-100vh">
                     <div className='overflw-scroll overflow-scroll-hidden h-100vh'>
 					<div className="brand-logo auth-brand mb-3">
-                      <Link to={_route._admin_dashboard} className="logo-link">
-                        
-                        <p className="auth fs-3 fs-md-1 ">Login</p>
+					<Link to={_route._dashboard} className="logo-link">
+                        <img
+                          className="auth-logo-img logo-xl logo-img"
+                          src={logo}
+                          alt="logo"
+						  style={{width: '15rem', maxWidth: 'inherit'}}
+						/>
                       </Link>
                     </div>
                     <div className="nk-auth-form overflow-scroll-hidden">

@@ -41,7 +41,7 @@ export default function Dashboard() {
 					
 					<DashboardAnalysis
 						title="Total User Wallet Balance"
-						value="10,361,457"
+						value="0.00"
 						wallet
 						// accept=" 6,512,224.384"
 						// decline='33,611,719'
@@ -52,8 +52,8 @@ export default function Dashboard() {
 				{/* .nk-block */}
 				<div className="nk-block">
 				<div className="row g-gs">
-					<div className={`col-md-6`}>
-						<div style={{maxWidth: 'none'}} className='widget-container p-0'>
+					<div className={`col-md-12`}>
+						<div style={{maxWidth: 'none'}} className='widget-container justify-content-start p-0'>
 							<Card 
 								icon={phone}
 								text="Airtime"
@@ -94,7 +94,7 @@ export default function Dashboard() {
 						</div>
 					{/* .card */}
 					</div>
-					<div className={`col-md-6`}>
+					<div className={`col-md-12`}>
 					<div className="card h-100">
 						<div className="nk-ecwg nk-ecwg2">
 						<div className="card-inner pe-0 ps-0">
