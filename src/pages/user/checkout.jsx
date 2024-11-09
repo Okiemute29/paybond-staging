@@ -19,15 +19,11 @@ export default function CheckOut() {
 	const [picx, setPicx] = useState(null)
 	const [name, setName] = useState(null)
 	const [formData, setFormData] = useState({
-		amount: "",
-		meterNumber: "",
-		meterType: "prepaid"
+		number: "",
+		city: "",
+		address: "",
 	})
 
-	const handleClick = (e) => {
-		setPicx(e.img);
-		setName(e.value);
-	};
 
 	const handleInputChange = (e) =>{
 		const {name, value} = e.target 
@@ -37,33 +33,6 @@ export default function CheckOut() {
 	}	
 
 
-
-	const items = [
-		{
-			img: aedc,
-			value: "Abuja Electricity"
-		},
-		{
-			img: bedc,
-			value: "BEDC Electricity "
-		},
-		{
-			img: eedc,
-			value: "Enugu Electricity"
-		},
-		{
-			img: ecedc,
-			value: "Eko Electricity "
-		},
-		{
-			img: PHED,
-			value: "Port Harcourt Electricity "
-		},
-		{
-			img: ibedc,
-			value: "Benin Electricity"
-		},
-	]
 
 
 	return ( 
@@ -119,7 +88,7 @@ export default function CheckOut() {
 												name="number"
 												type="tel"
 												placeholder="Enter phone number"
-												value={formData.city}
+												value={formData.number}
 												change={handleInputChange}
 											/>
 										</div>
