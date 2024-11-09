@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Modal({handleClose, showModal, children}) {
+export default function Modal({handleClose, showModal, myStyle, children}) {
   return (
 	<>
 	  
@@ -11,7 +11,7 @@ export default function Modal({handleClose, showModal, children}) {
 			onClick={()=> {handleClose()}}
 		>
 			<div
-			className="modal-dialog modal-dialog-centered modal-lg"
+			className={`modal-dialog modal-dialog-centered ${myStyle ? myStyle : "modal-lg"}`}
 			onClick={(e)=> e.stopPropagation()}
 			>
 			<div className="modal-content">

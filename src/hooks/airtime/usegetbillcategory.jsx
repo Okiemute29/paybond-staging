@@ -12,13 +12,13 @@ const useGetBillCategory = () => {
     const source = useRef();
 
    
-    const getBillCategory = async () => {
+    const getBillCategory = async (data) => {
         if (source.current === undefined) {
             source.current = CancelToken.source();
           }
         try {
             setloading(true);
-            const res = await Airtimeservices.getBillCategory("airtime", source.current.token );
+            const res = await Airtimeservices.getBillCategory(data, source.current.token );
 
             if(!res) {
 

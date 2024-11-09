@@ -5,14 +5,33 @@ import Spinnar from '../component/spinnar'
 import OtpInput from 'react-otp-input';
 import signUpImg from "../assets/images/signup-img.svg"
 import useVerifyOTP from '../hooks/auth/useverifyotp';
+import Countdown from "../helpers/countdown";
+import useVerifyEmail from '../hooks/auth/resendotp';
 
 export default function RegisterOtp() {
 	const {verifyOTP, loading} = useVerifyOTP()
+	const user = JSON.parse(localStorage.getItem("paybondsignup"))
+	const [startCountdown, setStartCountdown] = useState(false);
+	const  {resendOTP, loading: otpLoading} = useVerifyEmail()
     const [OTP, setOTP] = useState("");
 
 	const handleSubmit = async (e)=>{
 		e.preventDefault()
 		await verifyOTP(OTP)
+	}
+
+	
+    const resendOtp = async (e) =>{
+		e.preventDefault()
+		if(!otpLoading){
+            const result = await resendOTP({email: user.username});
+			
+            if (result) {
+                setStartCountdown(true);
+                // Success('OTP sent Successfully');
+            } 
+		  
+		}
 	}
 
 	console.log(OTP)
@@ -85,6 +104,9 @@ export default function RegisterOtp() {
                           </button>
                         </div>
                       </form>
+                      <div className="form-note-s2 pt-4 text-black">
+						Didn't receive OTP? {startCountdown ? <Countdown startCountdown={startCountdown} setStartCountdown={setStartCountdown} /> : otpLoading ? <span className="text-paybond cursor-pointer"> Sending... </span> : <span className="text-paybond cursor-pointer" onClick={resendOtp}>Resend OTP</span>}
+                      </div>
                     </div>
 					</div>
                   </div>

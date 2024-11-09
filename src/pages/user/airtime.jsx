@@ -19,6 +19,7 @@ import useCreateCard from "../../hooks/airtime/usecreatecardtr"
 // import OtpInput from 'react-otp-input';
 import { useSelector } from 'react-redux'
 import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
+import successImg from "../../assets/success.png"
 
 
 export default function Airtime() {
@@ -27,7 +28,7 @@ export default function Airtime() {
 	const {getBillCategory, data, loading} = useGetBillCategory();
 	const {createCardTransaction, data: cardData, loading: cardLoading} = useCreateCard()
     const [pin, setPin] = useState("");
-	const [showPin, setShowPin] = useState(false)
+	const [showSuccess, setShowSuccess] = useState(false)
 	const {getBillFromCategory, data: billFromCategoryData, loading: billFromCategoryLoading} = useGetBillFromCategory()
 	const {postVerifyBill, data: verifyBillData, loading: verifyBillLoading} = usePostVerifyBill()
 	const [selectedProvider, setSelectedProvider] = useState(null)
@@ -38,6 +39,10 @@ export default function Airtime() {
 		code: "",
 		customer: ""
 	})
+	const [error, setError] = useState('');
+	// Define a regular expression for Nigerian phone numbers
+	const nigeriaPhoneRegex = /^(080|081|070|090|091)\d{8}$/;
+
 	const [paymentConfig, setPaymentConfig] = useState({
 		public_key: 'FLWPUBK_TEST-46541080f1bf17e301a6f52027061790-X',
 		tx_ref: `tx-${Date.now()}`,
@@ -81,6 +86,7 @@ export default function Airtime() {
 	const handleClick = (item) => {
 		setSelectedProvider(item);
 		setFormData(prv => ({...prv, code: item.biller_code}))
+		setSelectProvider(prv => !prv)
 	};
 
 	const handleInputChange = (e) =>{
@@ -115,15 +121,36 @@ export default function Airtime() {
 	]
 
 	const handleGetBillCategory = async () =>{
-		await getBillCategory()
+		await getBillCategory("airtime")
 	}
 	const handleGetBillFromCategory = async () =>{
 		await getBillFromCategory(selectedProvider.biller_code)
 	} 
+	
+	const handleChange = (e) => {
+		const { value } = e.target;
+
+
+		// Update state with input value
+		setFormData((prev) => ({ ...prev, customer: value }));
+
+		// Validate phone number
+		if (value && !nigeriaPhoneRegex.test(value)) {
+			setError('Please enter a valid Nigerian phone number');
+		} else {
+			setError('');
+		}
+	};
 	const handleVerifyBill = async (e) =>{
 		e.preventDefault()
 		console.log("submit verify", formData)
 		if(formData.amount && formData.code && formData.customer && formData.item_code){
+
+			// Check if the phone number is valid
+			if (!nigeriaPhoneRegex.test(formData.customer)) {
+				window.NioApp.Toast("Please enter a valid 11-digit Nigerian phone number", "warning");
+				return; // Stop execution if phone number is invalid
+			}
 			var verifyData = {
 				item_code: formData.item_code,
 				code: formData.code,
@@ -179,10 +206,23 @@ export default function Airtime() {
 			});
 	
 			setUpdatedBillers(updated);
+			setSelectedProvider(updated[0])
+			setFormData(prv => ({...prv, code: updated[0]?.biller_code}))
 		}
 	}, [data]); // Added items to dependency array
 	
-	console.log("verifyBillData", verifyBillData);
+	// Set the first item_code by default if billFromCategoryData is available
+	useEffect(() => {
+		if (billFromCategoryData?.length > 0 && !formData.item_code) {
+			const defaultItem = billFromCategoryData.find(item => 
+				item.name.includes(selectedProvider?.name?.split(" ")[0])
+			);
+			if (defaultItem) {
+				setFormData(prev => ({ ...prev, item_code: defaultItem.item_code }));
+			}
+		}
+	}, [billFromCategoryData,]);
+	console.log("formData", formData);
 
 	// Function to handle payment initiation
 	const initiatePayment = () => {
@@ -224,6 +264,23 @@ export default function Airtime() {
 		}
 	}
 
+	const handlePaybillSuccess = () => {
+		setShowSuccess(false)
+		setFormData({
+			amount: "",
+			item_code: "",
+			code: "",
+			customer: ""
+		})
+	}
+
+	useEffect(()=>{
+		if(cardData){
+			setShowSuccess(true)
+		}
+	}, [cardData])
+
+	console.log("cardData", cardData)
 
 	return ( 
 	<>
@@ -272,6 +329,7 @@ export default function Airtime() {
 								show={selectProvider}
 								items={updatedBillers}
 								handleClick={handleClick}
+								loading={loading}
 								checkMark
 								selectedProvider={selectedProvider}
 
@@ -288,7 +346,6 @@ export default function Airtime() {
 
 									required
 								>
-									<option hidden>Select Biller</option>
 									{
 										billFromCategoryData?.filter(item => item.name.includes(selectedProvider?.name?.split(" ")[0])).map((biller, index)=>{
 											return <option key={index} value={biller.item_code}>{biller.short_name}</option>
@@ -309,18 +366,21 @@ export default function Airtime() {
 												</div>
 												+234
 											</div>
-											<input 
-												className='border-0' 
-												type='tel' 
-												placeholder='0812222222' 
+											<input
+												className="border-0"
+												type="tel"
+												placeholder="e.g 0801 234 5678 901"
+												maxLength="11"
 												value={formData.customer}
-												onChange={(e)=> setFormData(prv => ({...prv, customer: e.target.value}))} 
+												onChange={handleChange}
 											/>
+
 										</div>
 										{/* <div className='dropdown-con'>
 											<img src={dropdown} alt='dropdown' />
 										</div> */}
 									</div>
+									{error && <p style={{ color: 'red' }}>{error}</p>}
 								</div>
 								{/* .card-inner */}
 								</div>
@@ -402,60 +462,20 @@ export default function Airtime() {
 		</div>
 
 		{
-			(loading || billFromCategoryLoading) &&<LoadingModal />
+			(billFromCategoryLoading || cardLoading) &&<LoadingModal />
 		}
-		{/* <Modal
-			handleClose={handleClosePin}
-			showModal={showPin}
+		{showSuccess && <Modal
+			handleClose={handlePaybillSuccess}
+			showModal={showSuccess}
+			myStyle="modal-sm"
 		>
 				
-				<div className="nk-auth-form overflow-scroll-hidden">
-                      <div className="nk-block-head">
-                        <div className="nk-block-head-content">
-                          <h5 className="nk-block-title auth-title">Set Transaction Pin</h5>
-                          <div className="nk-block-des">
-                            <p className='auth-descript'>
-							Do not disclose this transaction pin to anyone.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <form onSubmit={handleSubmit} className="auth-form ">
-						<div className='row gy-4 mb-4'>
-							<div className="">
-								<div className="form-group">
-								<div className="otp-cont">
-									<OtpInput
-										value={pin}
-										onChange={setPin}
-										numInputs={4}
-										separator={<span> </span>}
-										renderInput={(inputProps, index) => <input key={index} {...inputProps} />}
-										inputStyle={{
-										width: '4rem',
-										height: '4rem',
-										margin: '0 0.5rem',
-										fontSize: '2rem',
-										borderRadius: 4,
-										background: '#EDEDED',
-										border: '1px solid #D9D9D9'
-										}}
-									/>
-								</div>
-								</div>
-							</div>
-						</div>
-
-
-
-                        <div className="form-group col-sm-6">
-                          <button className="auth-btn btn btn-lg btn-primary btn-block">
-                            {loading ? <Spinnar /> : 'Continue'}
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-			</Modal> */}
+				<div className="success-card">
+					<img src={successImg} alt="successful-check" />
+					<p className="payment-success-text text-paybond mb-0">Payment Successful</p>
+					<p className="text-center">{`Your airtime recharge of ${formatNumber(formData.amount)} to ${formData.customer} was successful `}</p>
+				</div>
+			</Modal>}
 
 
 	</>

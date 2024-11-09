@@ -7,7 +7,7 @@ import usePostPayBill from "./usepostbill";
 
 const useCreateCardTransaction = () => {
     const [loading, setloading] = useState(false);
-    const [data, setData] = useState([])
+    const [data, setData] = useState()
 	const {postPayBill, data: billData, loading: billLoading} = usePostPayBill()
 	const navigate = useNavigate()
     const CancelToken = axios.CancelToken;
@@ -21,7 +21,6 @@ const useCreateCardTransaction = () => {
         try {
             setloading(true);
             const res = await Airtimeservices.createCard(cardData, source.current.token );
-console.log("res", res)
             if(!res) {
 
 				window.NioApp.Toast('An error occured', "warning");
@@ -34,6 +33,7 @@ console.log("res", res)
 						transaction_id: res.data.result._id
 					}
 					await postPayBill(postBillData)
+					setData(billData)
 					// window.NioApp.Toast(res.data.message, "success");
                     return true
                 }

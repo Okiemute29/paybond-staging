@@ -15,12 +15,20 @@ export default function SignUp() {
 		password: '',
 		confirmPassword: ''
 	})
+	const [error, setError] = useState('');
+	// Define a regular expression for Nigerian phone numbers
+	const nigeriaPhoneRegex = /^(080|081|070|090|091)\d{8}$/;
 
 	const handleSubmit = async (e)=>{
 		e.preventDefault()
 		if(formData.password !== formData.confirmPassword){
 			window.NioApp.Toast("The passwords entered do not match.", "error");
 		}else{
+			// Check if the phone number is valid
+			if (!nigeriaPhoneRegex.test(formData.number)) {
+				window.NioApp.Toast("Please enter a valid 11-digit Nigerian phone number", "warning");
+				return; // Stop execution if phone number is invalid
+			}
 			const user = {
 				username: formData.username,
 				password: formData.password,
@@ -30,6 +38,22 @@ export default function SignUp() {
 			await verifyEmail(user)
 		}
 	}
+
+	
+	const handleChange = (e) => {
+		const { value } = e.target;
+
+
+		// Update state with input value
+		setFormData((prev) => ({ ...prev, number: value }));
+
+		// Validate phone number
+		if (value && !nigeriaPhoneRegex.test(value)) {
+			setError('Please enter a valid Nigerian phone number');
+		} else {
+			setError('');
+		}
+	};
 
   return (
     <>
@@ -92,10 +116,12 @@ export default function SignUp() {
 										id="tel" 
 										placeholder="e.g 0801 234 5678 901"
 										value={formData.number}
-										onChange={(e)=> setFormData(prv => ({...prv, number: e.target.value}))}
+										maxLength="11"
+										onChange={handleChange}
 										required 
 									/>
 								</div>
+								{error && <p style={{ color: 'red' }}>{error}</p>}
 								</div>
 							</div>
 						</div>
@@ -108,7 +134,7 @@ export default function SignUp() {
 										type="email" 
 										className="form-control form-control-lg auth-field" 
 										id="email" 
-										placeholder="e.g Paul Okoro" 
+										placeholder="e.g PaulOkoro@gmail.com" 
 										value={formData.username}
 										onChange={(e)=> setFormData(prv => ({...prv, username: e.target.value}))}
 										required
@@ -131,7 +157,7 @@ export default function SignUp() {
 										name="password"
 										className="form-control form-control-lg auth-field" 
 										id="password" 
-										placeholder="Create a 4 digit password" 
+										placeholder="Create password" 
 										value={formData.password}
 										onChange={(e)=> setFormData(prv => ({...prv, password: e.target.value}))}
 										required
@@ -156,7 +182,7 @@ export default function SignUp() {
 										name="password"
 										className="form-control form-control-lg auth-field" 
 										id="password" 
-										placeholder="confirm your 4 digit password" 
+										placeholder="confirm your password" 
 										value={formData.confirmPassword}
 										onChange={(e)=> setFormData(prv => ({...prv, confirmPassword: e.target.value}))}
 										required

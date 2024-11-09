@@ -72,10 +72,10 @@ export default function Login() {
                         <div className="form-group">
                           <div className="form-control-wrap">
 							<InputField 
-								label="Create Password"
+								label="Password"
 								name="password"
 								type="password"
-								placeholder="Create a 4 digit password"
+								placeholder="Enter password"
 								value={formData.password}
 								change={handleInputChange}
 							/>

@@ -6,7 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import _route from "../../constants/routes";
 
-const useSignUpUser = () => {
+const useResendOTP = () => {
     const [loading, setloading] = useState(false);
     const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -14,26 +14,20 @@ const useSignUpUser = () => {
     const source = useRef();
 
    
-    const signUpUser = async () => {
+    const resendOTP = async (data) => {
         if (source.current === undefined) {
             source.current = CancelToken.source();
           }
         try {
             setloading(true);
-			const signupData = JSON.parse(localStorage.getItem("paybondsignup"));
-            const res = await AuthService.signUp(signupData, source.current );
-			console.log("signup res", res)
-
+            const res = await AuthService.verifyUser(data, source.current );
             if(!res) {
 				window.NioApp.Toast('An error occured', "warning");
             }else{
                 setloading(false);
                 if(res.status === 200 || res.status === 201){
-                    await dispatch(setUser(res.data.result))
 					window.NioApp.Toast(res.data.message, "success");
-					localStorage.removeItem("paybondsignup");
-                    localStorage.setItem("user", JSON.stringify(res.data.result));
-                    navigate(_route._transaction_pin)
+					return true
                 }
             }
             
@@ -56,8 +50,7 @@ const useSignUpUser = () => {
         }
     }, [])
 
-    return {signUpUser, loading};
+    return {resendOTP, loading};
 }
  
-export default useSignUpUser;
-
+export default useResendOTP;

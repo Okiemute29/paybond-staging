@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const usePostPayBill = () => {
     const [loading, setloading] = useState(false);
-    const [data, setData] = useState([])
+    const [data, setData] = useState()
 	const navigate = useNavigate()
     const CancelToken = axios.CancelToken;
     const source = useRef();
