@@ -6,67 +6,93 @@ import { useNavigate } from "react-router-dom";
 import usePostPayBill from "./usepostbill";
 
 const useCreateCardTransaction = () => {
-    const [loading, setloading] = useState(false);
-    const [data, setData] = useState()
-	const {postPayBill, data: billData, loading: billLoading} = usePostPayBill()
-	const navigate = useNavigate()
+    const [loading, setLoading] = useState(false);
+    const [data, setData] = useState();
+    const [error, setError] = useState({
+        cardError: null,
+        billError: null
+    });
+    const [isSuccess, setIsSuccess] = useState(false);
+    
+    const { postPayBill, loading: billLoading } = usePostPayBill();
+    const navigate = useNavigate();
     const CancelToken = axios.CancelToken;
     const source = useRef();
 
-   
     const createCardTransaction = async (cardData, billData) => {
         if (source.current === undefined) {
             source.current = CancelToken.source();
-          }
-        try {
-            setloading(true);
-            const res = await Airtimeservices.createCard(cardData, source.current.token );
-            if(!res) {
+        }
 
-				window.NioApp.Toast('An error occured', "warning");
-            }else{
-                setloading(false);
-                if(res.status === 200 || res.status === 201){
-					// setData(res.data.result)
-					const postBillData = {
-						...billData,
-						transaction_id: res.data.result._id
-					}
-					await postPayBill(postBillData)
-					setData(billData)
-					// window.NioApp.Toast(res.data.message, "success");
-                    return true
-                }
-            }
+        try {
+            setLoading(true);
+            setError({ cardError: null, billError: null });
+            setIsSuccess(false);
+
+            // First API call - Create Card Transaction
+            const res = await Airtimeservices.createCard(cardData, source.current.token);
             
+            if (!res) {
+                throw new Error('An error occurred during card transaction');
+            }
+
+            if (res.status === 200 || res.status === 201) {
+                // Second API call - Post Bill Payment
+                const postBillData = {
+                    ...billData,
+                    transaction_id: res.data.result._id
+                };
+
+                const billResponse = await postPayBill(postBillData);
+                
+                if (!billResponse.success) {
+                    setError(prev => ({ ...prev, billError: billResponse.error }));
+                    setIsSuccess(false);
+                    window.NioApp.Toast('Bill payment failed: ' + billResponse.error, "warning");
+                    return false;
+                }
+
+                setData(billData);
+                setIsSuccess(true);
+                return true;
+            }
         } catch (error) {
-            setloading(false);
+            setLoading(false);
+            setIsSuccess(false);
+            
             if (axios.isCancel(error)) {
                 console.log(error);
-            }else{
-                if(error.response){
-					if(error?.response?.status === 401){
-						if(error?.response?.data?.message?.toLowerCase() === "jwt expired"){
-							navigate(_route._login)
-						}
-					}
-					window.NioApp.Toast(error?.response?.data?.message, "warning");
-                }else{
-                    console.log(error)
-					window.NioApp.Toast(error?.response?.data?.message, "warning");
-                }
+                return false;
             }
-        }
-       
-    }
-    
-    useEffect(()=>{
-        return () =>{ 
-            if (source.current != null) source.current.cancel()
-        }
-    }, [])
 
-    return {createCardTransaction, data, loading};
-}
- 
+            const errorMessage = error.response?.data?.message || error.message;
+            setError(prev => ({ ...prev, cardError: errorMessage }));
+
+            if (error.response?.status === 401 && 
+                error.response?.data?.message?.toLowerCase() === "jwt expired") {
+                navigate(_route._login);
+            }
+
+            window.NioApp.Toast(errorMessage, "warning");
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        return () => {
+            if (source.current != null) source.current.cancel();
+        };
+    }, []);
+
+    return { 
+        createCardTransaction, 
+        data, 
+        loading: loading || billLoading,
+        error,
+        isSuccess
+    };
+};
+
 export default useCreateCardTransaction;

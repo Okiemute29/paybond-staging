@@ -20,15 +20,17 @@ import useCreateCard from "../../hooks/airtime/usecreatecardtr"
 import { useSelector } from 'react-redux'
 import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 import successImg from "../../assets/success.png"
+import failImg from "../../assets/fail.png"
 
 
 export default function Airtime() {
 	const user = useSelector((state) => state.auth.user)
 	const [selectProvider, setSelectProvider] = useState(false)
 	const {getBillCategory, data, loading} = useGetBillCategory();
-	const {createCardTransaction, data: cardData, loading: cardLoading} = useCreateCard()
+	const {createCardTransaction, data: cardData, loading: cardLoading,  error: cardError, isSuccess } = useCreateCard()
     const [pin, setPin] = useState("");
 	const [showSuccess, setShowSuccess] = useState(false)
+	const [showError, setShowError] = useState(false)
 	const {getBillFromCategory, data: billFromCategoryData, loading: billFromCategoryLoading} = useGetBillFromCategory()
 	const {postVerifyBill, data: verifyBillData, loading: verifyBillLoading} = usePostVerifyBill()
 	const [selectedProvider, setSelectedProvider] = useState(null)
@@ -257,12 +259,6 @@ export default function Airtime() {
 		}
 	}, [verifyBillData])
 
-	const handleSubmit = async (e)=>{
-		e.preventDefault()
-		const transactionData = {
-			pin: pin,
-		}
-	}
 
 	const handlePaybillSuccess = () => {
 		setShowSuccess(false)
@@ -273,12 +269,24 @@ export default function Airtime() {
 			customer: ""
 		})
 	}
+	const handlePaybillError = () => {
+		setShowError(false)
+	}
 
-	useEffect(()=>{
-		if(cardData){
-			setShowSuccess(true)
-		}
-	}, [cardData])
+	// useEffect(()=>{
+	// 	if(cardData){
+	// 		setShowSuccess(true)
+	// 	}
+	// }, [cardData])
+	useEffect(() => {
+        if(isSuccess) {
+            setShowSuccess(true);
+            setShowError(false);
+        } else if (cardError.cardError || cardError.billError) {
+            setShowError(true);
+            setShowSuccess(false);
+        }
+    }, [isSuccess, cardData, cardError]);
 
 	console.log("cardData", cardData)
 
@@ -476,6 +484,18 @@ export default function Airtime() {
 					<p className="text-center">{`Your airtime recharge of ${formatNumber(formData.amount)} to ${formData.customer} was successful `}</p>
 				</div>
 			</Modal>}
+		{showError && <Modal
+			handleClose={handlePaybillError}
+			showModal={showError}
+			myStyle="modal-sm"
+		>
+			
+			<div className="success-card">
+				<img src={failImg} alt="successful-check" />
+				<p style={{color: "red"}} className="payment-fail-text mb-0">Payment Failed</p>
+				<p className="text-center">{`Your data purchase was failed. `}</p>
+			</div>
+		</Modal>}
 
 
 	</>

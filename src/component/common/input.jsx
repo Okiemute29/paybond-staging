@@ -2,7 +2,7 @@ import { useState } from "react"
 import search from "../../assets/images/search-normal.svg"
 
 
-export default function InputField({label, type, name, placeholder, value, inputClass, change }) {
+export default function InputField({label, type, readOnly, name, placeholder, value, inputClass, change }) {
 	const [showPassword, setShowPassword] = useState(false)
   return (
 	<>
@@ -22,6 +22,7 @@ export default function InputField({label, type, name, placeholder, value, input
 					className={`form-control form-control-lg auth-field ${inputClass && inputClass}`}                              
 					placeholder={placeholder}
 					value={value}
+					readOnly={readOnly}
 					onChange={change}
 					required
 				/>
@@ -35,6 +36,7 @@ export default function InputField({label, type, name, placeholder, value, input
 					className={`form-control form-control-lg auth-field ${inputClass && inputClass}`}                              
 					placeholder={placeholder}
 					value={value}
+					readOnly={readOnly}
 					onChange={change}
 					required
 				/>
