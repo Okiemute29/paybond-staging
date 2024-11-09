@@ -31,7 +31,8 @@ const useLoginUser = () => {
                     await dispatch(setUser(res.data.result))
 					window.NioApp.Toast(res.data.message, "success");
                     localStorage.setItem("user", JSON.stringify(res.data.result));
-                    navigate(_route._dashboard)
+                    // navigate(_route._dashboard)
+					window.location.href = `${window.location.origin}/dashboard`
                 }
             }
             

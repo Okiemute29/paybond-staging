@@ -22,6 +22,17 @@
     align-items: center;
     transition: color 0.3s, background-color 0.3s;
 }
+.wallet-card-bg{
+	background-image: url('../../assets/card-bg.png');
+	background-color: transparent;
+	background-position: center;
+	background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 20px;
+    min-height: 14rem;
+	max-width: 40rem;
+	width: 100%;
+}
 .success-card{
 	display: flex;
 	justify-content: center;

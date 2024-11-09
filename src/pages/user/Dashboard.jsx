@@ -37,7 +37,7 @@ export default function Dashboard() {
 				</div>
 				{/* .nk-block-head */}
 				<div className="nk-block">
-				<div className="row bg-white dashboard-card-analysis pb-5 g-gs">
+				<div className="row  dashboard-card-analysis pb-5 g-gs">
 					
 					<DashboardAnalysis
 						title="Total User Wallet Balance"
@@ -46,24 +46,6 @@ export default function Dashboard() {
 						// accept=" 6,512,224.384"
 						// decline='33,611,719'
 					/>
-					<DashboardAnalysis
-						title="Total Groceries Transactions"
-						value="12,932,900"
-						// accept="1,663,230"
-						// decline='1,423,550'
-					/>
-					<DashboardAnalysis
-						title="Total Paybills Transaction"
-						value="889,768"
-						// increase="5"
-						// width='3'
-					/>
-					{/* <DashboardAnalysis
-					title="Basic Users"
-					value="100"
-					increase="-5"
-					width='3'
-					/> */}
 				</div>
 				{/* .row */}
 				</div>
