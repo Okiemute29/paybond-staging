@@ -93,7 +93,7 @@ export default function CheckOut() {
 											/>
 										</div>
 										<div className="mt-5">
-											<p className="text-black fs-6">Delivery Fee: <span className="fw-bold ms-2"> NGN 16,000</span></p>
+											<p className="text-black fs-6">Delivery Fee: <span className="fw-bold ms-2"> NGN 1,550</span></p>
 										</div>
 										
 
