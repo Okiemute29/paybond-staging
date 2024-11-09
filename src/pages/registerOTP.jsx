@@ -25,7 +25,7 @@ export default function RegisterOtp() {
 		e.preventDefault()
 		if(!otpLoading){
             const result = await resendOTP({email: user.username});
-			
+
             if (result) {
                 setStartCountdown(true);
                 // Success('OTP sent Successfully');
@@ -62,7 +62,7 @@ export default function RegisterOtp() {
                           <h5 className="nk-block-title auth-title">Enter OTP</h5>
                           <div className="nk-block-des">
                             <p className='auth-descript'>
-							Enter 5 digit number sent to email 
+							{`Enter 6 digit number sent to ${user.username}`} 
                             </p>
                           </div>
                         </div>
