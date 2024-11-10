@@ -23,7 +23,7 @@ export default function DropDown({show, items, formatNumber, handleClick, loadin
 											<img src={item.logo} alt='select-img' className="provider-logo" />
 										</div>
 										}
-										<p>{`${item?.biller_name} (${formatNumber(item?.amount)})`}</p>
+										<p>{`${item?.biller_name} ${(item?.amount && item?.amount!== 0) ? `(${formatNumber(item?.amount)})` : ""}`}</p>
 									</div>
 									{
 									

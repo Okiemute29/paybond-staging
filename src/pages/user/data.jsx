@@ -31,7 +31,6 @@ export default function Data() {
 	const [selectDataPlan, setSelectDataPlan] = useState(false)
 	const {getBillCategory, data, loading} = useGetBillCategory();
 	const {createCardTransaction, data: cardData, loading: cardLoading,  error: cardError, isSuccess } = useCreateCard()
-    const [pin, setPin] = useState("");
 	const [showSuccess, setShowSuccess] = useState(false)
 	const [showError, setShowError] = useState(false)
 	const {getBillFromCategory, data: billFromCategoryData, loading: billFromCategoryLoading} = useGetBillFromCategory()
@@ -50,7 +49,7 @@ export default function Data() {
 	const nigeriaPhoneRegex = /^(080|081|070|090|091)\d{8}$/;
 
 	const [paymentConfig, setPaymentConfig] = useState({
-		public_key: 'FLWPUBK_TEST-46541080f1bf17e301a6f52027061790-X',
+		public_key: process.env.REACT_APP_FLUTTER_WAVE,
 		tx_ref: `tx-${Date.now()}`,
 		amount: 0,
 		currency: 'NGN',
@@ -202,7 +201,7 @@ export default function Data() {
 			const updated = data.map(biller => {
 				// Find matching logo by checking if biller name includes the logo value
 				const matchingLogo = items.find(logo => 
-					biller.name.toUpperCase().includes(logo.value)
+					biller.name.toUpperCase().includes(logo.value.toUpperCase())
 				);
 				
 				// If found, update the logo, otherwise keep as is

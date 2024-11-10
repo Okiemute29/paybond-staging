@@ -1,23 +1,8 @@
-
-import sidepic from "../../assets/images/electricity-img.png"
-import aedc from "../../assets/images/AEDC-BRAND.png"
-import bedc from "../../assets/images/BEDC.png"
-import eedc from "../../assets/images/eedc.png"
-import ecedc from "../../assets/images/ecedc.png"
-import PHED from "../../assets/images/PHED.png"
-import ibedc from "../../assets/images/ibedc.png"
-import dropdown from "../../assets/images/dropdown.svg"
-import Spinnar from '../../component/spinnar'
 import { useState } from 'react'
-import DropDown from '../../helpers/dropdown'
 import InputField from "../../component/common/input"
 
 
 export default function CheckOut() {
-	var loading = false
-	const [selectProvider, setSelectProvider] = useState(false)
-	const [picx, setPicx] = useState(null)
-	const [name, setName] = useState(null)
 	const [formData, setFormData] = useState({
 		number: "",
 		city: "",

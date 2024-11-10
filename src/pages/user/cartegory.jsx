@@ -1,9 +1,6 @@
 
-import mtn from "../../assets/images/mtn.png"
 import milo from "../../assets/images/milo.png"
 import milk from "../../assets/images/milk.png"
-import noodles from "../../assets/images/noodles.png"
-import gabage from "../../assets/images/gabage.png"
 import spag from "../../assets/images/spag.png"
 import egg from "../../assets/images/egg.png"
 import deleteIcon from "../../assets/images/delete.svg";
