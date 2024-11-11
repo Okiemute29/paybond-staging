@@ -51,6 +51,11 @@ export default function _sidebar() {
 			icon: "grocery",
 		},
 		{
+			route: _route._transaction,
+			name: "Transaction",
+			icon: "transaction",
+		},,
+		{
 			route: _route._setting,
 			name: "Settings",
 			icon: "betting",

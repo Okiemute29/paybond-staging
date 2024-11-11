@@ -10,6 +10,7 @@ import Favourites from "./favourite";
 import Category from "./cartegory";
 import CheckOut from "./checkout";
 import Settings from "./settings"
+import Transaction from "./transaction"
 
 
 export { 
@@ -24,7 +25,8 @@ export {
 	Favourites,
 	Category,
 	CheckOut,
-	Settings
+	Settings,
+	Transaction
 	
 	
 };

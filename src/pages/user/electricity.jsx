@@ -159,7 +159,9 @@ export default function Electricity() {
 			amount: `${formData.amount}`,
 			customer_id: formData.customer,
 			biller_code: formData.code,
-			item_code: formData.item_code
+			item_code: formData.item_code,
+			payment_method: "card",
+			category: "Electricity"
 
 		}
 		await createCardTransaction(cardData, billData)
@@ -264,6 +266,9 @@ export default function Electricity() {
         if(isSuccess) {
             setShowSuccess(true);
             setShowError(false);
+			console.log("details", details)
+			console.log("cardData", cardData)
+			console.log("verifyBillData", verifyBillData)
         } else if (cardError.cardError || cardError.billError) {
             setShowError(true);
             setShowSuccess(false);
@@ -278,6 +283,9 @@ export default function Electricity() {
 	}
 
 	console.log("cardData", cardData)
+	console.log("details", details)
+	console.log("cardData", cardData)
+	console.log("verifyBillData", verifyBillData)
 
 
 

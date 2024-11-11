@@ -174,7 +174,10 @@ export default function Airtime() {
 			amount: formData.amount,
 			customer_id: formData.customer,
 			biller_code: formData.code,
-			item_code: formData.item_code
+			item_code: formData.item_code,
+			payment_method: "card",
+			category: "Airtime"
+		
 
 		}
 		await createCardTransaction(cardData, billData)

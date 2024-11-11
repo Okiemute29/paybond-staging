@@ -16,7 +16,8 @@ import {
 	  Favourites,
 	  Category,
 	  CheckOut,
-	  Settings
+	  Settings,
+	  Transaction
 	  
   
   } from "./pages/user/index";
@@ -66,6 +67,7 @@ const router = createBrowserRouter(
 			<Route path={_route._category} element={<Category /> } />
 			<Route path={_route._checkout} element={<CheckOut /> } />
 			<Route path={_route._setting} element={<Settings /> } />
+			<Route path={_route._transaction} element={<Transaction /> } />
 
 			</Route>
 		</Route>

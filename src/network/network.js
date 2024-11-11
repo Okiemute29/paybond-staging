@@ -10,3 +10,4 @@ export const _billfromCategory = process.env.REACT_APP_BASE_URL + "/transaction/
 export const _verifybill = process.env.REACT_APP_BASE_URL + "/transaction/bills/validate"
 export const _paybill = process.env.REACT_APP_BASE_URL + "/transaction/bills/pay"
 export const _createCard = process.env.REACT_APP_BASE_URL + "/transaction/card/create"
+export const _billTransaction = process.env.REACT_APP_BASE_URL + "/transaction/bills/history"

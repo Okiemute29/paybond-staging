@@ -177,7 +177,9 @@ export default function Data() {
 			amount: `${formData.amount}`,
 			customer_id: formData.customer,
 			biller_code: formData.code,
-			item_code: formData.item_code
+			item_code: formData.item_code,
+			payment_method: "card",
+			category: "Data"
 
 		}
 		await createCardTransaction(cardData, billData)

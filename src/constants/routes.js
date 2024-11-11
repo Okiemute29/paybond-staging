@@ -21,6 +21,7 @@ const _route = {
     _checkout: '/groceries/shipping/checkout',
     _setting: '/setting',
     _groceries_details: '/groceries/:id',
+    _transaction: '/transaction',
     _not_found: '*',
 
 }
