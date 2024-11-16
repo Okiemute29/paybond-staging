@@ -43,9 +43,10 @@ const useGetAllOrder = () => {
                 console.log(error);
             } else {
                 if(error.response){
-                    console.log(error)
-					if(error?.response?.data?.status === 401){
-						navigate(_route._admin_login)
+					if(error?.response?.status === 401){
+						if(error?.response?.data?.message?.toLowerCase() === "jwt expired"){
+							navigate(_route._login)
+						}
 					}
 					window.NioApp.Toast(error?.response?.data?.message, "warning");
                 }else{

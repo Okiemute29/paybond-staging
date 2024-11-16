@@ -5,16 +5,17 @@ import noodles from "../../assets/images/noodles.png"
 import gabage from "../../assets/images/gabage.png"
 import spag from "../../assets/images/spag.png"
 import egg from "../../assets/images/egg.png"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import InputField from "../../component/common/input"
 import ProductList from "../../component/groceries/productlist"
 import FavouriteBtnSection from "../../component/groceries/favouritebtnsection"
-
+import useGetAllShop from "../../hooks/shop/usegetallshop"
 
 export default function Groceries() {
 	const [formData, setFormData] = useState({
 		amount: "",
 	})
+	const {getAllShop, data, loading} = useGetAllShop()
 
 
 
@@ -25,8 +26,15 @@ export default function Groceries() {
 		setFormData(prv => ({...prv, [name]: rawValue}))
 	}	
 
+	
+	const handleGetAllShopItem = async ()=>{
+		await getAllShop()
+	}
 
 
+	useEffect(()=>{
+		handleGetAllShopItem()
+	}, [])
 	
 	const product = [
 		{
@@ -125,6 +133,7 @@ export default function Groceries() {
 	];
 
 
+	console.log("data", data)
 	
 	return ( 
 	<>
@@ -159,7 +168,8 @@ export default function Groceries() {
 					<div className="nk-block mt-4">
 					<div className="row g-gs ">
 						<ProductList 
-							products={product}
+							loading={loading}
+							products={data}
 							carts={carts}
 						/>
 					

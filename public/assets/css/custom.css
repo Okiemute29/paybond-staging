@@ -565,7 +565,7 @@ a:hover{
     display: none;
 }
 .show{
-    display: block;
+    display: block !important;
 }
 .flex{
     display: flex;

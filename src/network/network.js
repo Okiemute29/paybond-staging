@@ -11,3 +11,5 @@ export const _verifybill = process.env.REACT_APP_BASE_URL + "/transaction/bills/
 export const _paybill = process.env.REACT_APP_BASE_URL + "/transaction/bills/pay"
 export const _createCard = process.env.REACT_APP_BASE_URL + "/transaction/card/create"
 export const _billTransaction = process.env.REACT_APP_BASE_URL + "/transaction/bills/history"
+export const _getAllShopItems = process.env.REACT_APP_BASE_URL + "/groceries/get/all"
+export const _addToCart = process.env.REACT_APP_BASE_URL + "//cart/add"

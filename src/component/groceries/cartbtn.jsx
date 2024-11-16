@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function CartBtn({isInCart, ProductId, count}) {
+export default function CartBtn({isInCart, ProductId, count, handleAddToCart}) {
 	const [countValue, setCountValue] = useState(0)
 
 
@@ -15,7 +15,7 @@ export default function CartBtn({isInCart, ProductId, count}) {
 		<button 
 			data-cart={isInCart}  
 			data-id={ProductId} 
-			onClick={(e) => handleClick(e)}
+			onClick={(e) => handleAddToCart({product: ProductId})}
 			className={`product-add-btn py-1 ${countValue > 0 && "bg-paybond"}`}>
 			<div>
 				{countValue > 0 && <span onClick={()=> setCountValue(prv => (prv - 1))} className={`cart-plus ${countValue > 0 && " cart-plus-active"}`}>-</span>}

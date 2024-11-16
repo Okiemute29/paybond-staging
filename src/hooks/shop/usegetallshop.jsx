@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-import OrderServices from "../../services/orders/admin";
+import Shopservices from "../../services/shop/admin";
 import _route from '../../constants/routes'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const useGetSIngleOrder = () => {
+const useGetAllShop = () => {
     const [loading, setloading] = useState(false);
     const [data, setData] = useState([])
 	const navigate = useNavigate()
@@ -12,13 +12,13 @@ const useGetSIngleOrder = () => {
     const source = useRef();
 
    
-    const getSIngleOrder = async (id, user) => {
+    const getAllShop = async () => {
         if (source.current === undefined) {
             source.current = CancelToken.source();
           }
         try {
             setloading(true);
-            const res = await OrderServices.getSingleOrder(id, user, source.current.token );
+            const res = await Shopservices.getAllShop(source.current.token );
 
             if(!res) {
 				window.NioApp.Toast('An error occured', "warning");
@@ -43,9 +43,10 @@ const useGetSIngleOrder = () => {
                 console.log(error);
             } else {
                 if(error.response){
-                    console.log(error)
-					if(error?.response?.data?.status === 401){
-						navigate(_route._admin_login)
+					if(error?.response?.status === 401){
+						if(error?.response?.data?.message?.toLowerCase() === "jwt expired"){
+							navigate(_route._login)
+						}
 					}
 					window.NioApp.Toast(error?.response?.data?.message, "warning");
                 }else{
@@ -63,7 +64,7 @@ const useGetSIngleOrder = () => {
         }
     }, [])
 
-    return {getSIngleOrder, data, loading};
+    return {getAllShop, data, loading};
 }
  
-export default useGetSIngleOrder;
+export default useGetAllShop;

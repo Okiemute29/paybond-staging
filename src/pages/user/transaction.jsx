@@ -3,15 +3,11 @@
 import { useState, useEffect } from "react";
 import _route from "../../constants/routes";
 import './myfastin.css'
-// import AddCryptoForm from "../../component/crypto/addcryptoform";
 import EditCryptoForm from "../../component/order/editcryptoform";
 import TransactionTable from "../../component/order/crptoTable";
 import Modal from '../../component/modal-md'
 import ModalWithHeader from '../../component/modalwithtitle'
 import useGetAllOrder from '../../hooks/orders/usegetorder';
-// import usePostCryto from '../../hooks/crypto/usecreatecrypto';
-// import useUpdateCryto from '../../hooks/crypto/useupdatecrypto';
-// import useDeleteOrder from '../../hooks/orders/usedeleteorder';
 import Spinnar from "../../component/spinnar";
 
 
@@ -23,15 +19,9 @@ export default function Orders() {
 	const [viewCryptoModal, setViewCryptoModal] = useState(false)
 	const [crypto, setCrypto] = useState(null)
 	const [editCrypto, setEditCrypto] = useState(null)
-	const postData = {}
-	const updateData = {}
-	const deleteData = {}
 	const updateLoading = false
 	const deleteLoading = false
 	const {getAllOrder, data, loading} = useGetAllOrder()
-	// const {postCryto, data: postData, loading: postLoading} = usePostCryto()
-	// const {upDateCryto, data: updateData, loading: updateLoading} = useUpdateCryto()
-	// const {deleteOrder, data:deleteData, loading: deleteLoading} = useDeleteOrder()
 
 	const handleClose = ()=>{
 		setViewCryptoModal(false)
@@ -49,9 +39,6 @@ export default function Orders() {
 	}
 
 	
-	const handlePostCrypto = async (details)=>{
-		// await postCryto(details) && handleClose()
-	}
 	
 	const handleUpdateCrypto = async (details, id)=>{
 		// await upDateCryto(details, id) && handleClose()
@@ -74,7 +61,7 @@ export default function Orders() {
                 <div className="nk-block-between">
                   <div className="nk-block-head-content">
                     <h3 className="nk-block-title page-title tb-ff">
-                      Transaction
+                      Transactions
                     </h3>
                     <div className="nk-block-des text-soft tb-ff">
                       <p>

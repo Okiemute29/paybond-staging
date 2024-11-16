@@ -3,13 +3,34 @@ import favourite from "../../assets/images/favorite.svg"
 import { Link } from 'react-router-dom';
 import _route from '../../constants/routes';
 import CartBtn from "../../component/groceries/cartbtn"
+import usePostAddToCart from '../../hooks/shop/useaddtocart';
+import Skeleton from '../skeletons/skeleton';
+import oops from '../../assets/images/oops.png'
 
-const ProductList = ({ products, carts, setSelectProduct }) => {
+const ProductList = ({ products, carts, loading, setSelectProduct }) => {
+	const {addToCart, data, loading: addLoading} = usePostAddToCart()
+
+	const handleAddToCart = (addData) => {
+		addToCart(addData)
+	}
     return (
         <>
-            {products.length < 1 ? (
-                <div className="w-100 d-flex justify-content-center mt-5 align-items-center">
-                    <img className="mt-auto w-60" src="/images/oops.png" alt="banner" />
+            {
+			loading ?
+			<div className="sevice_container mt-3">
+				{[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map((product, index) => {
+					return (
+						<div  className="product pb-0">
+							<Skeleton type='product' />
+						</div>
+					);
+				})}
+			</div>
+			:
+			products.length < 1 ? (
+                <div className="w-100 d-flex flex-column justify-content-center mt-5 align-items-center">
+                    <img className="mt-auto w-60" src={oops} alt="Error" />
+					<p>No Product Found</p>
                 </div>
             ) : (
                 <div className="sevice_container mt-3">
@@ -42,6 +63,7 @@ const ProductList = ({ products, carts, setSelectProduct }) => {
 									<CartBtn 
 										isInCart={isInCart}
 										ProductId={product._id}
+										handleAddToCart={handleAddToCart}
 									/>
 
 								</div>
@@ -49,7 +71,8 @@ const ProductList = ({ products, carts, setSelectProduct }) => {
                         );
                     })}
                 </div>
-            )}
+            )
+			}
         </>
     );
 };
