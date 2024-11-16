@@ -90,7 +90,7 @@ export default function CrptoTable({ data, loading }) {
               <strong>Name</strong>
             </span>
           </div>
-          <div className="nk-tb-col tb-col-mb tb-inner-tx">
+          <div className="nk-tb-col tb-inner-tx">
             <span className="sub-text">
               <strong>Total Amount</strong>
             </span>
@@ -100,7 +100,7 @@ export default function CrptoTable({ data, loading }) {
               <strong>Payment Method</strong>
             </span>
           </div>
-          <div className="nk-tb-col tb-col-lg tb-inner-tx">
+          <div className="nk-tb-col tb-inner-tx">
             <span className="sub-text">
               <strong>Date</strong>
             </span>
@@ -214,7 +214,7 @@ export default function CrptoTable({ data, loading }) {
                     <input type="text" defaultValue="BTC" hidden />
                   </div>
                 </div>
-                <div className="nk-tb-col tb-col-mb no-border">
+                <div className="nk-tb-col no-border">
                   <span className="tb-amount">
                     <span className="currency">₦</span>
                     {crypto?.bill?.amount}
@@ -223,7 +223,7 @@ export default function CrptoTable({ data, loading }) {
                 <div className="nk-tb-col tb-col-md no-border">
                   <span>{crypto?.payment_method}</span>
                 </div>
-                <div className="nk-tb-col tb-col-lg no-border">
+                <div className="nk-tb-col no-border">
                   <span>{`${new Date(crypto?.createdAt)?.toLocaleDateString(
                     "en-US",
                     options

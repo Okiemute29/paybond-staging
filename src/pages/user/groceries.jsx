@@ -10,14 +10,19 @@ import InputField from "../../component/common/input"
 import ProductList from "../../component/groceries/productlist"
 import FavouriteBtnSection from "../../component/groceries/favouritebtnsection"
 import useGetAllShop from "../../hooks/shop/usegetallshop"
+import usePostAddToCart from '../../hooks/shop/useaddtocart';
+import useGetFromCart from '../../hooks/shop/usegetfromcart';
+import usePostRemoveFromCart from '../../hooks/shop/useremovefromcart';
+
 
 export default function Groceries() {
 	const [formData, setFormData] = useState({
 		amount: "",
 	})
 	const {getAllShop, data, loading} = useGetAllShop()
-
-
+	const {addToCart, data: addCartData, loading: addLoading} = usePostAddToCart();
+	const {removeFromCart, data: removeCartData, loading: removeLoading } = usePostRemoveFromCart()
+	const {getFromCart, data: cartData, loading: cartLoading} = useGetFromCart()
 
 	const handleInputChange = (e) =>{
 		const {name, value} = e.target 
@@ -26,11 +31,24 @@ export default function Groceries() {
 		setFormData(prv => ({...prv, [name]: rawValue}))
 	}	
 
+	const handleAddToCart = (addData) => {
+		addToCart(addData)
+	}
+
+	const handleRemoveFromCart = (addData) => {
+		removeFromCart(addData)
+	}
 	
 	const handleGetAllShopItem = async ()=>{
 		await getAllShop()
+		await getFromCart()
 	}
 
+	useEffect(()=>{
+		if(addCartData){
+			getFromCart()
+		}
+	}, [addCartData, removeCartData])
 
 	useEffect(()=>{
 		handleGetAllShopItem()
@@ -131,10 +149,8 @@ export default function Groceries() {
 			quantity: 1
 		}
 	];
-
-
-	console.log("data", data)
 	
+	console.log("cartData", cartData)
 	return ( 
 	<>
 		<div className="nk-content ">
@@ -171,6 +187,11 @@ export default function Groceries() {
 							loading={loading}
 							products={data}
 							carts={carts}
+							cartData={cartData}
+							handleAddToCart={handleAddToCart}
+							handleRemoveFromCart={handleRemoveFromCart}
+							addLoading={addLoading || removeLoading}
+
 						/>
 					
 					</div>

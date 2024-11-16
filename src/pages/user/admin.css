@@ -577,6 +577,9 @@ select[multiple] option:checked {
 .bg-green{
 	background: #00EAB0;
 }
+.bg-paybond .add-loading{
+	color: white;
+}
 
 /* Modal section  */
 .css-1x2qt9t {

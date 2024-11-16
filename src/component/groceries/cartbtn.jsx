@@ -1,28 +1,19 @@
-import { useState } from "react";
+import Spinnar from "../../helpers/spinnar";
 
-export default function CartBtn({isInCart, ProductId, count, handleAddToCart}) {
-	const [countValue, setCountValue] = useState(0)
-
-
-
-	const handleClick = (e) => {
-		e.stopPropagation();
-		e.preventDefault(); // Corrected the typo here
-	};
+export default function CartBtn({isInCart, ProductId, count, handleAddToCart, handleRemoveFromCart, addLoading}) {
 
   return (
 	<>
 		<button 
-			data-cart={isInCart}  
-			data-id={ProductId} 
-			onClick={(e) => handleAddToCart({product: ProductId})}
-			className={`product-add-btn py-1 ${countValue > 0 && "bg-paybond"}`}>
+			// data-cart={isInCart}  
+			// data-id={ProductId} 
+			className={`product-add-btn py-1 ${count > 0 && "bg-paybond"}`}>
 			<div>
-				{countValue > 0 && <span onClick={()=> setCountValue(prv => (prv - 1))} className={`cart-plus ${countValue > 0 && " cart-plus-active"}`}>-</span>}
+				{count > 0 && <span onClick={(e) => handleRemoveFromCart({product: ProductId})} className={`cart-plus ${count > 0 && " cart-plus-active"}`}>-</span>}
 			</div>
-			{countValue > 0 ? <p className="text-white mb-0">{countValue}</p> : "cart"}
+			{addLoading ? <span className="add-loading"> <Spinnar /> </span> : count > 0 ? <p className="text-white mb-0">{count}</p> : "cart"}
 
-			<span onClick={()=> setCountValue(prv => (prv + 1))} className={`cart-plus ${countValue > 0 && " cart-plus-active"}`}>+</span>
+			<span onClick={(e) => handleAddToCart({product: ProductId})} className={`cart-plus ${count > 0 && " cart-plus-active"}`}>+</span>
 		</button>
 	</>
   )
