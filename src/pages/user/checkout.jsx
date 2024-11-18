@@ -1,155 +1,375 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import InputField from "../../component/common/input"
-
+import useGetFromCart from '../../hooks/shop/usegetfromcart';
+import useGetCartDelivery from '../../hooks/shop/usegetcartdelivery';
+import { formatPrice } from '../../helpers/priceFormat';
+import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
+import { useSelector } from 'react-redux';
+import Spinnar from '../../component/spinnar';
+import successImg from "../../assets/success.png";
+import failImg from "../../assets/fail.png";
+import Modal from "../../helpers/modal";
+import LoadingModal from "../../helpers/paybillsmodal";
 
 export default function CheckOut() {
-	const [formData, setFormData] = useState({
-		number: "",
-		city: "",
-		address: "",
-	})
+  const user = useSelector((state) => state.auth.user);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [formData, setFormData] = useState({
+    number: "",
+    city: "",
+    address: "",
+    state: "",
+    price: "",
+    country: null
+  });
+  
+  const {getFromCart, data: cartData, loading: cartLoading} = useGetFromCart();
+  const {getDeliveryState, data, loading} = useGetCartDelivery();
 
+  // Nigerian phone number regex
+  const nigerianPhoneRegex = /^(080|081|070|090|091)\d{8}$/;
 
-	const handleInputChange = (e) =>{
-		const {name, value} = e.target 
-		const rawValue = value.replace(/[^\d]/g, ''); // Remove non-numeric characters
-		console.log(rawValue);
-		setFormData(prv => ({...prv, [name]: rawValue}))
-	}	
+  const [paymentConfig, setPaymentConfig] = useState({
+    public_key: process.env.REACT_APP_FLUTTER_WAVE,
+    tx_ref: `tx-${Date.now()}`,
+    amount: 0,
+    currency: 'NGN',
+    payment_options: 'card,mobilemoney,ussd',
+    customer: {
+      email: user?.username || '',
+      name: user?.fullname || '',
+    },
+    customizations: {
+      title: 'Grocery Order Payment',
+      description: 'Payment for Grocery Order',
+      logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
+    },
+    meta: {
+      source: window.location.origin,
+    },
+    redirect_url: '',
+    mode: 'payment',
+  });
 
+  const handleFlutterPayment = useFlutterwave(paymentConfig);
 
+  const handleInputChange = (e) => {
+    const {name, value} = e.target;
+    if (name === 'number') {
+      const rawValue = value.replace(/[^\d]/g, '');
+      setFormData(prev => ({...prev, [name]: rawValue}));
+    } else {
+      setFormData(prev => ({...prev, [name]: value}));
+    }
+  };
 
+  const handlegetCart = () => {
+    getFromCart();
+  };
 
-	return ( 
-	<>
-		<div className="nk-content ">
-		<div className="container-fluid">
-			<div className="nk-content-inner">
-			<div className="nk-content-body">
-				<div className="nk-block-head nk-block-head-sm mt-4">
-				<div className="nk-block-between">
-					{/* .nk-block-head-content */}
-						<div className="nk-block-head-content">
-							<h4 className="page-title cus-page-title text-paybond">Groceries</h4>
-							
-						</div>
-				</div>
-				{/* .nk-block-between */}
-				</div>
-				{/* .nk-block */}
-				<div className="nk-block">
-				<div className="row g-gs">
-					<div className={`col-md-6`}>
-						<div className='col-md-9'>
+  const handlegetState = () => {
+    getDeliveryState();
+  };
 
-							<div className="card mt-0 shodowles-card bg-transparent">
-								<div className="nk-ecwg nk-ecwg2">
-								<div className="card-inner p-0">
-									<div className='rounded-4 py-2'>
-									<form>								
-										<div className="form-group">												
-											<InputField 
-												label="House Address"
-												name="address"
-												type="text"
-												placeholder="Enter house address"
-												value={formData.address}
-												change={handleInputChange}
-											/>
-										</div>									
-										<div className="form-group">												
-											<InputField 
-												label="City"
-												name="city"
-												type="text"
-												placeholder="Enter City"
-												value={formData.city}
-												change={handleInputChange}
-											/>
-										</div>								
-										<div className="form-group">												
-											<InputField 
-												label="Phone Number"
-												name="number"
-												type="tel"
-												placeholder="Enter phone number"
-												value={formData.number}
-												change={handleInputChange}
-											/>
-										</div>
-										<div className="mt-5">
-											<p className="text-black fs-6">Delivery Fee: <span className="fw-bold ms-2"> NGN 1,550</span></p>
-										</div>
-										
+  const subTotal = useMemo(() => {
+    if (!cartData) return 0;
+    return cartData.reduce((total, product) => {
+      return total + (parseFloat(product.product.price) * parseFloat(product.quantity));
+    }, 0);
+  }, [cartData]);
 
-									</form>
-									</div>
-								</div>
-								{/* .card-inner */}
-								</div>
-								{/* .nk-ecwg */}
-							</div>
-						</div>
-					{/* .card */}
-					</div>
-					{/* .col */}
-					<div className="col-md-6">
-						<div className="card bg-transparent">
-							<div className="nk-ecwg nk-ecwg2">
-							<div className="card-inner flex-grow-1 d-flex flex-column ps-4">
-								<div  className="col-12 p-4 text-white rounded-5 bg-paybond overflow-hidden ">
-									<h4>Order Sumary</h4>
-									<div className="py-3 border-b-white d-flex flex-column justify-content-start paybound-gap-2">
-										{
-											[1,2,3,4,5].map((element, index)=>{
-												return (
-													
-													<div className="fs-5 d-flex justify-content-between align-items-center">
-														<p className="mb-0 fw-normal">Millo Refil 800g</p>
-														<p className="fw-bold">NGN 3,200</p>
-													</div>
-												)
-											})
-										}
-									</div>
-									<div className="fs-5 border-b-white py-3 d-flex justify-content-between align-items-center">
-										<p className="mb-0 fw-bold">Subtotal</p>
-										<p className="fw-bold">NGN 16,000</p>
-									</div>
-									<div className="fs-5 border-b-white py-3 d-flex justify-content-between align-items-center">
-										<p className="mb-0 fw-bold">Delivery fee</p>
-										<p className="fw-bold">NGN 1,550</p>
-									</div>
-									<div className="fs-5 border-b-white py-3 d-flex justify-content-between align-items-center">
-										<p className="mb-0 fw-bold">Total</p>
-										<p className="fw-bold">NGN 17,550</p>
-									</div>
+  const totalAmount = useMemo(() => {
+    if (!cartData || !formData.price || !subTotal) return 0;
+    const price = parseFloat(formData.price) || 0;
+    const subtotalValue = parseFloat(subTotal) || 0;
+    return subtotalValue + price;
+  }, [cartData, formData.price, subTotal]);
 
-									<div className="w-100 d-flex justify-content-center mt-4 align-items-center">
-										<button className="w-75  fw-medium complete-btn">
-											<span className="text-paybond">Complete Order</span>
-										</button>
-									</div>
+  // Validate form completion
+  const isFormValid = () => {
+    return (
+      formData.number.trim() !== '' &&
+      nigerianPhoneRegex.test(formData.number) &&
+      formData.city.trim() !== '' &&
+      formData.address.trim() !== '' &&
+      formData.state &&
+      formData.price &&
+      totalAmount > 0
+    );
+  };
 
-								</div>
-							</div>
-							{/* .card-inner */}
-							</div>
-							{/* .nk-ecwg */}
-						</div>
-					</div>
-					{/* .col */}
-				</div>
-				{/* .row */}
-				</div>
-				{/* .nk-block */}
-			</div>
-			</div>
-		</div>
-		</div>
+  // Update payment config when amount changes
+  useEffect(() => {
+    if (totalAmount) {
+      setPaymentConfig(prevConfig => ({
+        ...prevConfig,
+        amount: totalAmount,
+        tx_ref: `tx-${Date.now()}`,
+        customer: {
+          ...prevConfig.customer,
+          phone_number: formData.number
+        }
+      }));
+    }
+  }, [totalAmount, formData.number]);
 
+  useEffect(() => {
+    handlegetCart();
+    handlegetState();
+  }, []);
 
-	</>
+  useEffect(() => {
+    if (!loading && data?.length > 0 && !formData.country) {
+      setFormData(prev => ({
+        ...prev,
+        country: data[1].state,
+        price: data[1].price,
+        state: data[1].state
+      }));
+    }
+  }, [loading, data]);
 
+  const handleChange = (e) => {
+    const selectedState = e.target.value;
+    const selectedCountry = data.find(country => country.state === selectedState);
+    
+    setFormData(prev => ({
+      ...prev,
+      country: selectedState,
+      price: selectedCountry?.price || '',
+      state: selectedState
+    }));
+  };
+
+  const handlePaymentSuccess = () => {
+    setShowSuccess(false);
+    // Reset form or redirect to success page
+    setFormData({
+      number: "",
+      city: "",
+      address: "",
+      state: "",
+      price: "",
+      country: null
+    });
+  };
+
+  const handlePaymentError = () => {
+    setShowError(false);
+  };
+
+  const initiatePayment = () => {
+    if (!isFormValid()) {
+      window.NioApp.Toast("Please fill all required fields correctly", "warning");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      handleFlutterPayment({
+        callback: (response) => {
+          console.log('Payment Response:', response);
+          if (response.status === 'successful') {
+            setShowSuccess(true);
+            // Handle successful payment here - you might want to call an API to process the order
+          } else {
+            setShowError(true);
+          }
+          closePaymentModal();
+          setIsLoading(false);
+        },
+        onClose: () => {
+          console.log('Payment modal closed');
+          setIsLoading(false);
+        },
+      });
+    } catch (error) {
+      console.error('Error initiating payment:', error);
+      setShowError(true);
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="nk-content">
+        <div className="container-fluid">
+          <div className="nk-content-inner">
+            <div className="nk-content-body">
+              <div className="nk-block-head nk-block-head-sm mt-4">
+                <div className="nk-block-between">
+                  <div className="nk-block-head-content">
+                    <h4 className="page-title cus-page-title text-paybond">Groceries</h4>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="nk-block">
+                <div className="row g-gs">
+                  <div className="col-md-6">
+                    <div className='col-md-9'>
+                      <div className="card mt-0 shodowles-card bg-transparent">
+                        <div className="nk-ecwg nk-ecwg2">
+                          <div className="card-inner p-0">
+                            <div className='rounded-4 py-2'>
+                              <form>
+                                <div className="form-group">
+                                  <InputField 
+                                    label="House Address"
+                                    name="address"
+                                    type="text"
+                                    placeholder="Enter house address"
+                                    value={formData.address}
+                                    change={handleInputChange}
+                                  />
+                                </div>
+                                
+                                <div className="form-group">
+                                  <InputField 
+                                    label="City"
+                                    name="city"
+                                    type="text"
+                                    placeholder="Enter City"
+                                    value={formData.city}
+                                    change={handleInputChange}
+                                  />
+                                </div>
+                                
+                                <div className="form-group">
+                                  <InputField 
+                                    label="Phone Number"
+                                    name="number"
+                                    type="tel"
+                                    placeholder="Enter phone number"
+                                    value={formData.number}
+                                    change={handleInputChange}
+                                  />
+                                  {formData.number && !nigerianPhoneRegex.test(formData.number) && (
+                                    <small className="text-danger">Please enter a valid Nigerian phone number</small>
+                                  )}
+                                </div>
+                                
+                                <div className="form-group">
+                                  <label className="auth-label">State</label>
+                                  <select
+                                    name="country"
+                                    className="form-control form-control-lg auth-field"
+                                    value={formData.country}
+                                    onChange={handleChange}
+                                    required
+                                  >
+                                    {loading ? (
+                                      <option>Loading...</option>
+                                    ) : (
+                                      data.map((country, index) => (
+                                        <option key={index} value={country.state}>
+                                          {country.state}
+                                        </option>
+                                      ))
+                                    )}
+                                  </select>
+                                </div>
+
+                                <div className="mt-5">
+                                  <p className="text-black fs-6">Delivery Fee: <span className="fw-bold ms-2">{formatPrice(formData.price)}</span></p>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="card bg-transparent">
+                      <div className="nk-ecwg nk-ecwg2">
+                        <div className="card-inner flex-grow-1 d-flex flex-column ps-4">
+                          <div className="col-12 p-4 text-white rounded-5 bg-paybond overflow-hidden">
+                            <h4>Order Summary</h4>
+                            <div className="py-3 border-b-white d-flex flex-column justify-content-start paybound-gap-2">
+                              {cartData?.map((element, index) => (
+                                <div key={index} className="fs-5 d-flex justify-content-between align-items-center">
+                                  <p className="mb-0 fw-normal">{element.product.title}</p>
+                                  <p className="fw-bold">{formatPrice(element.product.price * element.quantity)}</p>
+                                </div>
+                              ))}
+                            </div>
+
+                            <div className="fs-5 border-b-white py-3 d-flex justify-content-between align-items-center">
+                              <p className="mb-0 fw-bold">Subtotal</p>
+                              <p className="fw-bold">{formatPrice(subTotal)}</p>
+                            </div>
+
+                            <div className="fs-5 border-b-white py-3 d-flex justify-content-between align-items-center">
+                              <p className="mb-0 fw-bold">Delivery fee</p>
+                              <p className="fw-bold">{formatPrice(formData.price)}</p>
+                            </div>
+
+                            <div className="fs-5 border-b-white py-3 d-flex justify-content-between align-items-center">
+                              <p className="mb-0 fw-bold">Total</p>
+                              <p className="fw-bold">{formatPrice(totalAmount)}</p>
+                            </div>
+
+                            <div className="w-100 d-flex justify-content-center mt-4 align-items-center">
+                              <button 
+                                className={`w-75 fw-medium complete-btn ${!isFormValid() ? 'opacity-50' : ''}`}
+                                onClick={initiatePayment}
+                                disabled={!isFormValid() || isLoading}
+                              >
+                                {isLoading ? (
+                                  <Spinnar />
+                                ) : (
+                                  <span className="text-paybond">Complete Order</span>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Loading Modal */}
+      {loading && <LoadingModal />}
+
+      {/* Success Modal */}
+      {showSuccess && (
+        <Modal
+          handleClose={handlePaymentSuccess}
+          showModal={showSuccess}
+          myStyle="modal-sm"
+        >
+          <div className="success-card">
+            <img src={successImg} alt="successful-check" />
+            <p className="payment-success-text text-paybond mb-0">Order Successful</p>
+            <p className="text-center">Your order has been placed successfully.</p>
+          </div>
+        </Modal>
+      )}
+
+      {/* Error Modal */}
+      {showError && (
+        <Modal
+          handleClose={handlePaymentError}
+          showModal={showError}
+          myStyle="modal-sm"
+        >
+          <div className="success-card">
+            <img src={failImg} alt="error-check" />
+            <p style={{color: "red"}} className="payment-fail-text mb-0">Order Failed</p>
+            <p className="text-center">Your order could not be processed. Please try again.</p>
+          </div>
+        </Modal>
+      )}
+    </>
   );
 }

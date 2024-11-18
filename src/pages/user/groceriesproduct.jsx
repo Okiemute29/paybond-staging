@@ -6,12 +6,54 @@ import gabage from "../../assets/images/gabage.png"
 import spag from "../../assets/images/spag.png"
 import egg from "../../assets/images/egg.png"
 import ProductDetails from "../../component/groceries/productdetails"
+import { useEffect, useState } from 'react'
+import InputField from "../../component/common/input"
+import ProductList from "../../component/groceries/productlist"
 import FavouriteBtnSection from "../../component/groceries/favouritebtnsection"
+import useGetAllShop from "../../hooks/shop/usegetallshop"
+import usePostAddToCart from '../../hooks/shop/useaddtocart';
+import useGetFromCart from '../../hooks/shop/usegetfromcart';
+import usePostRemoveFromCart from '../../hooks/shop/useremovefromcart';
 
 
 export default function GroceriesProduct() {
+	const [formData, setFormData] = useState({
+		amount: "",
+	})
+	const {getAllShop, data, loading} = useGetAllShop()
+	const {addToCart, data: addCartData, loading: addLoading} = usePostAddToCart();
+	const {removeFromCart, data: removeCartData, loading: removeLoading } = usePostRemoveFromCart()
+	const {getFromCart, data: cartData, loading: cartLoading} = useGetFromCart()
 
+	const handleInputChange = (e) =>{
+		const {name, value} = e.target 
+		const rawValue = value.replace(/[^\d]/g, ''); // Remove non-numeric characters
+		console.log(rawValue);
+		setFormData(prv => ({...prv, [name]: rawValue}))
+	}	
 
+	const handleAddToCart = (addData) => {
+		addToCart(addData)
+	}
+
+	const handleRemoveFromCart = (addData) => {
+		removeFromCart(addData)
+	}
+	
+	const handleGetAllShopItem = async ()=>{
+		getAllShop()
+		getFromCart()
+	}
+
+	useEffect(()=>{
+		if(addCartData){
+			getFromCart()
+		}
+	}, [addCartData, removeCartData])
+
+	useEffect(()=>{
+		handleGetAllShopItem()
+	}, [])
 
 
 
@@ -137,7 +179,9 @@ export default function GroceriesProduct() {
 							<div className="d-flex paybound-gap-1 justify-content-between align-items-center w-available">
 								<div className="d-none d-sm-block"></div>
 								
-								<FavouriteBtnSection />
+								<FavouriteBtnSection 
+									cartData={cartData}
+								/>
 							</div>
 						</div>
 						{/* .nk-block-head-content */}
@@ -148,9 +192,13 @@ export default function GroceriesProduct() {
 					<div className="nk-block mt-4">
 					<div className="row g-gs ">
 						<ProductDetails 
-							products={product}
-							carts={carts}
-							product={select}
+							loading={loading}
+							products={data}
+							cartData={cartData}
+							handleAddToCart={handleAddToCart}
+							handleRemoveFromCart={handleRemoveFromCart}
+							addLoading={addLoading || removeLoading}
+
 						/>
 					</div>
 					{/* .row */}

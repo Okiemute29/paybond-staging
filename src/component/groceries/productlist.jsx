@@ -6,7 +6,7 @@ import CartBtn from "../../component/groceries/cartbtn";
 import Skeleton from '../skeletons/skeleton';
 import oops from '../../assets/images/oops.png';
 
-const ProductList = ({ products, carts, loading, handleRemoveFromCart, handleAddToCart, cartData, addLoading }) => {
+const ProductList = ({ products, loading, handleRemoveFromCart, handleAddToCart, cartData, addLoading }) => {
     const getProductQuantity = (productId) => {
         // First check cartData for the product
         const cartItem = cartData?.find(item => item.product._id === productId);
@@ -15,7 +15,7 @@ const ProductList = ({ products, carts, loading, handleRemoveFromCart, handleAdd
         }
         
         // If not found in cartData, check carts array
-        const cartsItem = carts?.find(item => item.product._id === productId);
+        const cartsItem = cartData?.find(item => item.product._id === productId);
         return cartsItem ? cartsItem.quantity : 0;
     };
 

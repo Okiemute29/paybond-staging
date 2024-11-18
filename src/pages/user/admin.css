@@ -421,6 +421,7 @@ select[multiple] option:checked {
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
+	position: relative;
 }
 .flex-con{	
 	display: flex;
@@ -579,6 +580,21 @@ select[multiple] option:checked {
 }
 .bg-paybond .add-loading{
 	color: white;
+}
+.fav-con-amount{
+	position: absolute;
+	background: #00EAB0 ;
+	font-size: 12px;
+	font-weight: 400;
+	top: -8px;
+	right: -8px;
+	height: 20px;
+	width: 20px;
+	color: #1A1423;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 /* Modal section  */

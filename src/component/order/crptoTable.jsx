@@ -10,6 +10,7 @@ import cableImg from "../../assets/images/tx-tv.png";
 import walletImg from "../../assets/images/tx-wallet.png";
 import SideModal from "../../helpers/sidemodal";
 import { useState } from "react";
+import UnderScoreRemoval from "../../helpers/underscoreremoval";
 
 export default function CrptoTable({ data, loading }) {
   const options = { month: "long", year: "numeric", day: "numeric" };
@@ -54,12 +55,15 @@ export default function CrptoTable({ data, loading }) {
     setSelectedTransaction(transc);
   };
 
+
   const renderKeyValuePairs = (data) => {
 	const elements = [];
   
 	const traverse = (obj, prefix = "") => {
 	  Object.entries(obj).forEach(([key, value]) => {
-		const formattedKey = prefix ? `${prefix}.${key}` : key;
+		// Replace "phone_number" with "customer" in the key
+		const formattedKey = prefix ? `${prefix}.${key}` : key === "phone_number" ? "customer" : key;
+  
 		if (value && typeof value === "object" && !Array.isArray(value)) {
 		  // Recursively handle nested objects
 		  traverse(value, formattedKey);
@@ -67,7 +71,9 @@ export default function CrptoTable({ data, loading }) {
 		  // Push the key-value pair with a null-safe check
 		  elements.push(
 			<div className="css-cnt7qc" key={formattedKey}>
-			  <div>{formattedKey}</div>
+			  <div className="capitalize">
+				<UnderScoreRemoval text={formattedKey} />
+			  </div>
 			  <div className="title">
 				<span>{value != null ? value : "N/A"}</span>
 			  </div>
@@ -80,7 +86,6 @@ export default function CrptoTable({ data, loading }) {
 	traverse(data);
 	return elements;
   };
-
   return (
     <>
       <div className="nk-tb-list nk-tb-ulist trans-table">
@@ -194,7 +199,7 @@ export default function CrptoTable({ data, loading }) {
               <div
                 onClick={() => handleSelectTransaction(crypto)}
                 key={index}
-                className="nk-tb-item table-content"
+                className="nk-tb-item cursor-pointer table-content"
               >
                 <div className="nk-tb-col no-border">
                   <div className="user-card">

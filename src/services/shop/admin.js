@@ -1,10 +1,17 @@
-import { _getAllShopItems, _addToCart, _getCart, _removeFromCart } from "../../network/network"
+import { _getAllShopItems, _addToCart, _getCart, _removeFromCart, _dropFromCart, _getState } from "../../network/network"
 import axios from "axios";
 import myApi from "../common/interceptors/apiinterceptor";
 
 const Airtimeservices = {
 	getAllShop: async (source) => {	  		
 		return await myApi.get(_getAllShopItems, {
+			cancelToken: source.token,
+		  }).then(async (res) => {
+			return res;
+		  });
+	},
+	getState: async (source) => {	  		
+		return await myApi.get(_getState, {
 			cancelToken: source.token,
 		  }).then(async (res) => {
 			return res;
@@ -25,8 +32,16 @@ const Airtimeservices = {
 		  });
 	},
 	removeFromCart: async ( data, source) => {	  		
-		return await myApi.post(`${_removeFromCart}/${data}`, {
+		return await myApi.delete(`${_removeFromCart}/${data}`, {
 			cancelToken: source.token,
+		  }).then(async (res) => {
+			return res;
+		  });
+	},
+	dropFromCart: async ( data, source) => {	  		
+		return await myApi.delete(_dropFromCart, {
+			cancelToken: source.token,
+			data: data,
 		  }).then(async (res) => {
 			return res;
 		  });

@@ -14,4 +14,6 @@ export const _billTransaction = process.env.REACT_APP_BASE_URL + "/transaction/b
 export const _getAllShopItems = process.env.REACT_APP_BASE_URL + "/groceries/get/all"
 export const _addToCart = process.env.REACT_APP_BASE_URL + "/cart/add"
 export const _removeFromCart = process.env.REACT_APP_BASE_URL + "/cart/remove"
+export const _dropFromCart = process.env.REACT_APP_BASE_URL + "/cart/drop"
 export const _getCart = process.env.REACT_APP_BASE_URL + "/cart/get"
+export const _getState = process.env.REACT_APP_BASE_URL + "/store/delivery-state/get"

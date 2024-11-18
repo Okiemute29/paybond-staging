@@ -11,6 +11,7 @@ import useGetAllOrder from '../../hooks/orders/usegetorder';
 import Spinnar from "../../component/spinnar";
 
 
+
 export default function Orders() {
 	const [addModal, setAddModal] = useState(false)
 	const [deleteModal, setDeleteModal] = useState(false)
