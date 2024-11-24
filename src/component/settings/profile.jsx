@@ -1,23 +1,52 @@
 import InputField from "../common/input"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from 'react-redux'
+import useUpdateUser from "../../hooks/user/useupdateuser";
+import Spinnar from "../../helpers/spinnar";
 
 export default function Profile() {
+	const user = useSelector((state) => state.auth.user)
+	const {UpdateUser, data, loading} = useUpdateUser()
 	const [formData, setFormData] = useState({
-	  name: "",
-	  phone: "",
+	  fullname: "",
+	  phone_no: "",
 	  username: "",
-	  avatar: "",
 	});
 
 	
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
+		console.log(name, value)
 		const rawValue = value.replace(/[^\d]/g, ''); // Remove non-numeric characters
 		console.log(rawValue);
 		setFormData((prv) => ({ ...prv, [name]: rawValue }));
-	  };
+	};	
+	const handlenameChange = (e) => {
+		const { name, value } = e.target;
+		console.log(name, value)
+		// const rawValue = value.replace(/[^\d]/g, ''); // Remove non-numeric characters
+		console.log(value);
+		setFormData((prv) => ({ ...prv, [name]: value }));
+	};
 
+	  useEffect(()=>{
+		setFormData({
+			fullname: user?.fullname,
+			phone_no: user?.phone_no,
+			username: user?.username,
+		  })
+	  }, [user])
 
+	  const handleSubmitForm = async(e)=>{
+		e.preventDefault()
+		const upDatedData = {
+			fullname: formData.fullname,
+			phone_no: formData.phone_no
+		}
+		await UpdateUser(upDatedData)
+	  }
+
+console.log("user-pay", formData)
   return (
 	<>
 		<div id="profile-setting" className="tab-container">
@@ -26,19 +55,18 @@ export default function Profile() {
 			What do you want to do today?
 			</p>
 			<form
-			action="/settings"
-			method="post"
+			onSubmit={handleSubmitForm}
 			className="auth-form px-3 py-4 rounded-4"
 			>
 			{/* .form-group */}
 			<div className="form-group">
 				<InputField 
 				label="Name"
-				name="name"
+				name="fullname"
 				type="text"
 				placeholder="Paul Okoro"
-				value={formData.name}
-				change={handleInputChange}
+				value={formData.fullname}
+				change={handlenameChange}
 				/>
 			</div>
 			<div className="form-group">
@@ -49,22 +77,23 @@ export default function Profile() {
 				placeholder="iampaulokoro@gmail.com"
 				value={formData.username}
 				change={handleInputChange}
+				readOnly
 				/>
 			</div>
 			{/* .form-group */}
 			<div className="form-group">
 				<InputField 
 				label="Phone Number"
-				name="phone"
+				name="phone_no"
 				type="tel"
 				placeholder="+23481000000"
-				value={formData.phone}
+				value={formData.phone_no}
 				change={handleInputChange}
 				/>
 			</div>
 			<div className="mt-4 btn-container">
 				<button className="delete-acct-btn w-100 bg-paybond text-white active-btn">
-				Save Changes
+				{loading ? <Spinnar /> : "Save Changes"}
 				</button>
 			</div>
 			</form>

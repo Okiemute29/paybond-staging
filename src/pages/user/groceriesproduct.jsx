@@ -1,19 +1,14 @@
 
-import milo from "../../assets/images/milo.png"
-import milk from "../../assets/images/milk.png"
-import noodles from "../../assets/images/noodles.png"
-import gabage from "../../assets/images/gabage.png"
-import spag from "../../assets/images/spag.png"
-import egg from "../../assets/images/egg.png"
 import ProductDetails from "../../component/groceries/productdetails"
 import { useEffect, useState } from 'react'
-import InputField from "../../component/common/input"
-import ProductList from "../../component/groceries/productlist"
 import FavouriteBtnSection from "../../component/groceries/favouritebtnsection"
 import useGetAllShop from "../../hooks/shop/usegetallshop"
 import usePostAddToCart from '../../hooks/shop/useaddtocart';
 import useGetFromCart from '../../hooks/shop/usegetfromcart';
 import usePostRemoveFromCart from '../../hooks/shop/useremovefromcart';
+import useGetFromFavourite from "../../hooks/shop/usegetfromfavorite";
+import usePostAddToFavourite from "../../hooks/shop/useaddtofavorite";
+import usePostRemoveFromFavourite from "../../hooks/shop/useremovefromfav";
 
 
 export default function GroceriesProduct() {
@@ -24,25 +19,35 @@ export default function GroceriesProduct() {
 	const {addToCart, data: addCartData, loading: addLoading} = usePostAddToCart();
 	const {removeFromCart, data: removeCartData, loading: removeLoading } = usePostRemoveFromCart()
 	const {getFromCart, data: cartData, loading: cartLoading} = useGetFromCart()
+	const {getFromFavourite, data: FavouriteData, loading: favouriteLoading} = useGetFromFavourite()
+	const {addToFavourite, data: addFavData, loading: addFavLoading} = usePostAddToFavourite()
+	const {removeFromFavourite, data: removeFavData, loading: removeFavLoading} = usePostRemoveFromFavourite()
 
-	const handleInputChange = (e) =>{
-		const {name, value} = e.target 
-		const rawValue = value.replace(/[^\d]/g, ''); // Remove non-numeric characters
-		console.log(rawValue);
-		setFormData(prv => ({...prv, [name]: rawValue}))
-	}	
+	// const handleInputChange = (e) =>{
+	// 	const {name, value} = e.target 
+	// 	const rawValue = value.replace(/[^\d]/g, ''); // Remove non-numeric characters
+	// 	console.log(rawValue);
+	// 	setFormData(prv => ({...prv, [name]: rawValue}))
+	// }	
 
 	const handleAddToCart = (addData) => {
 		addToCart(addData)
+	}
+	const handleAddToFav = (addData) => {
+		addToFavourite(addData)
 	}
 
 	const handleRemoveFromCart = (addData) => {
 		removeFromCart(addData)
 	}
+	const handleRemoveFromFav = (addData) => {
+		removeFromFavourite(addData)
+	}
 	
 	const handleGetAllShopItem = async ()=>{
 		getAllShop()
 		getFromCart()
+		getFromFavourite()
 	}
 
 	useEffect(()=>{
@@ -52,119 +57,16 @@ export default function GroceriesProduct() {
 	}, [addCartData, removeCartData])
 
 	useEffect(()=>{
+		if(addFavData){
+			getFromFavourite()
+		}
+	}, [addFavData, removeFavData])
+
+	useEffect(()=>{
 		handleGetAllShopItem()
 	}, [])
 
-
-
-
-	const product = [
-		{
-			_id: "prod1",
-			title: "Milo Refill",
-			price: 3200,
-			description: "A high-quality t-shirt made from organic cotton, available in multiple sizes and colors.",
-			image: {
-				url: milo
-			},
-			size: "800g",
-			color: "Blue"
-		},
-		{
-			_id: "prod2",
-			title: "Peak Milk Full Creame",
-			price: 8200,
-			description: "A comfortable hoodie perfect for chilly weather.",
-			image: {
-				url: milk
-			},
-			size: "800g",
-			color: "Gray"
-		},
-		{
-			_id: "prod3",
-			title: "Indomie Noodles",
-			price: 500,
-			description: "A stylish cap suitable for outdoor activities.",
-			image: {
-				url: noodles
-			},
-			size: "Super pack",
-			color: "Black"
-		},
-		{
-			_id: "prod4",
-			title: "Gabage",
-			price: 3200,
-			description: "Lightweight running shoes with excellent grip and comfort.",
-			image: {
-				url: gabage
-			},
-			size: "800g",
-			color: "Red"
-		},
-		{
-			_id: "prod5",
-			title: "Spaghetti",
-			price: 950,
-			description: "A premium leather wallet with multiple compartments.",
-			image: {
-				url: spag
-			},
-			size: "800g",
-			color: "Brown"
-		},
-		{
-			_id: "prod5",
-			title: "Crate of Egg",
-			price: 9540050,
-			description: "A premium leather wallet with multiple compartments.",
-			image: {
-				url: egg
-			},
-			size: "800g",
-			color: "Brown"
-		}
-	];
-
-	const carts = [
-		{
-			product: {
-				_id: "prod1",
-				title: "Milo Refill",
-				price: 3200,
-				description: "A high-quality t-shirt made from organic cotton, available in multiple sizes and colors.",
-				image: {
-					url: milo  // Replace with actual image URL
-				}
-			},
-			quantity: 2
-		},
-		{
-			product: {
-				_id: "prod2",
-				title: "Peak Milk Full Creame",
-				price: 8200,
-				description: "A comfortable hoodie perfect for chilly weather.",
-				image: {
-					url: milk  // Replace with actual image URL
-				}
-			},
-			quantity: 1
-		}
-	];
-
-	const select = {
-		_id: "prod1",
-		title: "Milo Refill",
-		price: 3200,
-		description: "A high-quality t-shirt made from organic cotton, available in multiple sizes and colors.",
-		image: {
-			url: milo
-		},
-		size: "800g",
-		color: "Blue"
-	};
+	console.log("FavouriteData", FavouriteData)
 	
 	return ( 
 	<>
@@ -181,6 +83,7 @@ export default function GroceriesProduct() {
 								
 								<FavouriteBtnSection 
 									cartData={cartData}
+									favData={FavouriteData}
 								/>
 							</div>
 						</div>
@@ -195,8 +98,11 @@ export default function GroceriesProduct() {
 							loading={loading}
 							products={data}
 							cartData={cartData}
+							FavouriteData={FavouriteData}
 							handleAddToCart={handleAddToCart}
 							handleRemoveFromCart={handleRemoveFromCart}
+							handleAddToFav={handleAddToFav}
+							handleRemoveFromFav={handleRemoveFromFav}
 							addLoading={addLoading || removeLoading}
 
 						/>

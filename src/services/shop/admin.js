@@ -1,4 +1,4 @@
-import { _getAllShopItems, _addToCart, _getCart, _removeFromCart, _dropFromCart, _getState } from "../../network/network"
+import { _getAllShopItems, _addToCart, _getCart, _removeFromCart, _dropFromCart, _getState, _getFav, _addToFavourite, _removeFromFav } from "../../network/network"
 import axios from "axios";
 import myApi from "../common/interceptors/apiinterceptor";
 
@@ -45,7 +45,28 @@ const Airtimeservices = {
 		  }).then(async (res) => {
 			return res;
 		  });
-	}
+	},
+	getFromFavourite: async ( source) => {	  		
+		return await myApi.get(_getFav, {
+			cancelToken: source.token,
+		  }).then(async (res) => {
+			return res;
+		  });
+	},
+	addToFavourite: async ( data, source) => {	  		
+		return await myApi.post(_addToFavourite, data, {
+			cancelToken: source.token,
+		  }).then(async (res) => {
+			return res;
+		  });
+	},
+	removeFromFavourite: async ( data, source) => {	  		
+		return await myApi.delete(`${_removeFromFav}/${data}`, {
+			cancelToken: source.token,
+		  }).then(async (res) => {
+			return res;
+		  });
+	},
 
 }
 

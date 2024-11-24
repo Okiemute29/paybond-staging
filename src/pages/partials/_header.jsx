@@ -124,11 +124,11 @@ export default function _header() {
 											alt="avatar"
 											/>
 											:									
-											<span><TwoCharacterComponent data={`${'Godwin'} ${"Robert"}`} /> </span>
+											<span><TwoCharacterComponent data={user.fullname} /> </span>
 										}
 									</div>
 									<div className="user-info d-none d-xl-block">
-										<div className="user-name dropdown-indicator">{`${'Godwin'} ${"Robert"}`}</div>
+										<div className="user-name dropdown-indicator">{user.fullname}</div>
 									</div>
 								</div>
 							</span>
@@ -136,18 +136,18 @@ export default function _header() {
 								<div className="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
 									<div className="user-card">
 										<div className="user-avatar">
-											<span><TwoCharacterComponent data={`${'Godwin'} ${"Robert"}`} /></span>
+											<span><TwoCharacterComponent data={user.fullname} /></span>
 										</div>
 										<div className="user-info w-available me-5">
-											<span className="lead-text">{`${'Godwin'} ${"Robert"}`}</span>
-											<span className="sub-text w-100 line-clamp-1">{'godwinrobert@gmail.com'}</span>
+											<span className="lead-text">{user.fullname}</span>
+											<span className="sub-text w-100 line-clamp-1">{user.username}</span>
 										</div>
 									</div>
 								</div>
 								<div className="dropdown-inner">
 									<ul className="link-list">
 										{/* <li><span ><em className="icon ni ni-user-alt" /><span>View Profile</span></span></li> */}
-										<li className='pointer'><Link to={_route._admin_profile_setting}><em className="icon ni ni-setting-alt" /><span>Account Setting</span></Link></li>
+										<li className='pointer'><Link to={_route._setting}><em className="icon ni ni-setting-alt" /><span>Account Setting</span></Link></li>
 										{/* <li><span ><em className="icon ni ni-activity-alt" /><span>Login Activity</span></span></li> */}
 										{/* <li><span className="dark-switch" ><em className="icon ni ni-moon" /><span>Dark Mode</span></span></li> */}
 									</ul>

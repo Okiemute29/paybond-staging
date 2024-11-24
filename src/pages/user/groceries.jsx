@@ -7,6 +7,9 @@ import useGetAllShop from "../../hooks/shop/usegetallshop"
 import usePostAddToCart from '../../hooks/shop/useaddtocart';
 import useGetFromCart from '../../hooks/shop/usegetfromcart';
 import usePostRemoveFromCart from '../../hooks/shop/useremovefromcart';
+import useGetFromFavourite from "../../hooks/shop/usegetfromfavorite";
+import usePostAddToFavourite from "../../hooks/shop/useaddtofavorite";
+import usePostRemoveFromFavourite from "../../hooks/shop/useremovefromfav";
 
 
 export default function Groceries() {
@@ -17,6 +20,9 @@ export default function Groceries() {
 	const {addToCart, data: addCartData, loading: addLoading} = usePostAddToCart();
 	const {removeFromCart, data: removeCartData, loading: removeLoading } = usePostRemoveFromCart()
 	const {getFromCart, data: cartData, loading: cartLoading} = useGetFromCart()
+	const {getFromFavourite, data: FavouriteData, loading: favouriteLoading} = useGetFromFavourite()
+	const {addToFavourite, data: addFavData, loading: addFavLoading} = usePostAddToFavourite()
+	const {removeFromFavourite, data: removeFavData, loading: removeFavLoading} = usePostRemoveFromFavourite()
 
 	const handleInputChange = (e) =>{
 		const {name, value} = e.target 
@@ -39,6 +45,7 @@ export default function Groceries() {
 	
 	const handleGetAllShopItem = async ()=>{
 		getAllShop()
+		getFromFavourite()
 		handlegetCart()
 	}
 
@@ -52,6 +59,18 @@ export default function Groceries() {
 		handleGetAllShopItem()
 	}, [])
 
+	const handleAddToFav = (addData) => {
+		addToFavourite(addData)
+	}
+	const handleRemoveFromFav = (addData) => {
+		removeFromFavourite(addData)
+	}
+	
+	useEffect(()=>{
+		if(addFavData){
+			getFromFavourite()
+		}
+	}, [addFavData, removeFavData])
 	
 	return ( 
 	<>
@@ -77,6 +96,7 @@ export default function Groceries() {
 								</div>
 								<FavouriteBtnSection 
 									cartData={cartData}
+									favData={FavouriteData}
 								/>
 							</div>
 						</div>
@@ -94,6 +114,9 @@ export default function Groceries() {
 							handleAddToCart={handleAddToCart}
 							handleRemoveFromCart={handleRemoveFromCart}
 							addLoading={addLoading || removeLoading}
+							handleAddToFav={handleAddToFav}
+							handleRemoveFromFav={handleRemoveFromFav}
+							FavouriteData={FavouriteData}
 
 						/>
 					

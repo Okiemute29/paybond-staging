@@ -1,44 +1,38 @@
 import { useEffect, useState, useRef } from "react";
-import Adminservices from "../../services/user/auth";
+import Shopservices from "../../services/shop/admin";
 import _route from '../../constants/routes'
 import axios from "axios";
-import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from "../../redux/authreducer";
+import { useNavigate } from "react-router-dom";
 
-const useUpdateUser = () => {
+const usePostAddToFavourite = () => {
     const [loading, setloading] = useState(false);
-	const user = useSelector((state) => state.auth.user)
     const [data, setData] = useState([])
-    const dispatch = useDispatch()
+	const navigate = useNavigate()
     const CancelToken = axios.CancelToken;
     const source = useRef();
 
    
-    const UpdateUser = async (data) => {
+    const addToFavourite = async (data) => {
         if (source.current === undefined) {
             source.current = CancelToken.source();
           }
         try {
             setloading(true);
-            const res = await Adminservices.UpdateAppUser( data, user._id, source.current.token );
-            if(!res) {
+            const res = await Shopservices.addToFavourite(data, source.current.token);
 
+            if(!res) {
 				window.NioApp.Toast('An error occured', "warning");
             }else{
-                setloading(false);
-                if(res.status === 200 || res.status === 201){
-					console.log("updated user", res.data.result)
-					console.log("user", user)
-					const userUpdate = {
-						...user,
-						fullname: res.data.result.fullname,
-						phone_no: res.data.result.phone_no,
-						
-					}
-					console.log("userUpdate", userUpdate)
-					window.NioApp.Toast(res.data.message, "success");
-                    await dispatch(setUser(userUpdate))
+				setloading(false)
+                if(res.status === 200){
 					setData(res.data.result)
+					// window.NioApp.Toast(res.data.message, "success");
+                    return true
+                }
+                if(res.status === 201){
+					console.log(res.data)
+					setData(res.data.result)
+					// window.NioApp.Toast(res.data.message, "success");
                     return true
                 }
             }
@@ -49,10 +43,15 @@ const useUpdateUser = () => {
                 console.log(error);
             } else {
                 if(error.response){
-                    console.log(error)
+					if(error?.response?.status === 401){
+						if(error?.response?.data?.message?.toLowerCase() === "jwt expired"){
+							navigate(_route._login)
+						}
+					}
 					window.NioApp.Toast(error?.response?.data?.message, "warning");
                 }else{
-					window.NioApp.Toast('An error occured', "warning");
+                    console.log(error)
+					window.NioApp.Toast(error?.response?.data?.message, "warning");
                 }
             }
         }
@@ -65,7 +64,7 @@ const useUpdateUser = () => {
         }
     }, [])
 
-    return {UpdateUser, data, loading};
+    return {addToFavourite, data, loading};
 }
  
-export default useUpdateUser;
+export default usePostAddToFavourite;

@@ -11,6 +11,7 @@ import usePostRemoveFromCart from '../../hooks/shop/useremovefromcart';
 import useDropFromCart from '../../hooks/shop/usedropfromcart';
 import usePostAddToCart from '../../hooks/shop/useaddtocart';
 import Skeleton from "../../component/skeletons/skeleton";
+import useGetFromFavourite from "../../hooks/shop/usegetfromfavorite";
 import Spinnar from "../../helpers/spinnar";
 
 export default function Category() {
@@ -22,6 +23,7 @@ export default function Category() {
   const {addToCart, data: addCartData, loading: addLoading} = usePostAddToCart();
   const {removeFromCart, data: removeCartData, loading: removeLoading } = usePostRemoveFromCart()
   const {dropFromCart, data: dropCartData, loading: dropCartLoading} = useDropFromCart()
+  const {getFromFavourite, data: FavouriteData, loading: favouriteLoading} = useGetFromFavourite()
 
   const totalAmount = useMemo(() => {
     if (!cartData) return 0;
@@ -54,6 +56,7 @@ export default function Category() {
 
   useEffect(() => {
     handlegetCart();
+	getFromFavourite()
   }, []);
 
   useEffect(() => {
@@ -187,7 +190,10 @@ export default function Category() {
                           change={handleInputChange}
                         />
                       </div>
-                      <FavouriteBtnSection cartData={cartData} />
+                      <FavouriteBtnSection 
+						cartData={cartData}
+						favData={FavouriteData} 
+					  />
                     </div>
                   </div>
                 </div>
@@ -224,7 +230,7 @@ export default function Category() {
                         {shouldShowSkeletons ? 
                           <Skeleton type="button" /> 
                           : 
-                          <Link to={_route._checkout} className="checkout-btn bg-paybond">Checkout</Link>
+                          <Link to={_route._checkout} className="checkout-btn bg-paybond"> <span className="text-white">Checkout</span></Link>
                         }
                       </div>
                     </div>

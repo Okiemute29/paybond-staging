@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-import Adminservices from "../../services/agent/admin";
+import Shopservices from "../../services/shop/admin";
 import _route from '../../constants/routes'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const useGetSingleUser = () => {
+const useGetFromFavourite = () => {
     const [loading, setloading] = useState(false);
     const [data, setData] = useState([])
 	const navigate = useNavigate()
@@ -12,19 +12,18 @@ const useGetSingleUser = () => {
     const source = useRef();
 
    
-    const getSingleUser = async (id) => {
+    const getFromFavourite = async (data) => {
         if (source.current === undefined) {
             source.current = CancelToken.source();
           }
         try {
             setloading(true);
-            const res = await Adminservices.getSingleUser(id, source.current.token );
+            const res = await Shopservices.getFromFavourite(source.current.token);
 
             if(!res) {
-
 				window.NioApp.Toast('An error occured', "warning");
             }else{
-                setloading(false);
+				setloading(false)
                 if(res.status === 200){
 					setData(res.data.result)
 					// window.NioApp.Toast(res.data.message, "success");
@@ -44,9 +43,10 @@ const useGetSingleUser = () => {
                 console.log(error);
             } else {
                 if(error.response){
-                    console.log(error)
-					if(error?.response?.data?.status === 401){
-						navigate(_route._admin_login)
+					if(error?.response?.status === 401){
+						if(error?.response?.data?.message?.toLowerCase() === "jwt expired"){
+							navigate(_route._login)
+						}
 					}
 					window.NioApp.Toast(error?.response?.data?.message, "warning");
                 }else{
@@ -64,7 +64,7 @@ const useGetSingleUser = () => {
         }
     }, [])
 
-    return {getSingleUser, data, loading};
+    return {getFromFavourite, data, loading};
 }
  
-export default useGetSingleUser;
+export default useGetFromFavourite;

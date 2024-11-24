@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import favourite from "../../assets/images/favorite.svg";
+import activefavourite from "../../assets/images/favoriteactive.svg";
 import ProductList from './productlist';
 import { useParams } from 'react-router-dom';
 import CartBtn from './cartbtn';
@@ -8,9 +9,12 @@ const ProductDetails = ({
   products, 
   loading, 
   handleRemoveFromCart, 
-  handleAddToCart, 
+  handleAddToCart,
   cartData, 
-  addLoading 
+  addLoading,
+  FavouriteData,
+  handleRemoveFromFav,
+  handleAddToFav
 }) => {
   const { id } = useParams();
   const [productQuantity, setProductQuantity] = useState(0);
@@ -40,6 +44,16 @@ const ProductDetails = ({
     return <div className="col-12">Loading...</div>;
   }
 
+
+  const handleFavOnclick = () =>{
+	const foundItem = FavouriteData?.find(item => item.product._id === id);
+  
+	if (foundItem) {
+	  handleRemoveFromFav(foundItem._id);
+	} else {
+	  handleAddToFav({ product: id });
+	}
+  }
   return (
     <div className="col-12">
       <div className="d-flex flex-column flex-md-row product-details-container">
@@ -74,10 +88,15 @@ const ProductDetails = ({
               addLoading={addLoading}
             />
 
-            <div className='d-flex justify-content-start mt-5 paybound-gap-2 align-items-center'>
-              <div className="fav-con">
-                <img src={favourite} alt="Add to wishlist" />
-              </div>
+            <div className='d-flex justify-content-start mt-5 paybound-gap-2 align-items-center'>  
+			  
+				<div 
+					onClick={() => handleFavOnclick()} 
+					className={`fav-con ${FavouriteData.find(item => item.product._id === id) ? "infavourite" : ""}`}
+				>
+					<img className='default-fav' src={favourite} alt="favourite" />
+					<img className='active-fav' src={activefavourite} alt="favourite" />
+				</div>
               <p className="mb-0">Add to wishlist</p>
             </div>
           </div>
@@ -99,9 +118,12 @@ const ProductDetails = ({
               loading={loading}
               products={relatedProducts}
               cartData={cartData}
+			  FavouriteData={FavouriteData}
               handleAddToCart={handleAddToCart}
               handleRemoveFromCart={handleRemoveFromCart}
               addLoading={addLoading}
+			  handleRemoveFromFav={handleRemoveFromFav}
+			  handleAddToFav={handleAddToFav}
             />
           </div>
         </div>

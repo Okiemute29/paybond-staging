@@ -3,11 +3,11 @@ import favourite from "../../assets/images/favorite.svg";
 import activefavourite from "../../assets/images/favoriteactive.svg";
 import { Link } from 'react-router-dom';
 import _route from '../../constants/routes';
-import CartBtn from "../../component/groceries/cartbtn";
+import CartBtn from "./cartbtn";
 import Skeleton from '../skeletons/skeleton';
 import oops from '../../assets/images/oops.png';
 
-const ProductList = ({ products, loading, handleRemoveFromCart, handleAddToCart, cartData, addLoading, FavouriteData, handleRemoveFromFav, handleAddToFav }) => {
+const FavProductList = ({ products, loading, handleRemoveFromCart, handleAddToCart, cartData, addLoading, FavouriteData, handleRemoveFromFav, handleAddToFav }) => {
     const getProductQuantity = (productId) => {
         // First check cartData for the product
         const cartItem = cartData?.find(item => item.product._id === productId);
@@ -43,7 +43,7 @@ const ProductList = ({ products, loading, handleRemoveFromCart, handleAddToCart,
             ) : products.length < 1 ? (
                 <div className="w-100 d-flex flex-column justify-content-center mt-5 align-items-center">
                     <img className="mt-auto w-60" src={oops} alt="Error" />
-                    <p>No Product Found</p>
+                    <p>No Favourite Item</p>
                 </div>
             ) : (
                 <div className="sevice_container mt-3">
@@ -54,11 +54,11 @@ const ProductList = ({ products, loading, handleRemoveFromCart, handleAddToCart,
                         return (
                             <div key={product._id} className="product relative">
                                 <Link to={`${_route._groceries}/${product._id}`} className="product-image-container relative">
-                                    <img src={product?.image?.url} alt="product" />
+                                    <img src={product?.product?.image?.url} alt="product" />
                                 </Link>
 								<div 
-									onClick={() => handleFavOnclick(product._id)} 
-									className={`fav-con-abs ${FavouriteData?.find(item => item.product._id === product._id) ? "infavourite" : ""}`}
+									onClick={() => handleFavOnclick(product.product?._id)} 
+									className={`fav-con-abs ${FavouriteData?.find(item => item.product._id === product.product._id) ? "infavourite" : ""}`}
 								>
 									<img className='default-fav' src={favourite} alt="favourite" />
 									<img className='active-fav' src={activefavourite} alt="favourite" />
@@ -66,10 +66,10 @@ const ProductList = ({ products, loading, handleRemoveFromCart, handleAddToCart,
                                 
                                 <div className="product-details px-3">
                                     <div>
-                                        <p className="product-name mb-0">{product.title}</p>
-                                        <p className="product-size mb-0">{product.sub_title}</p>
+                                        <p className="product-name mb-0">{product.product?.title}</p>
+                                        <p className="product-size mb-0">{product.product?.sub_title}</p>
                                         <p className="product-price mb-0">
-                                            NGN {product.price}
+                                            NGN {product.product?.price}
                                         </p>
                                     </div>
                                 </div>
@@ -79,7 +79,7 @@ const ProductList = ({ products, loading, handleRemoveFromCart, handleAddToCart,
                                         isInCart={isInCart}
                                         cartData={cartData}
                                         count={productQuantity}
-                                        ProductId={product._id}
+                                        ProductId={product.product._id}
                                         handleAddToCart={handleAddToCart}
 										handleRemoveFromCart={handleRemoveFromCart}
 										addLoading={addLoading}
@@ -94,4 +94,4 @@ const ProductList = ({ products, loading, handleRemoveFromCart, handleAddToCart,
     );
 };
 
-export default ProductList;
+export default FavProductList;

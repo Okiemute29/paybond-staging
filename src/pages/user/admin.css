@@ -423,6 +423,17 @@ select[multiple] option:checked {
 	cursor: pointer;
 	position: relative;
 }
+.fav-con-top{
+	width: 40px;
+	height: 40px;
+	background: #fff;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	position: relative;
+}
 .flex-con{	
 	display: flex;
 	justify-content: center;
@@ -443,6 +454,15 @@ select[multiple] option:checked {
 }
 .fav-con-abs > img{
 	width: 17px;
+}
+.fav-con-abs:hover, .fav-con:hover, .infavourite{
+	background: #00EAB0;
+}
+.active-fav, .fav-con-abs:hover  .default-fav, .fav-con:hover  .default-fav, .infavourite .default-fav{
+	display: none;
+}
+.fav-con-abs:hover  .active-fav, .fav-con:hover  .active-fav, .infavourite .active-fav{
+	display: block;
 }
 
 .product-banner > img, .shopping-cart > img{

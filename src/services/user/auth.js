@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js'
 import myApi from "../common/interceptors/apiinterceptor";
-import { _logInUser, _logOutUser, _signUpUser, _verifyUser, _verifyOTP, _transactionPin } from "../../network/network";
+import { _logInUser, _logOutUser, _updateUser, _signUpUser, _verifyUser, _verifyOTP, _transactionPin } from "../../network/network";
 const HashPasswordKey = process.env.REACT_APP_BASE_HASH_KEY
 
 const Authservices = {
@@ -66,6 +66,14 @@ const Authservices = {
 	},
 	transactionPin: async (data, source) => {
 		return await myApi.patch(_transactionPin, data, {
+			cancelToken: source.token,
+		}).then(async (res) => {
+			return res;
+		});
+
+	},
+	UpdateAppUser: async (data, id, source) => {
+		return await myApi.patch(`${_updateUser}/${id}`, data, {
 			cancelToken: source.token,
 		}).then(async (res) => {
 			return res;

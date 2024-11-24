@@ -19,7 +19,7 @@ export default function InputField({label, type, readOnly, name, placeholder, va
 				<input
 					type={`${showPassword ? 'text' : type}`}
 					name={name}
-					className={`form-control form-control-lg auth-field ${inputClass && inputClass}`}                              
+					className={`form-control form-control-lg capitalize auth-field ${inputClass && inputClass}`}                              
 					placeholder={placeholder}
 					value={value}
 					readOnly={readOnly}
@@ -33,7 +33,7 @@ export default function InputField({label, type, readOnly, name, placeholder, va
 				<input
 					type={type}
 					name={name}
-					className={`form-control form-control-lg auth-field ${inputClass && inputClass}`}                              
+					className={`form-control form-control-lg capitalize auth-field ${inputClass && inputClass}`}                              
 					placeholder={placeholder}
 					value={value}
 					readOnly={readOnly}
