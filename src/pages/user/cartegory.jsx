@@ -178,9 +178,9 @@ export default function Category() {
                 <div className="nk-block-between">
                   <div className="nk-block-head-content flex-column flex-sm-row d-flex paybound-gap-1 justify-content-sm-between align-items-sm-center w-100">
                     <h4 className="page-title cus-page-title text-paybond">Groceries</h4>
-                    <div className="d-flex paybound-gap-1 justify-content-between align-items-center w-available">
-                      <div className="d-none d-sm-block"></div>
-                      <div className="w-75 relative">           
+                    <div className="d-flex paybound-gap-1 justify-content-end align-items-center w-available">
+                      {/* <div className="d-none d-sm-block"></div> */}
+                      {/* <div className="w-75 relative">           
                         <InputField 
                           name="search"
                           type="text"
@@ -189,7 +189,7 @@ export default function Category() {
                           value={formData.amount}
                           change={handleInputChange}
                         />
-                      </div>
+                      </div> */}
                       <FavouriteBtnSection 
 						cartData={cartData}
 						favData={FavouriteData} 

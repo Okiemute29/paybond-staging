@@ -10,26 +10,18 @@ import usePostRemoveFromCart from '../../hooks/shop/useremovefromcart';
 import useGetFromFavourite from "../../hooks/shop/usegetfromfavorite";
 import usePostAddToFavourite from "../../hooks/shop/useaddtofavorite";
 import usePostRemoveFromFavourite from "../../hooks/shop/useremovefromfav";
+import { SearchHandle } from '../../helpers/searchfilter'
 
 
 export default function Groceries() {
-	const [formData, setFormData] = useState({
-		amount: "",
-	})
+	const {searchResult, filterHandle, searchTerm} = SearchHandle()
 	const {getAllShop, data, loading} = useGetAllShop()
 	const {addToCart, data: addCartData, loading: addLoading} = usePostAddToCart();
 	const {removeFromCart, data: removeCartData, loading: removeLoading } = usePostRemoveFromCart()
 	const {getFromCart, data: cartData, loading: cartLoading} = useGetFromCart()
 	const {getFromFavourite, data: FavouriteData, loading: favouriteLoading} = useGetFromFavourite()
 	const {addToFavourite, data: addFavData, loading: addFavLoading} = usePostAddToFavourite()
-	const {removeFromFavourite, data: removeFavData, loading: removeFavLoading} = usePostRemoveFromFavourite()
-
-	const handleInputChange = (e) =>{
-		const {name, value} = e.target 
-		const rawValue = value.replace(/[^\d]/g, ''); // Remove non-numeric characters
-		console.log(rawValue);
-		setFormData(prv => ({...prv, [name]: rawValue}))
-	}	
+	const {removeFromFavourite, data: removeFavData, loading: removeFavLoading} = usePostRemoveFromFavourite()	
 
 	const handleAddToCart = (addData) => {
 		addToCart(addData)
@@ -71,6 +63,11 @@ export default function Groceries() {
 			getFromFavourite()
 		}
 	}, [addFavData, removeFavData])
+
+	   // Handle Search function 
+	const searchHandle = (e) =>{
+		filterHandle(e.target.value, data)  
+	}
 	
 	return ( 
 	<>
@@ -90,8 +87,8 @@ export default function Groceries() {
 										type="text"
 										inputClass=""
 										placeholder="Search groceries"
-										value={formData.amount}
-										change={handleInputChange}
+										value={searchTerm}
+										change={searchHandle}
 									/>
 								</div>
 								<FavouriteBtnSection 
@@ -117,6 +114,8 @@ export default function Groceries() {
 							handleAddToFav={handleAddToFav}
 							handleRemoveFromFav={handleRemoveFromFav}
 							FavouriteData={FavouriteData}
+							searchResult={searchResult}
+							searchTerm={searchTerm}
 
 						/>
 					

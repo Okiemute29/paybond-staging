@@ -7,7 +7,7 @@ import CartBtn from "../../component/groceries/cartbtn";
 import Skeleton from '../skeletons/skeleton';
 import oops from '../../assets/images/oops.png';
 
-const ProductList = ({ products, loading, handleRemoveFromCart, handleAddToCart, cartData, addLoading, FavouriteData, handleRemoveFromFav, handleAddToFav }) => {
+const ProductList = ({ products, loading, handleRemoveFromCart, handleAddToCart, cartData, addLoading, FavouriteData, handleRemoveFromFav, handleAddToFav, searchTerm, searchResult  }) => {
     const getProductQuantity = (productId) => {
         // First check cartData for the product
         const cartItem = cartData?.find(item => item.product._id === productId);
@@ -40,14 +40,14 @@ const ProductList = ({ products, loading, handleRemoveFromCart, handleAddToCart,
                         </div>
                     ))}
                 </div>
-            ) : products.length < 1 ? (
+            ) : (searchTerm ? searchTerm < 1 ? products : searchResult : products)?.length < 1 ? (
                 <div className="w-100 d-flex flex-column justify-content-center mt-5 align-items-center">
                     <img className="mt-auto w-60" src={oops} alt="Error" />
                     <p>No Product Found</p>
                 </div>
             ) : (
                 <div className="sevice_container mt-3">
-                    {products.map((product, index) => {
+                    {(searchTerm ? searchTerm < 1 ? products : searchResult : products)?.map((product, index) => {
                         const isInCart = cartData?.some(item => item.product._id === product._id);
                         const productQuantity = getProductQuantity(product._id);
 

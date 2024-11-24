@@ -9,27 +9,17 @@ import usePostRemoveFromFavourite from "../../hooks/shop/useremovefromfav";
 import useGetFromCart from '../../hooks/shop/usegetfromcart';
 import usePostAddToCart from '../../hooks/shop/useaddtocart';
 import usePostRemoveFromCart from '../../hooks/shop/useremovefromcart';
+import { SearchHandle } from '../../helpers/searchfilter'
 
 
 export default function Favourites() {
-	const [formData, setFormData] = useState({
-		amount: "",
-	})
+	const {searchResult, filterHandle, searchTerm} = SearchHandle()
 	const {getFromFavourite, data: FavouriteData, loading} = useGetFromFavourite()
 	const {addToCart, data: addCartData, loading: addLoading} = usePostAddToCart();
 	const {removeFromCart, data: removeCartData, loading: removeLoading } = usePostRemoveFromCart()
 	const {getFromCart, data: cartData, loading: cartLoading} = useGetFromCart()
 	const {addToFavourite, data: addFavData, loading: addFavLoading} = usePostAddToFavourite()
 	const {removeFromFavourite, data: removeFavData, loading: removeFavLoading} = usePostRemoveFromFavourite()
-
-
-
-	const handleInputChange = (e) =>{
-		const {name, value} = e.target 
-		const rawValue = value.replace(/[^\d]/g, ''); // Remove non-numeric characters
-		console.log(rawValue);
-		setFormData(prv => ({...prv, [name]: rawValue}))
-	}	
 
 	
 	
@@ -75,7 +65,11 @@ export default function Favourites() {
 		}
 	}, [addFavData, removeFavData])
 	
-	
+
+	// Handle Search function 
+	const searchHandle = (e) =>{
+		filterHandle(e.target.value, FavouriteData)  
+	}
 	return ( 
 	<>
 		<div className="nk-content ">
@@ -94,8 +88,8 @@ export default function Favourites() {
 										type="text"
 										inputClass=""
 										placeholder="Search groceries"
-										value={formData.amount}
-										change={handleInputChange}
+										value={searchTerm}
+										change={searchHandle}
 									/>
 								</div>
 								<FavouriteBtnSection 
@@ -123,6 +117,8 @@ export default function Favourites() {
 							handleAddToFav={handleAddToFav}
 							handleRemoveFromFav={handleRemoveFromFav}
 							FavouriteData={FavouriteData}
+							searchResult={searchResult}
+							searchTerm={searchTerm}
 						/>
 					</div>
 					{/* .row */}
