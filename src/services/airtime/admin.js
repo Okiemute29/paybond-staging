@@ -1,5 +1,4 @@
 import { _billCategory, _billfromCategory, _verifybill, _paybill, _createCard } from "../../network/network"
-import axios from "axios";
 import myApi from "../common/interceptors/apiinterceptor";
 
 const Airtimeservices = {

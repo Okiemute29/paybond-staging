@@ -1,8 +1,6 @@
 import emptyState from "../../assets/images/oops.png";
 import _route from "../../constants/routes";
 import Skeleton from "../skeletons/skeleton";
-import { Link } from "react-router-dom";
-import Profile from "../data/profile";
 import dataImg from "../../assets/images/tx-data.png";
 import airtimeImg from "../../assets/images/tx-airtime.png";
 import electricityImg from "../../assets/images/tx-electicity.png";
@@ -12,7 +10,7 @@ import SideModal from "../../helpers/sidemodal";
 import { useState } from "react";
 import UnderScoreRemoval from "../../helpers/underscoreremoval";
 
-export default function CrptoTable({ data, loading }) {
+export default function GroceryTransactionTable({ data, loading }) {
   const options = { month: "long", year: "numeric", day: "numeric" };
   const [showTransaction, setTransaction] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
@@ -55,44 +53,63 @@ export default function CrptoTable({ data, loading }) {
     setSelectedTransaction(transc);
   };
 
-
   const renderKeyValuePairs = (data) => {
-	const elements = [];
+	const groupedElements = {
+	  "Shipping Details": {},
+	  "Transaction Details": {}
+	};
   
-	const traverse = (obj, prefix = "") => {
+	const traverse = (obj, group, prefix = "") => {
 	  Object.entries(obj).forEach(([key, value]) => {
-		// Replace "phone_number" with "customer" in the key
-		const formattedKey = prefix ? `${prefix}.${key}` : key === "phone_number" ? "customer" : key;
-  
-		if (value && typeof value === "object" && !Array.isArray(value)) {
+		// Group key mappings
+		if (group === "Shipping Details" && 
+			["firstname", "lastname", "phone_no", "address", "zip", "city", "country", "state"].includes(key)) {
+		  groupedElements["Shipping Details"][key] = value;
+		} 
+		else if (group === "Transaction Details" && 
+				 ["_id", "total_amount", "payment_method", "transaction_id", "status", "createdAt"].includes(key)) {
+		  groupedElements["Transaction Details"][key] = value;
+		}
+		else if (typeof value === "object" && !Array.isArray(value)) {
 		  // Recursively handle nested objects
-		  traverse(value, formattedKey);
-		} else {
-		  // Push the key-value pair with a null-safe check
-		  elements.push(
-			<div className="css-cnt7qc" key={formattedKey}>
-			  <div className="capitalize">
-				<UnderScoreRemoval text={formattedKey} />
-			  </div>
-			  <div className="title">
-				<span>{value != null ? value : "N/A"}</span>
-			  </div>
-			</div>
-		  );
+		  if (key === "shipping_info") {
+			traverse(value, "Shipping Details");
+		  } else if (key === "user") {
+			// Optionally handle user details if needed
+			traverse(value, "Transaction Details");
+		  }
 		}
 	  });
 	};
   
-	traverse(data);
-	return elements;
+	traverse(data, "Transaction Details");
+	traverse(data, "Shipping Details");
+  
+	return Object.entries(groupedElements).map(([groupTitle, groupData]) => (
+	  <div key={groupTitle} className="mb-4">
+		<div className="text-lg font-semibold mb-2">{groupTitle}</div>
+		{Object.entries(groupData).map(([key, value]) => (
+		  <div className="css-cnt7qc" key={key}>
+			<div className="capitalize">
+			  <UnderScoreRemoval text={key} />
+			</div>
+			<div className="title">
+			  <span>{value != null ? value : "N/A"}</span>
+			</div>
+		  </div>
+		))}
+	  </div>
+	));
   };
+
+
   return (
     <>
       <div className="nk-tb-list nk-tb-ulist trans-table">
         <div className="nk-tb-item nk-tb-head table-header">
           <div className="nk-tb-col tb-inner-tx">
             <span className="sub-text">
-              <strong>Name</strong>
+              <strong>Trabx ID</strong>
             </span>
           </div>
           <div className="nk-tb-col tb-inner-tx">
@@ -203,17 +220,9 @@ export default function CrptoTable({ data, loading }) {
               >
                 <div className="nk-tb-col no-border">
                   <div className="user-card">
-                    <div
-                      style={{ background: "transparent" }}
-                      className="user-avatar"
-                    >
-                      {matchedIcon && (
-                        <img src={matchedIcon?.name} alt="avatar" />
-                      )}
-                    </div>
                     <div className="user-info">
                       <span className="tb-lead">
-                        {crypto?.network?.split(" ")[0]} {crypto?.category}
+                        {crypto?.transaction_id} 
                       </span>
                     </div>
                     <input type="text" defaultValue="BTC" hidden />
@@ -222,7 +231,7 @@ export default function CrptoTable({ data, loading }) {
                 <div className="nk-tb-col no-border">
                   <span className="tb-amount">
                     <span className="currency">₦</span>
-                    {crypto?.bill?.amount}
+                    {crypto?.total_amount}
                   </span>
                 </div>
                 <div className="nk-tb-col tb-col-md no-border">
@@ -247,63 +256,53 @@ export default function CrptoTable({ data, loading }) {
                     {crypto?.status}
                   </span>
                 </div>
-                {/* <div className="nk-tb-col nk-tb-col-tools no-border">
-							<div className="dropdown">
-								<a className="text-soft dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em className="icon ni ni-more-h" /></a>
-								<div className="dropdown-menu dropdown-menu-right ">
-									<ul className="link-list-opt no-bdr">
-										<li><Link to={`${_route._transaction}/${crypto?._id}`}><em className="icon ni ni-eye" /><span>View Order</span></Link></li>
-										<li onClick={()=> {setEditCrypto(crypto); setEditAddModal(true)}}><a href="javascript:void(0)"><em className="icon ni ni-edit" /><span>Edit Crypto</span></a></li>
-										<li onClick={()=> {setDeleteId(crypto?._id); setDeleteModal(true)}}><a href="javascript:void(0)"><em className="icon ni ni-trash" /><span>Delete Crypto</span></a></li>
-									</ul>
-								</div>
-							</div>
-
-						</div> */}
               </div>
             );
           })
         )}
       </div>
 
-      <SideModal
-        handleClose={handleClose}
-        showModal={showTransaction}
-        myStyle={"active-view"}
-      >
-        <div data-testid="transaction-modal" className="css-wjk5yo">
-          <div className="css-1x2qt9t">
-            <div className="title"> {selectedTransaction?.network?.split(" ")[0]} {selectedTransaction?.category}</div>
-          </div>
-          <div className="css-xr82n9">
-            <div>
-              <div className="amount debit ">-₦{selectedTransaction?.bill?.amount}</div>
-              <div>Total Amount</div>
-            </div>
-            <div className={`center css-13b6tx1 ${
-                      crypto?.status?.toLowerCase() === "successful"
-                        ? "text-success"
-                        : crypto.status?.toLowerCase() === "processing"
-                        ? "text-warning"
-                        : "text-danger"
-                    }`}>
-			{selectedTransaction?.status}</div>
-          </div>
-          <div className="css-16mevgv">
-            <div className="css-oggppy">
-              <button
-                color="#161616"
-                className="pill  css-1erdyoi"
-                data-testid="pillbutton"
-                aria-describedby="tooltip"
-              >
-                Transaction Details
-              </button>
-            </div>
-			{selectedTransaction && renderKeyValuePairs(selectedTransaction?.bill)}
-          </div>
+		 <SideModal
+    handleClose={handleClose}
+    showModal={showTransaction}
+    myStyle={"active-view"}
+  >
+    <div data-testid="transaction-modal" className="css-wjk5yo">
+      <div className="css-1x2qt9t">
+        <div className="title">
+          {selectedTransaction?.shipping_info?.firstname} {selectedTransaction?.shipping_info?.lastname}
         </div>
-      </SideModal>
+      </div>
+      <div className="css-xr82n9">
+        <div>
+          <div className="amount debit">-₦{selectedTransaction?.total_amount}</div>
+          <div>Total Amount</div>
+        </div>
+        <div className={`center css-13b6tx1 ${
+          selectedTransaction?.status?.toLowerCase() === "successful"
+            ? "text-success"
+            : selectedTransaction?.status?.toLowerCase() === "processing"
+            ? "text-warning"
+            : "text-danger"
+        }`}>
+          {selectedTransaction?.status}
+        </div>
+      </div>
+      <div className="css-16mevgv">
+        <div className="css-oggppy">
+          <button
+            color="#161616"
+            className="pill css-1erdyoi"
+            data-testid="pillbutton"
+            aria-describedby="tooltip"
+          >
+            Transaction Details
+          </button>
+        </div>
+        {selectedTransaction && renderKeyValuePairs(selectedTransaction)}
+      </div>
+    </div>
+  </SideModal>
     </>
   );
 }

@@ -4,6 +4,7 @@ import _route from '../../constants/routes'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import usePostPayBill from "./usepostbill";
+import useCreateCheckOut from "../shop/usecreatecheckout";
 
 const useCreateCardTransaction = () => {
     const [loading, setLoading] = useState(false);
@@ -15,11 +16,12 @@ const useCreateCardTransaction = () => {
     const [isSuccess, setIsSuccess] = useState(false);
     
     const { postPayBill, loading: billLoading } = usePostPayBill();
+    const {addToCheckOut, data: checkOutData, loading: checkOutLoading} = useCreateCheckOut();
     const navigate = useNavigate();
     const CancelToken = axios.CancelToken;
     const source = useRef();
 
-    const createCardTransaction = async (cardData, billData) => {
+    const createCardTransaction = async (cardData, billData, type) => {
         if (source.current === undefined) {
             source.current = CancelToken.source();
         }
@@ -42,13 +44,18 @@ const useCreateCardTransaction = () => {
                     ...billData,
                     transaction_id: res.data.result._id
                 };
+				var billResponse
 
-                const billResponse = await postPayBill(postBillData);
+				if(type === "grocery"){
+					billResponse = await addToCheckOut(postBillData);
+				}else{
+					billResponse = await postPayBill(postBillData);
+				}
                 
                 if (!billResponse.success) {
                     setError(prev => ({ ...prev, billError: billResponse.error }));
                     setIsSuccess(false);
-                    window.NioApp.Toast('Bill payment failed: ' + billResponse.error, "warning");
+                    window.NioApp.Toast('payment failed: ' + billResponse.error, "warning");
                     return false;
                 }
 
@@ -89,7 +96,7 @@ const useCreateCardTransaction = () => {
     return { 
         createCardTransaction, 
         data, 
-        loading: loading || billLoading,
+        loading: loading || billLoading || checkOutLoading,
         error,
         isSuccess
     };

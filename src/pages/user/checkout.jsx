@@ -1,21 +1,26 @@
 import { useState, useEffect, useMemo } from 'react'
 import InputField from "../../component/common/input"
 import useGetFromCart from '../../hooks/shop/usegetfromcart';
+import usecreatecheckout from '../../hooks/shop/usecreatecheckout';
 import useGetCartDelivery from '../../hooks/shop/usegetcartdelivery';
 import { formatPrice } from '../../helpers/priceFormat';
 import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 import { useSelector } from 'react-redux';
 import Spinnar from '../../component/spinnar';
 import successImg from "../../assets/success.png";
+import useCreateCard from "../../hooks/airtime/usecreatecardtr"
 import failImg from "../../assets/fail.png";
 import Modal from "../../helpers/modal";
 import LoadingModal from "../../helpers/paybillsmodal";
+import { Link } from 'react-router-dom';
+import _route from '../../constants/routes';
 
 export default function CheckOut() {
   const user = useSelector((state) => state.auth.user);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
+  const {createCardTransaction, data: cardData, loading: cardLoading,  error: cardError, isSuccess } = useCreateCard()
   const [formData, setFormData] = useState({
     number: "",
     city: "",
@@ -27,6 +32,7 @@ export default function CheckOut() {
   
   const {getFromCart, data: cartData, loading: cartLoading} = useGetFromCart();
   const {getDeliveryState, data, loading} = useGetCartDelivery();
+  const {addToCheckOut, data: checkoutData, loading: checkOutLoading} = usecreatecheckout()
 
   // Nigerian phone number regex
   const nigerianPhoneRegex = /^(080|081|070|090|091)\d{8}$/;
@@ -124,9 +130,9 @@ export default function CheckOut() {
     if (!loading && data?.length > 0 && !formData.country) {
       setFormData(prev => ({
         ...prev,
-        country: data[1].state,
-        price: data[1].price,
-        state: data[1].state
+        country: data[0].state,
+        price: data[0].price,
+        state: data[0].state
       }));
     }
   }, [loading, data]);
@@ -160,6 +166,35 @@ export default function CheckOut() {
     setShowError(false);
   };
 
+  
+  const transformToCartItems = (inputArray) => {
+	  return inputArray.map(item => ({
+		product: item.product._id,
+		quantity: item.quantity
+	  }));
+	};
+
+  
+	const handleBillPayment = async (data)=>{
+		const cardData ={
+			status: data.status,
+			description: "A new card payment",
+			flutterwave: data
+		}
+		const cartItems = transformToCartItems(cartData);
+		const billData = {
+			total_amount: data.amount,
+			payment_method: "card",
+			items: cartItems,
+			shipping_info: {
+				phone_no: formData.number,
+				address: formData.address,
+				city: formData.address,
+				state: formData.state
+			}
+		}
+		await createCardTransaction(cardData, billData, "grocery")
+	}
   const initiatePayment = () => {
     if (!isFormValid()) {
       window.NioApp.Toast("Please fill all required fields correctly", "warning");
@@ -173,6 +208,8 @@ export default function CheckOut() {
           console.log('Payment Response:', response);
           if (response.status === 'successful') {
             setShowSuccess(true);
+			console.log("flutterwave", response)
+			handleBillPayment(response)
             // Handle successful payment here - you might want to call an API to process the order
           } else {
             setShowError(true);
@@ -192,6 +229,19 @@ export default function CheckOut() {
     }
   };
 
+  
+	useEffect(() => {
+		if(isSuccess) {
+			setShowSuccess(true);
+			setShowError(false);
+		} else if (cardError.cardError || cardError.billError) {
+			setShowError(true);
+			setShowSuccess(false);
+		}
+	}, [isSuccess, cardData, cardError]);
+
+
+console.log("cartData", cartData)
   return (
     <>
       <div className="nk-content">
@@ -287,46 +337,57 @@ export default function CheckOut() {
                     <div className="card bg-transparent">
                       <div className="nk-ecwg nk-ecwg2">
                         <div className="card-inner flex-grow-1 d-flex flex-column ps-4">
-                          <div className="col-12 p-4 text-white rounded-5 bg-paybond overflow-hidden">
-                            <h4>Order Summary</h4>
-                            <div className="py-3 border-b-white d-flex flex-column justify-content-start paybound-gap-2">
-                              {cartData?.map((element, index) => (
-                                <div key={index} className="fs-5 d-flex justify-content-between align-items-center">
-                                  <p className="mb-0 fw-normal">{element.product.title}</p>
-                                  <p className="fw-bold">{formatPrice(element.product.price * element.quantity)}</p>
-                                </div>
-                              ))}
-                            </div>
+                          {
+							(cartData.length > 0) ?
+								<div className="col-12 p-4 text-white rounded-5 bg-paybond overflow-hidden">
+								<h4>Order Summary</h4>
+								<div className="py-3 border-b-white d-flex flex-column justify-content-start paybound-gap-2">
+								{cartData?.map((element, index) => (
+									<div key={index} className="fs-5 d-flex justify-content-between align-items-center">
+									<p className="mb-0 fw-normal">{element.product.title}</p>
+									<p className="fw-bold">{formatPrice(element.product.price * element.quantity)}</p>
+									</div>
+								))}
+								</div>
 
-                            <div className="fs-5 border-b-white py-3 d-flex justify-content-between align-items-center">
-                              <p className="mb-0 fw-bold">Subtotal</p>
-                              <p className="fw-bold">{formatPrice(subTotal)}</p>
-                            </div>
+								<div className="fs-5 border-b-white py-3 d-flex justify-content-between align-items-center">
+								<p className="mb-0 fw-bold">Subtotal</p>
+								<p className="fw-bold">{formatPrice(subTotal)}</p>
+								</div>
 
-                            <div className="fs-5 border-b-white py-3 d-flex justify-content-between align-items-center">
-                              <p className="mb-0 fw-bold">Delivery fee</p>
-                              <p className="fw-bold">{formatPrice(formData.price)}</p>
-                            </div>
+								<div className="fs-5 border-b-white py-3 d-flex justify-content-between align-items-center">
+								<p className="mb-0 fw-bold">Delivery fee</p>
+								<p className="fw-bold">{formatPrice(formData.price)}</p>
+								</div>
 
-                            <div className="fs-5 border-b-white py-3 d-flex justify-content-between align-items-center">
-                              <p className="mb-0 fw-bold">Total</p>
-                              <p className="fw-bold">{formatPrice(totalAmount)}</p>
-                            </div>
+								<div className="fs-5 border-b-white py-3 d-flex justify-content-between align-items-center">
+								<p className="mb-0 fw-bold">Total</p>
+								<p className="fw-bold">{formatPrice(totalAmount)}</p>
+								</div>
 
-                            <div className="w-100 d-flex justify-content-center mt-4 align-items-center">
-                              <button 
-                                className={`w-75 fw-medium complete-btn ${!isFormValid() ? 'opacity-50' : ''}`}
-                                onClick={initiatePayment}
-                                disabled={!isFormValid() || isLoading}
-                              >
-                                {isLoading ? (
-                                  <Spinnar />
-                                ) : (
-                                  <span className="text-paybond">Complete Order</span>
-                                )}
-                              </button>
-                            </div>
-                          </div>
+								<div className="w-100 d-flex justify-content-center mt-4 align-items-center">
+								<button 
+									className={`w-75 fw-medium complete-btn ${!isFormValid() ? 'opacity-50' : ''}`}
+									onClick={initiatePayment}
+									disabled={!isFormValid() || isLoading}
+								>
+									{isLoading ? (
+									<Spinnar />
+									) : (
+									<span className="text-paybond">Complete Order</span>
+									)}
+								</button>
+								</div>
+							</div>
+							:
+							<div className="text-center py-5">
+							  <h5 className="text-muted">Your shopping cart is empty</h5>
+							  <Link to={_route._groceries} className="btn btn-primary bg-paybond mt-3">
+								Continue Shopping
+							  </Link>
+							</div>
+
+						  }
                         </div>
                       </div>
                     </div>
@@ -339,7 +400,7 @@ export default function CheckOut() {
       </div>
 
       {/* Loading Modal */}
-      {loading && <LoadingModal />}
+      {(loading || cardLoading) && <LoadingModal />}
 
       {/* Success Modal */}
       {showSuccess && (

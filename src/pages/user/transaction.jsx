@@ -4,16 +4,19 @@ import { useState, useEffect } from "react";
 import _route from "../../constants/routes";
 import './myfastin.css'
 import EditCryptoForm from "../../component/order/editcryptoform";
-import TransactionTable from "../../component/order/crptoTable";
+import TransactionTable from "../../component/order/transactionTable";
+import GroceryTransactionTable from "../../component/order/grocerytransactionTable";
 import Modal from '../../component/modal-md'
 import ModalWithHeader from '../../component/modalwithtitle'
-import useGetAllOrder from '../../hooks/orders/usegetorder';
+import useGetAllOrder from '../../hooks/orders/usegetpaybillsorder';
+import useGetGroceriesAllOrder from '../../hooks/orders/usegetpaygroceriesorder';
 import Spinnar from "../../component/spinnar";
 
 
 
 export default function Orders() {
 	const [addModal, setAddModal] = useState(false)
+	const [tab, setTab] = useState("paybills")
 	const [deleteModal, setDeleteModal] = useState(false)
 	const [deleteId, setDeleteId] = useState(null)
 	const [editModal, setEditAddModal] = useState(false)
@@ -23,6 +26,7 @@ export default function Orders() {
 	const updateLoading = false
 	const deleteLoading = false
 	const {getAllOrder, data, loading} = useGetAllOrder()
+	const {getGroceriesAllOrder, data: groceriesData, loading:groceriesLoading} = useGetGroceriesAllOrder()
 
 	const handleClose = ()=>{
 		setViewCryptoModal(false)
@@ -36,7 +40,8 @@ export default function Orders() {
 
 	
 	const handleGetTransaction = async ()=>{
-		await getAllOrder()
+		getAllOrder()
+		getGroceriesAllOrder()
 	}
 
 	
@@ -52,6 +57,11 @@ export default function Orders() {
 	useEffect(()=>{
 		handleGetTransaction()
 	}, [])
+
+	const handleTab = (tabName)=>{
+		setTab(tabName)
+	}
+
 	return (
     <>
       <div className="nk-content ">
@@ -60,16 +70,20 @@ export default function Orders() {
             <div className="nk-content-body" data-select2-id={17}>
               <div className="nk-block-head nk-block-head-sm">
                 <div className="nk-block-between">
-                  <div className="nk-block-head-content">
-                    <h3 className="nk-block-title page-title tb-ff">
-                      Transactions
-                    </h3>
-                    <div className="nk-block-des text-soft tb-ff">
-                      <p>
-                        You have a total of <strong>{data.length}</strong> orders.
-                      </p>
-                    </div>
-                  </div>
+					<div className="nk-block-head-content">
+						<h3 className="nk-block-title page-title tb-ff">
+						Transactions
+						</h3>
+						<div className="nk-block-des text-soft tb-ff">
+						<p>
+							You have a total of <strong>{data.length}</strong> orders.
+						</p>
+						</div>
+					</div>
+					<div class="market-tools overflow-scroll-hidden me-n1">
+						<div onClick={()=> handleTab("paybills")}  class={`market-tabs ${tab === "paybills" && "bg-paybond"}`}>Paybill</div>
+						<div onClick={()=> handleTab("grocery")} class={`market-tabs ${tab === "grocery" && "bg-paybond"}`}>Groceries</div>
+					</div>
                   
                 </div>
               </div>
@@ -78,7 +92,8 @@ export default function Orders() {
                 <div className="card card-bordered card-stretch card-container">
                   <div className="card-inner-group">
                     <div className="card-inner p-0">
-						<TransactionTable data={data} setEditCrypto={setEditCrypto} loading={loading} setCrypto={setCrypto} setEditAddModal={setEditAddModal} setViewCryptoModal={setViewCryptoModal} setDeleteId={setDeleteId} setDeleteModal={setDeleteModal} />
+					{tab === "paybills" && <TransactionTable data={data} setEditCrypto={setEditCrypto} loading={loading} setCrypto={setCrypto} setEditAddModal={setEditAddModal} setViewCryptoModal={setViewCryptoModal} setDeleteId={setDeleteId} setDeleteModal={setDeleteModal} />}
+					{tab === "grocery" && <GroceryTransactionTable data={groceriesData} setEditCrypto={setEditCrypto} loading={groceriesLoading} setCrypto={setCrypto} setEditAddModal={setEditAddModal} setViewCryptoModal={setViewCryptoModal} setDeleteId={setDeleteId} setDeleteModal={setDeleteModal} />}
                       {/* .nk-tb-list */}
                     </div>
                     {/* .card-inner */}

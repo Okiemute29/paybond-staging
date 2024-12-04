@@ -2,7 +2,7 @@ import Dashboard from "./Dashboard";
 import Airtime from "./airtime";
 import Data from "./data";
 import Electricity from "./electricity";
-import Betting from "./betting";
+import Betting from "./bettingcomming soon";
 import Cable from "./cable";
 import Groceries from "./groceries";
 import GroceriesProduct from "./groceriesproduct";

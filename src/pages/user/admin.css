@@ -697,6 +697,27 @@ select[multiple] option:checked {
     align-items: flex-start;
     gap: 12px;
 }
+.market-tools{
+    font-size: 0.7rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border: 1px solid #CECECE;
+    border-radius: 10px;
+    color: #CECECE;
+    padding: 1px;
+	overflow: scroll;
+}
+.market-tools > div{
+    padding: 4px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.market-tools > .bg-paybond{
+    font-weight: 800;
+}
+
 @media (max-width: 991px) {
 	.nk-chat-aside {
 	  position: absolute;

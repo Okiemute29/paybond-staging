@@ -65,7 +65,7 @@ const CartButton = ({
         )}
       </div>
       
-      {addLoading ? (
+      {(addLoading && ProductId) ? (
         <span className="add-loading">
           <Spinnar />
         </span>

@@ -1,5 +1,4 @@
-import { _getAllShopItems, _addToCart, _getCart, _removeFromCart, _dropFromCart, _getState, _getFav, _addToFavourite, _removeFromFav } from "../../network/network"
-import axios from "axios";
+import { _getAllShopItems, _addToCart, _getCart, _removeFromCart, _createCheckOut, _dropFromCart, _getState, _getFav, _addToFavourite, _removeFromFav } from "../../network/network"
 import myApi from "../common/interceptors/apiinterceptor";
 
 const Airtimeservices = {
@@ -23,6 +22,13 @@ const Airtimeservices = {
 		  }).then(async (res) => {
 			return res;
 		  });
+	},
+	createCheckOut: async ( data, source) => {	  		
+		return await myApi.post(_createCheckOut, data, {
+			cancelToken: source.token,
+		}).then(async (res) => {
+			return res;
+		});
 	},
 	getFromCart: async ( source) => {	  		
 		return await myApi.get(_getCart, {
