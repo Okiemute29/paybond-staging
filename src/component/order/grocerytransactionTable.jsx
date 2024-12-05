@@ -53,54 +53,48 @@ export default function GroceryTransactionTable({ data, loading }) {
     setSelectedTransaction(transc);
   };
 
-  const renderKeyValuePairs = (data) => {
-	const groupedElements = {
-	  "Shipping Details": {},
-	  "Transaction Details": {}
-	};
-  
-	const traverse = (obj, group, prefix = "") => {
-	  Object.entries(obj).forEach(([key, value]) => {
-		// Group key mappings
-		if (group === "Shipping Details" && 
-			["firstname", "lastname", "phone_no", "address", "zip", "city", "country", "state"].includes(key)) {
-		  groupedElements["Shipping Details"][key] = value;
-		} 
-		else if (group === "Transaction Details" && 
-				 ["_id", "total_amount", "payment_method", "transaction_id", "status", "createdAt"].includes(key)) {
-		  groupedElements["Transaction Details"][key] = value;
+  const traverse = (obj, group, prefix = "") => {
+	Object.entries(obj).forEach(([key, value]) => {
+	  // Group key mappings
+	  if (group === "Products" && key === "items" && Array.isArray(value)) {
+		groupedElements["Products"] = value.map(item => ({
+		  title: item.product.title,
+		  price: item.product.price,
+		  quantity: item.quantity,
+		}));
+	  } 
+	  else if (group === "Transaction Details" && 
+			   ["_id", "total_amount", "payment_method", "transaction_id", "status", "createdAt"].includes(key)) {
+		groupedElements["Transaction Details"][key] = value;
+	  } 
+	  else if (group === "Shipping Details" && 
+			   ["firstname", "lastname", "phone_no", "address", "zip", "city", "country", "state"].includes(key)) {
+		groupedElements["Shipping Details"][key] = value;
+	  } 
+	  else if (typeof value === "object" && !Array.isArray(value)) {
+		// Recursively handle nested objects
+		if (key === "shipping_info") {
+		  traverse(value, "Shipping Details");
+		} else if (key === "user") {
+		  traverse(value, "Transaction Details");
 		}
-		else if (typeof value === "object" && !Array.isArray(value)) {
-		  // Recursively handle nested objects
-		  if (key === "shipping_info") {
-			traverse(value, "Shipping Details");
-		  } else if (key === "user") {
-			// Optionally handle user details if needed
-			traverse(value, "Transaction Details");
-		  }
-		}
-	  });
-	};
-  
-	traverse(data, "Transaction Details");
-	traverse(data, "Shipping Details");
-  
-	return Object.entries(groupedElements).map(([groupTitle, groupData]) => (
-	  <div key={groupTitle} className="mb-4">
-		<div className="text-lg font-semibold mb-2">{groupTitle}</div>
-		{Object.entries(groupData).map(([key, value]) => (
-		  <div className="css-cnt7qc" key={key}>
-			<div className="capitalize">
-			  <UnderScoreRemoval text={key} />
-			</div>
-			<div className="title">
-			  <span>{value != null ? value : "N/A"}</span>
-			</div>
-		  </div>
-		))}
-	  </div>
-	));
+	  }
+	});
   };
+  
+  // Initialize groupedElements
+  let groupedElements = {
+	Products: [],
+	"Transaction Details": {},
+	"Shipping Details": {},
+  };
+  
+  // Traverse the data
+  data.forEach(transaction => {
+	traverse(transaction, "Products");
+	traverse(transaction, "Transaction Details");
+	traverse(transaction, "Shipping Details");
+  });
 
 
   return (
@@ -262,11 +256,7 @@ export default function GroceryTransactionTable({ data, loading }) {
         )}
       </div>
 
-		 <SideModal
-    handleClose={handleClose}
-    showModal={showTransaction}
-    myStyle={"active-view"}
-  >
+	  <SideModal handleClose={handleClose} showModal={showTransaction} myStyle={"active-view"}>
     <div data-testid="transaction-modal" className="css-wjk5yo">
       <div className="css-1x2qt9t">
         <div className="title">
@@ -278,29 +268,63 @@ export default function GroceryTransactionTable({ data, loading }) {
           <div className="amount debit">-₦{selectedTransaction?.total_amount}</div>
           <div>Total Amount</div>
         </div>
-        <div className={`center css-13b6tx1 ${
-          selectedTransaction?.status?.toLowerCase() === "successful"
-            ? "text-success"
-            : selectedTransaction?.status?.toLowerCase() === "processing"
-            ? "text-warning"
-            : "text-danger"
-        }`}>
+        <div
+          className={`center css-13b6tx1 ${
+            selectedTransaction?.status?.toLowerCase() === "successful"
+              ? "text-success"
+              : selectedTransaction?.status?.toLowerCase() === "processing"
+              ? "text-warning"
+              : "text-danger"
+          }`}
+        >
           {selectedTransaction?.status}
         </div>
       </div>
-      <div className="css-16mevgv">
-        <div className="css-oggppy">
-          <button
-            color="#161616"
-            className="pill css-1erdyoi"
-            data-testid="pillbutton"
-            aria-describedby="tooltip"
-          >
-            Transaction Details
-          </button>
-        </div>
-        {selectedTransaction && renderKeyValuePairs(selectedTransaction)}
-      </div>
+			{Object.entries(groupedElements).map(([group, details]) => (
+			
+			<div className="css-16mevgv">
+            <div className="css-oggppy">
+              <button
+                color="#161616"
+                className="pill  css-1erdyoi"
+                data-testid="pillbutton"
+                aria-describedby="tooltip"
+              >
+                {group}
+              </button>
+            </div>
+			<div key={group} className="css-group">
+				{/* <h3>{group}</h3> */}
+				{Array.isArray(details) ? (
+				details.map((item, idx) => (
+					
+					<div className="css-cnt7qc" key={idx}>
+						<div className="capitalize">
+						{/* <UnderScoreRemoval text={formattedKey} /> */}
+						{item.title}
+						</div>
+						<div className="title">
+						<span> ₦{item.price}({item.quantity})</span>
+						</div>
+					</div>
+				))
+				) : (
+				Object.entries(details).map(([key, value], index) => (
+					
+					<div className="css-cnt7qc" key={index}>
+					<div className="capitalize">
+					<UnderScoreRemoval text={key} />:
+					</div>
+					<div className="title">
+					<span> {value}</span>
+					</div>
+				</div>
+				))
+				)}
+			</div>
+			</div>
+			))}
+      
     </div>
   </SideModal>
     </>

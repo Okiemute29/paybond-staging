@@ -24,13 +24,8 @@ const useGetGroceriesAllOrder = () => {
 				window.NioApp.Toast('An error occured', "warning");
             }else{
 				setloading(false)
-                if(res.status === 200){
-					setData(res.data.result)
-					// window.NioApp.Toast(res.data.message, "success");
-                    return true
-                }
-                if(res.status === 201){
-					console.log(res.data)
+                if(res.status === 200 || res.status === 201){
+					console.log("groceries", res.data.result)
 					setData(res.data.result)
 					// window.NioApp.Toast(res.data.message, "success");
                     return true
