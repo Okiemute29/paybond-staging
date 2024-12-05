@@ -19,13 +19,14 @@ export default function Orders() {
 	const [tab, setTab] = useState("paybills")
 	const [deleteModal, setDeleteModal] = useState(false)
 	const [deleteId, setDeleteId] = useState(null)
+	const {getAllOrder, data, loading} = useGetAllOrder()
+	const [listTotal, setListTotal] = useState(0)
 	const [editModal, setEditAddModal] = useState(false)
 	const [viewCryptoModal, setViewCryptoModal] = useState(false)
 	const [crypto, setCrypto] = useState(null)
 	const [editCrypto, setEditCrypto] = useState(null)
 	const updateLoading = false
 	const deleteLoading = false
-	const {getAllOrder, data, loading} = useGetAllOrder()
 	const {getGroceriesAllOrder, data: groceriesData, loading:groceriesLoading} = useGetGroceriesAllOrder()
 
 	const handleClose = ()=>{
@@ -58,6 +59,21 @@ export default function Orders() {
 		handleGetTransaction()
 	}, [])
 
+	useEffect(()=>{
+		if(data || groceriesData){
+			if(tab === "paybills"){
+				setListTotal(data.length)
+			}else if(tab === "grocery"){
+				setListTotal(groceriesData.length)
+
+			}else{
+				setListTotal(data.length)
+
+			}
+
+		}
+	}, [data, groceriesData, tab])
+
 	const handleTab = (tabName)=>{
 		setTab(tabName)
 	}
@@ -76,7 +92,7 @@ export default function Orders() {
 						</h3>
 						<div className="nk-block-des text-soft tb-ff">
 						<p>
-							You have a total of <strong>{data.length}</strong> orders.
+							You have a total of <strong>{listTotal}</strong> orders.
 						</p>
 						</div>
 					</div>
