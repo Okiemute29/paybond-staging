@@ -277,7 +277,7 @@ export default function TransactionTable({ data, loading }) {
           </div>
           <div className="css-xr82n9">
             <div>
-              <div className="amount debit ">-₦{selectedTransaction?.bill?.amount}</div>
+              <div className="amount debit ">₦{selectedTransaction?.bill?.amount}</div>
               <div>Total Amount</div>
             </div>
             <div className={`center css-13b6tx1 ${

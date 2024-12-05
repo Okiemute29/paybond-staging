@@ -265,7 +265,7 @@ export default function GroceryTransactionTable({ data, loading }) {
       </div>
       <div className="css-xr82n9">
         <div>
-          <div className="amount debit">-₦{selectedTransaction?.total_amount}</div>
+          <div className="amount debit">₦{selectedTransaction?.total_amount}</div>
           <div>Total Amount</div>
         </div>
         <div
