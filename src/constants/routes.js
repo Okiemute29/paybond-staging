@@ -1,5 +1,8 @@
 const _route = {
     _landing_page: '/',
+    _admin_privacy_policy: '/privacy-policy',
+    _admin_terms_of_service: '/terms-service',
+    _admin_kyc: '/kyc-policy',
     _about_us: '/about-us',
     _contact_us: '/contact-us',
     _login: '/login',

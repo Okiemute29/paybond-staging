@@ -37,6 +37,9 @@ import _route from './constants/routes';
 import PrivateRoute from './routeguard/privateroute'
 import PrivatePinRoute from './routeguard/privatepinroute'
 import './App.css';
+import PrivacyPolicy from './pages/privacypolicy';
+import TermsOfService from './pages/termsofservice';
+import KYCAMLPolicy from './pages/kycpolicy';
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -51,6 +54,9 @@ const router = createBrowserRouter(
 		<Route path={_route._landing_page}  element={<Home />} />
 		<Route path={_route._about_us}  element={<About />} />
 		<Route path={_route._contact_us}  element={<Contact />} />
+		<Route path={_route._admin_privacy_policy}  element={<PrivacyPolicy />} />
+		<Route path={_route._admin_terms_of_service}  element={<TermsOfService />} />
+		<Route path={_route._admin_kyc}  element={<KYCAMLPolicy />} />
 	</Route>
 	<Route element={<PrivateRoute />} >
 		<Route element={<PrivatePinRoute />} >

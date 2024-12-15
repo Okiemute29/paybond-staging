@@ -51,19 +51,19 @@ export default function _footer({notlanding}) {
 					<div className="col-6 col-lg-2 offset-lg-1 mb-3">
 					<h5 className="text-green">Products</h5>
 					<ul className="list-unstyled">
-					<li className="text-faintwhite mb-2"><Link to={_route._landing_page}>Airtime</Link></li>
-					<li className="text-faintwhite mb-2"><Link to={_route._landing_page}>Data</Link></li>
-					<li className="text-faintwhite mb-2"><Link to={_route._landing_page}>Electricity</Link></li>
-					<li className="text-faintwhite mb-2"><Link to={_route._landing_page}>Cable TV</Link></li>
-					<li className="text-faintwhite mb-2"><Link to={_route._landing_page}>Groceries</Link></li>
-					<li className="text-faintwhite mb-2"><Link to={_route._landing_page}>Airtime</Link></li>
+					<li className="text-faintwhite mb-2"><Link to={_route._airtime}>Airtime</Link></li>
+					<li className="text-faintwhite mb-2"><Link to={_route._data}>Data</Link></li>
+					<li className="text-faintwhite mb-2"><Link to={_route._electricity}>Electricity</Link></li>
+					<li className="text-faintwhite mb-2"><Link to={_route._cable}>Cable TV</Link></li>
+					<li className="text-faintwhite mb-2"><Link to={_route._groceries}>Groceries</Link></li>
+					{/* <li className="text-faintwhite mb-2"><Link to={_route._landing_page}>Airtime</Link></li> */}
 					</ul>
 					</div>
 					<div className="col-6 col-lg-2 mb-3">
 					<h5 className="text-green">Legal</h5>
 					<ul className="list-unstyled">
-					<li className="text-faintwhite mb-2"><Link to={_route._landing_page}>Privacy Policy</Link></li>
-					<li className="text-faintwhite mb-2"><Link to={_route._landing_page}>Terms & Conditions</Link></li>
+					<li className="text-faintwhite mb-2"><Link to={_route._admin_privacy_policy}>Privacy Policy</Link></li>
+					<li className="text-faintwhite mb-2"><Link to={_route._admin_terms_of_service}>Terms & Conditions</Link></li>
 					</ul>
 					</div>
 					<div className="col-6 col-lg-2 mb-3">
