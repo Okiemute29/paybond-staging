@@ -21,7 +21,8 @@ export default function SectionFour() {
 									</h2>
 									<div id="collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
 									<div className="accordion-body">
-										<strong>PayBond is a platform for paying bills such as airtime, TV subscriptions, electricity, and betting services, offering convenience and luxury.</strong> 
+										<strong>PayBond is a platform for paying bills such as airtime, TV subscriptions, and electricity services, offering convenience and luxury.</strong> 
+										{/* <strong>PayBond is a platform for paying bills such as airtime, TV subscriptions, and electricity, and betting services, offering convenience and luxury.</strong>  */}
 									</div>
 									</div>
 								</div>
@@ -50,7 +51,7 @@ export default function SectionFour() {
 											</li>
 											<li>TV: DSTV, GOTV, StarTimes  </li>
 											<li>Electricity: BEDC  </li>
-											<li>Betting: 1xBet, Kings Bet, Spoty Bet </li>
+											{/* <li>Betting: 1xBet, Kings Bet, Spoty Bet </li> */}
 										</ul>
 									</div>
 									</div>

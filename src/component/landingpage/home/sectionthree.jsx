@@ -45,11 +45,11 @@ export default function SectionThree() {
 							<ServiceProviderCard icon={ecedc} />							
 							<ServiceProviderCard icon={PHED} />							
 							<ServiceProviderCard icon={ibedc} background="ibedc" />							
-							<ServiceProviderCard icon={sporty} background="sporty" />							
+							{/* <ServiceProviderCard icon={sporty} background="sporty" />							
 							<ServiceProviderCard icon={mb} />							
 							<ServiceProviderCard icon={bet9ja} />							
 							<ServiceProviderCard icon={xbet} background="xbet" />							
-							<ServiceProviderCard icon={kingsbet} background="kingbet" />
+							<ServiceProviderCard icon={kingsbet} background="kingbet" /> */}
 
 
 
