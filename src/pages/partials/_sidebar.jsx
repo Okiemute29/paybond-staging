@@ -40,11 +40,11 @@ export default function _sidebar() {
 			name: "Cable TV",
 			icon: "tv",
 		},
-		{
-			route: _route._betting,
-			name: "Betting",
-			icon: "betting",
-		},
+		// {
+		// 	route: _route._betting,
+		// 	name: "Betting",
+		// 	icon: "betting",
+		// },
 		{
 			route: _route._groceries,
 			name: "Groceries",

@@ -17,7 +17,8 @@ import {
 	  Category,
 	  CheckOut,
 	  Settings,
-	  Transaction
+	  Transaction,
+	  Error
 	  
   
   } from "./pages/user/index";
@@ -65,7 +66,7 @@ const router = createBrowserRouter(
 			<Route path={_route._airtime}  element={<Airtime />} />
 			<Route path={_route._data}  element={<Data />} />
 			<Route path={_route._electricity}  element={<Electricity />} />
-			<Route path={_route._betting}  element={<Betting />} />
+			{/* <Route path={_route._betting}  element={<Betting />} /> */}
 			<Route path={_route._cable}  element={<Cable />} />
 			<Route path={_route._groceries} element={<Groceries /> } />
 			<Route path={_route._groceries_details} element={<GroceriesProduct /> } />
@@ -74,6 +75,7 @@ const router = createBrowserRouter(
 			<Route path={_route._checkout} element={<CheckOut /> } />
 			<Route path={_route._setting} element={<Settings /> } />
 			<Route path={_route._transaction} element={<Transaction /> } />
+			<Route path={_route._not_found} element={<Error /> } />
 
 			</Route>
 		</Route>

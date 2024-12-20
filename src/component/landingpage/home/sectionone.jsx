@@ -48,11 +48,11 @@ export default function SectionOne() {
 												text="Cable TV"
 												route={_route._cable}
 											/>
-											<Card 
+											{/* <Card 
 												icon={betting}
 												text="Betting"
 												route={_route._betting}
-											/>
+											/> */}
 											<Card 
 												icon={grocery}
 												text="Groceries"

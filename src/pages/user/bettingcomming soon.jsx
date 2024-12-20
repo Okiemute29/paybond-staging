@@ -30,7 +30,7 @@ export default function Betting() {
 				{/* .nk-block */}
 				<div className="nk-block">
 				<div className="row g-gs justify-content-center">
-					<div className="d-none d-md-block col-md-4">
+					<div className="col-md-4">
 						<div className="card bg-transparent">
 							<div className="nk-ecwg nk-ecwg2">
 							<div className="card-inner flex-grow-1 d-flex flex-column p-0">

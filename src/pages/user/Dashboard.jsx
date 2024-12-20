@@ -78,12 +78,12 @@ export default function Dashboard() {
 								route={_route._cable}
 								dashboard
 							/>
-							<Card 
+							{/* <Card 
 								icon={betting}
 								text="Betting"
 								route={_route._betting}
 								dashboard
-							/>
+							/> */}
 							<Card 
 								icon={grocery}
 								text="Groceries"

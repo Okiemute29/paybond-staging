@@ -11,6 +11,7 @@ import Category from "./cartegory";
 import CheckOut from "./checkout";
 import Settings from "./settings"
 import Transaction from "./transaction"
+import Error from "./404";
 
 
 export { 
@@ -26,7 +27,8 @@ export {
 	Category,
 	CheckOut,
 	Settings,
-	Transaction
+	Transaction,
+	Error
 	
 	
 };
